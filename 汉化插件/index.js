@@ -434,13 +434,44 @@
   }
 
 
+  /**
+   * 将 Windows 系统窗口控制条 (右上角最小化/缩放/关闭) 设置为完全透明
+   *
+   * @function applyTransparentTitleBar
+   * @param {string} [color='#00000000'] - 标题栏覆盖层底色，默认为完全透明色 (8位带Alpha十六进制)
+   * @param {string} [symbolColor='#ffffff'] - 按钮图标前景色，默认为纯白色
+   * @param {number} [height=30] - 标题栏覆盖层高度，单位像素
+   * @returns {Promise<boolean>} 若原生接口调用成功并生效返回 true，否则返回 false
+   * @throws {Error} 若内部发生无法恢复的异常时记录日志并安全返回 false
+   */
+  async function applyTransparentTitleBar(color = '#00000000', symbolColor = '#ffffff', height = 30) {
+    try {
+      if (typeof window !== 'undefined' && window.electronNative && typeof window.electronNative.setTitleBarOverlay === 'function') {
+        await window.electronNative.setTitleBarOverlay({ color, symbolColor, height });
+        return true;
+      }
+      return false;
+    } catch (err) {
+      if (typeof plugin !== 'undefined' && plugin.log) {
+        plugin.log.error('设置透明窗口控制条失败: ' + err);
+      }
+      return false;
+    }
+  }
+
   // 执行启动并注册清理回调
   if (typeof plugin !== 'undefined' && plugin && typeof plugin.onDispose === 'function') {
     plugin.log?.info('正在启动 Antigravity 2.0 深度简体中文汉化插件 (v1.1)...');
     const observer = initLocalization();
 
+    // 自动应用并维持右上角窗口控制条完全透明 (鼠标悬停保留原生高亮)
+    applyTransparentTitleBar();
+    const onResizeHandler = () => { applyTransparentTitleBar(); };
+    window.addEventListener('resize', onResizeHandler);
+
     plugin.onDispose(function () {
       observer.disconnect();
+      window.removeEventListener('resize', onResizeHandler);
       plugin.log?.info('已卸载简体中文汉化插件');
     });
   } else {
