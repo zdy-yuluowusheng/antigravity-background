@@ -1,0 +1,7 @@
+{
+  "name": "简体中文语言包",
+  "description": "Antigravity 2.0 界面动态汉化插件，基于 BetterGravity 插件引擎实现",
+  "version": "1.0.0",
+  "author": "Antigravity Community",
+  "main": "index.js"
+}

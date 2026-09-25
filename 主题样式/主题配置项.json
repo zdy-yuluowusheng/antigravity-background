@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "themes": {
+    "enabled": [
+      "晨雾森林毛玻璃主题.css"
+    ]
+  },
+  "plugins": {
+    "developerMode": true,
+    "enabled": [
+      "chinese-localization"
+    ]
+  },
+  "reapplyAfterHostUpdate": true
+}
