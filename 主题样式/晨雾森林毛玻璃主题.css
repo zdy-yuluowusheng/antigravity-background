@@ -1,8 +1,8 @@
 /**
  * @name        晨雾森林毛玻璃主题
- * @description 基于 wallhaven 晨雾松林丁达尔光壁纸定制的高级透明毛玻璃主题 (已嵌入原生 Base64 数据流)
+ * @description 基于 wallhaven 晨雾松林丁达尔光壁纸定制的高级透明主题 (命令行悬停白色微光版)
  * @author      Antigravity Assistant
- * @version     1.3.0
+ * @version     1.9.0
  */
 
 /* ================= 1. 变量与纯黑容器全面穿透 ================= */
@@ -104,7 +104,8 @@ nav {
 }
 
 /* ================= 5. 主对话画板与中心内容滑动区 ================= */
-main,
+[data-testid="conversation-view"],
+[data-testid="autoscroll-viewport"],
 [class*="canvas"],
 [class*="chat-scroll"],
 [class*="conversation-view"],
@@ -113,22 +114,238 @@ main,
     background: transparent !important;
 }
 
-/* ================= 6. 消息卡片与对话气泡：毛玻璃浮层 (严格限定于主内容消息区) ================= */
-main [class*="message-card"],
-main [class*="messageWrapper"],
-main [class*="chat-bubble"],
-main [data-testid*="message-item"],
-main .bg-muted {
-    background-color: rgba(18, 28, 24, 0.62) !important;
+/* ================= 6. 消息卡片与对话气泡：轻度微光浮层 ================= */
+[data-testid="conversation-view"] [class*="message-card"],
+[data-testid="conversation-view"] [class*="messageWrapper"],
+[data-testid="conversation-view"] [class*="chat-bubble"],
+[data-testid*="message-item"] {
+    background-color: rgba(18, 28, 24, 0.40) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 12px !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.20) !important;
 }
 
-/* ================= 7. 主对话框 / 输入框全面透明 ================= */
-/* 去除主对话框灰色背景卡片，直接透明展示背景 */
+/* ================= 7. 用户提问卡片与吸顶：纯透明高透矩形框 (1:1对齐输入框几何) ================= */
+[data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"],
+[data-testid="user-input-step"] .bg-card-border,
+[data-testid="user-input-step"] [class*="bg-card-border"],
+div[role="article"].sticky [data-testid="lifted-context-menu-trigger"],
+div[role="article"].sticky .bg-card-border,
+.md-sticky-message-bleed [data-testid="lifted-context-menu-trigger"],
+.md-sticky-message-bleed .bg-card-border {
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* 用户提问内层容器保持纯净透明，避免多层色块或灰底冲突 */
+[data-testid="user-input-step"] .bg-card,
+[data-testid="user-input-step"] [class*="bg-card"],
+div[role="article"].sticky .bg-card {
+    background-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* 吸顶容器自身透明化，避免产生大面积纯黑背景遮挡壁纸 */
+div[role="article"].sticky,
+.sticky.top-0,
+.md-sticky-message-bleed {
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+/* 移除原生黑色实底渐变伪元素，避免边缘生硬裁切 */
+.md-sticky-message-bleed::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* ================= 8. 代码块、行内代码与引用链接胶囊：纯透明极致通透 ================= */
+/* 8.1 代码块外层整体卡片：纯透明无底色、直显高清壁纸 */
+pre,
+.code-block,
+div[class*="word-break-all"][class*="rounded-xl"],
+div[class*="whitespace-pre-wrap"][class*="rounded-xl"],
+div[class*="whitespace-pre-wrap"][class*="bg-muted"],
+div:has(> div > .code-block),
+div:has(> .code-block) {
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+}
+
+/* 代码块内部代码渲染区纯透明 */
+pre code,
+.code-block,
+.code-block pre,
+.code-block code,
+[class*="syntax-highlighter"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 代码块顶部语言标题栏 (如 css、js 等标识与右侧复制按钮) */
+div[class*="whitespace-pre-wrap"] > div[class*="border-b"],
+div[class*="whitespace-pre-wrap"] div[class*="rounded-t"],
+div[class*="border-border"][class*="rounded-t"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* 8.2 行内代码与引用链接胶囊 (如 {} 主题样式/晨雾森林毛玻璃主题.css) */
+code:not(pre code),
+.inline-pill,
+[class*="inline-pill"],
+.context-scope-mention,
+.context-scope-mention button,
+span[class*="context-scope-mention"] button,
+button:has(svg):has(span),
+a[href*="file://"],
+[class*="chip"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 6px !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease !important;
+}
+
+/* 引用链接胶囊鼠标悬停微光反馈 */
+code:not(pre code):hover,
+[class*="inline-pill"]:hover,
+.inline-pill:hover,
+.context-scope-mention button:hover,
+span[class*="context-scope-mention"] button:hover,
+a[href*="file://"]:hover,
+[class*="chip"]:hover {
+    background-color: rgba(255, 255, 255, 0.10) !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+/* 8.3 文件变更状态条与折叠栏 (如 3 files changed +46 -43 > 与 审查 按钮) */
+.files-changed-header,
+div[class*="files-changed-header"],
+div[class*="files-changed"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.files-changed-header:hover,
+div[class*="files-changed-header"]:hover {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* 状态条右侧的【审查】操作按钮 */
+.review-button,
+button[class*="review-button"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 6px !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.review-button:hover,
+button[class*="review-button"]:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* ================= 9. 命令行与执行步骤行：父级与子项全面统一为平时纯透明、悬停柔和白色微光 ================= */
+/* 
+ * 彻底解决执行步骤（Ran node / Ran Copy-Item / Thought for / Worked for / Edited / 子项命令行）
+ * 鼠标悬停时因 Tailwind 的 hover:bg-muted 回退为深黑色的问题。
+ * 平时彻底纯透明，鼠标悬停时呈现纯正柔和的白色半透明微光 (对齐图二质感，绝不显黑底)。
+ */
+
+/* 1. 平时状态：父级组、具体子项命令行、工作时长与思考条全面纯透明 */
+div[data-testid="conversation-view"] button[data-testid="tool-group-collapsible"],
+div[data-testid="conversation-view"] button[data-testid="worked-for-collapsible"],
+div[data-testid="conversation-view"] button[data-testid="thinking-collapsible-trigger"],
+div[data-testid="conversation-view"] button[data-testid*="-collapsible"],
+div[data-testid="conversation-view"] button[data-testid*="tool-group"],
+div[data-testid="conversation-view"] button[class*="min-h-8"],
+div[data-testid="conversation-view"] button[class*="tabular-nums"],
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg,
+div[data-testid="conversation-view"] button.cursor-pointer[class*="min-h-8"],
+div[data-testid="conversation-view"] .hover\:bg-muted,
+button[data-testid="tool-group-collapsible"],
+button[data-testid="worked-for-collapsible"],
+button[data-testid="thinking-collapsible-trigger"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* 2. 悬停状态：强效覆盖原生 hover:bg-muted，统一为白色半透明微光与高亮白边 */
+div[data-testid="conversation-view"] button[data-testid="tool-group-collapsible"]:hover,
+div[data-testid="conversation-view"] button[data-testid="worked-for-collapsible"]:hover,
+div[data-testid="conversation-view"] button[data-testid="thinking-collapsible-trigger"]:hover,
+div[data-testid="conversation-view"] button[data-testid*="-collapsible"]:hover,
+div[data-testid="conversation-view"] button[data-testid*="tool-group"]:hover,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:hover,
+div[data-testid="conversation-view"] button[class*="tabular-nums"]:hover,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:hover,
+div[data-testid="conversation-view"] button.cursor-pointer[class*="min-h-8"]:hover,
+div[data-testid="conversation-view"] .hover\:bg-muted:hover,
+button[data-testid="tool-group-collapsible"]:hover,
+button[data-testid="worked-for-collapsible"]:hover,
+button[data-testid="thinking-collapsible-trigger"]:hover {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.06) !important;
+}
+
+/* 3. 悬停时内部所有子级文本与图标同步转为纯白色高亮 */
+div[data-testid="conversation-view"] button[data-testid="tool-group-collapsible"]:hover *,
+div[data-testid="conversation-view"] button[data-testid="worked-for-collapsible"]:hover *,
+div[data-testid="conversation-view"] button[data-testid="thinking-collapsible-trigger"]:hover *,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:hover *,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:hover *,
+div[data-testid="conversation-view"] .hover\:bg-muted:hover * {
+    color: #ffffff !important;
+}
+
+/* 4. 展开的子项命令行容器及终端执行输出底色通透处理 */
+div[data-testid="conversation-view"] [data-state="open"] pre,
+div[data-testid="conversation-view"] [data-state="open"] code,
+div[data-testid="conversation-view"] [class*="terminal"] {
+    background-color: transparent !important;
+}
+
+/* ================= 10. 主对话框 / 输入框保持通透美观 ================= */
+/* 保持主输入框底层卡片透明，与晨雾背景自然融合 */
 [data-testid="agent-input-box"],
 [data-testid="agent-input-box"] .bg-card,
 [data-testid="agent-input-box"] .bg-card-border,
@@ -170,7 +387,7 @@ form {
     box-shadow: none !important;
 }
 
-/* ================= 8. 右侧辅助面板 ================= */
+/* ================= 11. 右侧辅助面板 ================= */
 [class*="auxiliary"],
 [class*="auxiliaryPane"],
 [data-testid*="auxiliary-pane"],
@@ -181,7 +398,7 @@ form {
     border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
-/* ================= 9. 设置弹窗与交互对话框 ================= */
+/* ================= 12. 设置弹窗与交互对话框 ================= */
 .settings-modal-container,
 [role="dialog"],
 [class*="modal"],
@@ -193,7 +410,7 @@ form {
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
 }
 
-/* ================= 10. 滚动条美化 ================= */
+/* ================= 13. 滚动条美化 ================= */
 ::-webkit-scrollbar {
     width: 6px !important;
     height: 6px !important;
