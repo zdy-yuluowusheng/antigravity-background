@@ -393,21 +393,22 @@ button[class*="review-button"] {
     transition: background-color 0.2s ease !important;
 }
 
-/* 8.4 Markdown 引用块 (blockquote) 与提示引用框：半透明薄雾底色与精致微光左边框 */
+/* 8.4 Markdown 引用块 (blockquote) 与提示引用框：纯透明无底色、直显清晰壁纸 */
 blockquote,
 blockquote[style*="background-color"],
 div[data-testid="conversation-view"] blockquote,
 [data-testid*="message-item"] blockquote,
 [data-testid="conversation-view"] [class*="chat-bubble"] blockquote {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    background: rgba(255, 255, 255, 0.05) !important;
-    border-left: 3px solid rgba(52, 211, 153, 0.60) !important;
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-left: 3px solid rgba(52, 211, 153, 0.50) !important;
     border-top: none !important;
     border-right: none !important;
     border-bottom: none !important;
-    border-radius: 4px !important;
-    backdrop-filter: blur(4px) !important;
-    -webkit-backdrop-filter: blur(4px) !important;
+    border-radius: 0 !important;
     color: rgba(255, 255, 255, 0.90) !important;
 }
 
