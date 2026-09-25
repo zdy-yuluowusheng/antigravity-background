@@ -11,6 +11,10 @@
     --sidebar: 0 0% 0% / 0 !important;
     --sidebar-background: 0 0% 0% / 0 !important;
     --sidebar-muted: 0 0% 0% / 0 !important;
+    --sidebar-secondary: 0 0% 0% / 0 !important;
+    --sidebar-accent: 0 0% 0% / 0 !important;
+    --secondary: 0 0% 0% / 0 !important;
+    --muted: 0 0% 0% / 0 !important;
     --card: 0 0% 0% / 0 !important;
     --card-border: 0 0% 0% / 0 !important;
 }
@@ -42,11 +46,65 @@ body,
 /* ================= 3. 顶部导航/标题栏：微光极窄通透条 ================= */
 header,
 [data-testid="title-menu-bar"],
-[class*="title-menu-bar"] {
+[class*="title-menu-bar"],
+div:has(> div > div > [data-testid="breadcrumb-segment"]) {
     background-color: rgba(10, 16, 14, 0.25) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 顶部面包屑：项目名与会话名平时通透、悬停优雅半透明白色微光 (彻底消除黑底) */
+[data-testid="breadcrumb-segment"],
+span[data-testid="breadcrumb-segment"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border-radius: 6px !important;
+    transition: background-color 0.2s ease, opacity 0.2s ease, color 0.2s ease !important;
+}
+
+[data-testid="breadcrumb-segment"]:hover,
+span[data-testid="breadcrumb-segment"]:hover {
+    background-color: rgba(255, 255, 255, 0.14) !important;
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.06) !important;
+}
+
+/* 顶部 Open IDE 按钮及右侧操作栏按钮：平时通透微光外框、悬停白色微光高亮 (彻底消除黑底) */
+[data-testid="open-editor-single"],
+[data-testid*="open-editor"],
+[data-testid*="open-ide"],
+button[data-testid="open-editor-single"],
+header button,
+header [role="button"],
+[data-testid="title-menu-bar"] button,
+[data-testid="title-menu-bar"] [role="button"],
+div:has(> * > * > [data-testid="breadcrumb-segment"]) button,
+div:has(> * > * > [data-testid="breadcrumb-segment"]) [role="button"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 6px !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+[data-testid="open-editor-single"]:hover,
+[data-testid*="open-editor"]:hover,
+[data-testid*="open-ide"]:hover,
+button[data-testid="open-editor-single"]:hover,
+header button:hover,
+header [role="button"]:hover,
+[data-testid="title-menu-bar"] button:hover,
+[data-testid="title-menu-bar"] [role="button"]:hover,
+div:has(> * > * > [data-testid="breadcrumb-segment"]) button:hover,
+div:has(> * > * > [data-testid="breadcrumb-segment"]) [role="button"]:hover {
+    background-color: rgba(255, 255, 255, 0.14) !important;
+    background: rgba(255, 255, 255, 0.14) !important;
+    border-color: rgba(255, 255, 255, 0.24) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.06) !important;
 }
 
 /* ================= 4. 左侧侧边栏：全面通透，直显壁纸背景 ================= */
@@ -76,9 +134,6 @@ nav {
 [data-testid="conversation-list-sidebar"] [class*="bg-sidebar"],
 [data-testid="conversation-list-sidebar"] [class*="bg-muted"],
 [data-testid="conversation-list-sidebar"] [data-testid="lifted-context-menu-trigger"],
-[data-testid="conversation-list-sidebar"] [data-testid="conversation-kebab"],
-[data-testid="conversation-list-sidebar"] [data-testid="conversation-pin-button"],
-[data-testid="conversation-list-sidebar"] [data-testid="conversation-archive-button"],
 [data-testid="new-conversation-button"],
 [data-testid="history-button"],
 [data-testid="automations-button"],
@@ -91,7 +146,7 @@ nav {
     -webkit-backdrop-filter: none !important;
 }
 
-/* 鼠标悬停在侧边栏条目时的微光高亮交互，移开后恢复纯透明 */
+/* 鼠标悬停在普通侧边栏条目时的微光高亮交互，移开后恢复纯透明 */
 [data-testid="conversation-list-sidebar"] button:hover,
 [data-testid="conversation-list-sidebar"] a:hover,
 [data-testid="conversation-list-sidebar"] [class*="headerbtn"]:hover,
@@ -101,6 +156,67 @@ nav {
 [data-testid="sidebar-add-project-button"]:hover {
     background-color: rgba(255, 255, 255, 0.08) !important;
     border-radius: 8px !important;
+}
+
+/* 彻底清除右侧操作按钮栏(kebab三点/pin图钉/archive归档)外层容器的内联渐变黑底与色块遮罩 */
+[data-testid="conversation-list-sidebar"] div[style*="linear-gradient"],
+[data-testid="conversation-list-sidebar"] div[style*="var(--sidebar-secondary)"],
+[data-testid="conversation-list-sidebar"] div:has(> [data-testid="conversation-kebab"]),
+[data-testid="conversation-list-sidebar"] div:has(> [data-testid="conversation-pin-button"]),
+[data-testid="conversation-list-sidebar"] div:has(> [data-testid="conversation-archive-button"]),
+[data-testid="conversation-list-sidebar"] div:has(> button[data-testid*="conversation-"]),
+aside div[style*="linear-gradient"],
+aside div:has(> [data-testid="conversation-kebab"]) {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 会话条目在【选中/激活 (active/selected)】状态下的精致微光高亮，彻底消除黑底色块 */
+[data-testid="conversation-list-sidebar"] [data-active="true"],
+[data-testid="conversation-list-sidebar"] [aria-selected="true"],
+[data-testid="conversation-list-sidebar"] [data-state="active"],
+[data-testid="conversation-list-sidebar"] [class*="bg-sidebar-accent"],
+[data-testid="conversation-list-sidebar"] a[class*="bg-accent"],
+[data-testid="conversation-list-sidebar"] button[class*="bg-accent"],
+[data-testid="conversation-list-sidebar"] div[class*="group"][data-active="true"] {
+    background-color: rgba(52, 211, 153, 0.16) !important;
+    background: rgba(52, 211, 153, 0.16) !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(52, 211, 153, 0.22) !important;
+}
+
+/* 选中会话内的操作按钮容器同样保持绝对透明 */
+[data-testid="conversation-list-sidebar"] [data-active="true"] div[style*="linear-gradient"],
+[data-testid="conversation-list-sidebar"] [data-active="true"] div:has(> [data-testid="conversation-kebab"]),
+[data-testid="conversation-list-sidebar"] [aria-selected="true"] div[style*="linear-gradient"],
+[data-testid="conversation-list-sidebar"] [aria-selected="true"] div:has(> [data-testid="conversation-kebab"]) {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* 会话条目右侧的三个功能按钮：平时透明，悬停时细腻白色微光高亮 */
+[data-testid="conversation-list-sidebar"] [data-testid="conversation-kebab"],
+[data-testid="conversation-list-sidebar"] [data-testid="conversation-pin-button"],
+[data-testid="conversation-list-sidebar"] [data-testid="conversation-archive-button"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: rgba(255, 255, 255, 0.70) !important;
+    transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+
+[data-testid="conversation-list-sidebar"] [data-testid="conversation-kebab"]:hover,
+[data-testid="conversation-list-sidebar"] [data-testid="conversation-pin-button"]:hover,
+[data-testid="conversation-list-sidebar"] [data-testid="conversation-archive-button"]:hover {
+    background-color: rgba(255, 255, 255, 0.14) !important;
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: #ffffff !important;
+    border-radius: 4px !important;
 }
 
 /* ================= 5. 主对话画板与中心内容滑动区 ================= */

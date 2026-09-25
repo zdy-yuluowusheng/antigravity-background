@@ -438,6 +438,7 @@
   if (typeof plugin !== 'undefined' && plugin && typeof plugin.onDispose === 'function') {
     plugin.log?.info('正在启动 Antigravity 2.0 深度简体中文汉化插件 (v1.1)...');
     const observer = initLocalization();
+
     plugin.onDispose(function () {
       observer.disconnect();
       plugin.log?.info('已卸载简体中文汉化插件');
