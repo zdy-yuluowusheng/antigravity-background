@@ -11,10 +11,8 @@
     --sidebar: 0 0% 0% / 0 !important;
     --sidebar-background: 0 0% 0% / 0 !important;
     --sidebar-muted: 0 0% 0% / 0 !important;
-    --sidebar-secondary: 0 0% 0% / 0 !important;
-    --sidebar-accent: 0 0% 0% / 0 !important;
-    --secondary: 0 0% 0% / 0 !important;
-    --muted: 0 0% 0% / 0 !important;
+    --sidebar-secondary: transparent !important;
+    --sidebar-accent: rgba(52, 211, 153, 0.16) !important;
     --card: 0 0% 0% / 0 !important;
     --card-border: 0 0% 0% / 0 !important;
 }
@@ -46,12 +44,21 @@ body,
 /* ================= 3. 顶部导航/标题栏：微光极窄通透条 ================= */
 header,
 [data-testid="title-menu-bar"],
-[class*="title-menu-bar"],
-div:has(> div > div > [data-testid="breadcrumb-segment"]) {
+[class*="title-menu-bar"] {
     background-color: rgba(10, 16, 14, 0.25) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 保护 Windows 系统标题栏控制区(最小化/最大化/关闭 WCO)，杜绝合成器白块/灰块回退 */
+[data-testid="title-bar"],
+[class*="titlebar"],
+[class*="window-controls"],
+div[style*="app-region: drag"],
+div[style*="app-region: no-drag"] {
+    background: transparent !important;
+    background-color: transparent !important;
 }
 
 /* 顶部面包屑：项目名与会话名平时通透、悬停优雅半透明白色微光 (彻底消除黑底) */
@@ -72,17 +79,17 @@ span[data-testid="breadcrumb-segment"]:hover {
     box-shadow: 0 2px 8px rgba(255, 255, 255, 0.06) !important;
 }
 
-/* 顶部 Open IDE 按钮及右侧操作栏按钮：平时通透微光外框、悬停白色微光高亮 (彻底消除黑底) */
+/* 顶部 Open IDE 按钮、三点菜单、侧边栏折叠等控制按钮：平时通透、悬停白色微光高亮 (彻底消除黑底) */
 [data-testid="open-editor-single"],
 [data-testid*="open-editor"],
 [data-testid*="open-ide"],
+[data-testid="titlebar-more-actions"],
+[data-testid="toggle-aux-sidebar"],
 button[data-testid="open-editor-single"],
 header button,
 header [role="button"],
 [data-testid="title-menu-bar"] button,
-[data-testid="title-menu-bar"] [role="button"],
-div:has(> * > * > [data-testid="breadcrumb-segment"]) button,
-div:has(> * > * > [data-testid="breadcrumb-segment"]) [role="button"] {
+[data-testid="title-menu-bar"] [role="button"] {
     background-color: transparent !important;
     background: transparent !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -93,13 +100,13 @@ div:has(> * > * > [data-testid="breadcrumb-segment"]) [role="button"] {
 [data-testid="open-editor-single"]:hover,
 [data-testid*="open-editor"]:hover,
 [data-testid*="open-ide"]:hover,
+[data-testid="titlebar-more-actions"]:hover,
+[data-testid="toggle-aux-sidebar"]:hover,
 button[data-testid="open-editor-single"]:hover,
 header button:hover,
 header [role="button"]:hover,
 [data-testid="title-menu-bar"] button:hover,
-[data-testid="title-menu-bar"] [role="button"]:hover,
-div:has(> * > * > [data-testid="breadcrumb-segment"]) button:hover,
-div:has(> * > * > [data-testid="breadcrumb-segment"]) [role="button"]:hover {
+[data-testid="title-menu-bar"] [role="button"]:hover {
     background-color: rgba(255, 255, 255, 0.14) !important;
     background: rgba(255, 255, 255, 0.14) !important;
     border-color: rgba(255, 255, 255, 0.24) !important;
