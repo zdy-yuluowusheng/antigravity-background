@@ -459,27 +459,85 @@
     }
   }
 
+  /**
+   * 启动窗口控制条（Window Controls Overlay）透明化巡检与保活机制
+   * 通过多频次重试、关键生命周期事件监听（加载、缩放、聚焦）以及前置心跳守护，防止由于刷新、失焦或生命周期重置导致白块回退
+   * @function startTitleBarKeeper
+   * @returns {() => void} 用于销毁所有定时器与移除事件监听器的清理回调函数
+   * @throws {Error} 若内部注册异常时予以捕获并输出日志，保证主执行流不受影响
+   */
+  function startTitleBarKeeper() {
+    let active = true;
+    let attempts = 0;
+    const maxAttempts = 30;
+
+    const tryApply = async () => {
+      if (!active) return;
+      const ok = await applyTransparentTitleBar();
+      if (ok && attempts === 0) {
+        plugin.log?.info('已成功应用透明窗口控制条 (WCO 透明化生效)');
+      }
+      attempts++;
+      if (!ok && attempts < maxAttempts && active) {
+        setTimeout(tryApply, 150);
+      }
+    };
+
+    // 1. 立即执行尝试
+    tryApply();
+
+    // 2. 页面就绪各关键时间点加固执行
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', tryApply, { once: true });
+    }
+    window.addEventListener('load', tryApply, { once: true });
+
+    // 3. 页面大小变动、获得焦点时加固执行（防止系统 DWM 或 Electron 重置）
+    const onResizeOrFocus = () => { tryApply(); };
+    window.addEventListener('resize', onResizeOrFocus);
+    window.addEventListener('focus', onResizeOrFocus);
+
+    // 4. 前 6 秒内心跳守护（每 600ms 执行一次，共 10 次）
+    const keeperInterval = setInterval(() => {
+      if (!active) return;
+      tryApply();
+    }, 600);
+
+    setTimeout(() => {
+      clearInterval(keeperInterval);
+    }, 6000);
+
+    return () => {
+      active = false;
+      clearInterval(keeperInterval);
+      window.removeEventListener('resize', onResizeOrFocus);
+      window.removeEventListener('focus', onResizeOrFocus);
+    };
+  }
+
   // 执行启动并注册清理回调
   if (typeof plugin !== 'undefined' && plugin && typeof plugin.onDispose === 'function') {
     plugin.log?.info('正在启动 Antigravity 2.0 深度简体中文汉化插件 (v1.1)...');
     const observer = initLocalization();
 
-    // 自动应用并维持右上角窗口控制条完全透明 (鼠标悬停保留原生高亮)
-    applyTransparentTitleBar();
-    const onResizeHandler = () => { applyTransparentTitleBar(); };
-    window.addEventListener('resize', onResizeHandler);
+    // 启动高可靠窗口控制条透明化保活
+    const disposeTitleBarKeeper = startTitleBarKeeper();
 
     plugin.onDispose(function () {
       observer.disconnect();
-      window.removeEventListener('resize', onResizeHandler);
+      disposeTitleBarKeeper();
       plugin.log?.info('已卸载简体中文汉化插件');
     });
   } else {
     // 独立运行容错
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initLocalization, { once: true });
+      document.addEventListener('DOMContentLoaded', () => {
+        initLocalization();
+        startTitleBarKeeper();
+      }, { once: true });
     } else {
       initLocalization();
+      startTitleBarKeeper();
     }
   }
 })();
