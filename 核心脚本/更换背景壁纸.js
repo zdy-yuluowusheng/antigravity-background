@@ -37,39 +37,36 @@ function replaceWallpaper(imagePath, cssPath, systemCssPath, darkenOpacity = 0.4
     console.log(`[3/4] 正在更新本地主题 CSS: ${cssPath}`);
     const cssContent = fs.readFileSync(cssPath, 'utf8');
 
-    // 精准定位 background-image: 到 url("data:...") 的起止位置
+    // 精准定位 background-image:
     const bgStart = cssContent.indexOf('background-image:');
     if (bgStart === -1) {
       throw new Error('未在主题 CSS 中定位到 background-image: 声明');
     }
 
-    const urlStart = cssContent.indexOf('url("data:image/', bgStart);
+    // 优先更新 linear-gradient 遮罩层（如果用户指定了遮罩透明度）
+    let updatedCss = cssContent;
+    if (darkenOpacity !== null && darkenOpacity !== undefined && !isNaN(darkenOpacity)) {
+      const gradientRegex = /linear-gradient\(rgba\([^)]+\),\s*rgba\([^)]+\)\)/;
+      if (gradientRegex.test(updatedCss)) {
+        const newGradient = `linear-gradient(rgba(0, 0, 0, ${darkenOpacity.toFixed(2)}), rgba(0, 0, 0, ${darkenOpacity.toFixed(2)}))`;
+        updatedCss = updatedCss.replace(gradientRegex, newGradient);
+      }
+    }
+
+    // 精准定位 background-image 中的 url("...") 区域
+    const urlStart = updatedCss.indexOf('url("', bgStart);
     if (urlStart === -1) {
-      throw new Error('未在主题 CSS 中定位到 url("data:image/ 声明');
+      throw new Error('未在主题 CSS 中定位到 url(" 声明');
     }
 
     const dataStart = urlStart + 'url("'.length;
-    const dataEnd = cssContent.indexOf('"', dataStart);
+    const dataEnd = updatedCss.indexOf('")', dataStart);
     if (dataEnd === -1) {
-      throw new Error('未在主题 CSS 中定位到 Base64 结束引号');
+      throw new Error('未在主题 CSS 中定位到 Base64 结束引号 ")');
     }
 
-    // 同时更新 linear-gradient 遮罩层
-    const gradientStart = cssContent.indexOf('linear-gradient(', bgStart);
-    const gradientEnd = cssContent.indexOf('),', gradientStart);
-
-    let updatedCss = cssContent;
-    if (gradientStart !== -1 && gradientEnd !== -1 && gradientStart < urlStart) {
-      const newGradient = `linear-gradient(rgba(0, 0, 0, ${darkenOpacity.toFixed(2)}), rgba(0, 0, 0, ${darkenOpacity.toFixed(2)}))`;
-      updatedCss = updatedCss.slice(0, gradientStart) + newGradient + updatedCss.slice(gradientEnd + 1);
-    }
-
-    // 重新计算 dataStart 与 dataEnd
-    const finalUrlStart = updatedCss.indexOf('url("data:image/', bgStart);
-    const finalDataStart = finalUrlStart + 'url("'.length;
-    const finalDataEnd = updatedCss.indexOf('"', finalDataStart);
-
-    updatedCss = updatedCss.slice(0, finalDataStart) + dataUrl + updatedCss.slice(finalDataEnd);
+    // 拼接替换，完整保留 url(" 前缀与 ") !important; 后缀
+    updatedCss = updatedCss.slice(0, dataStart) + dataUrl + updatedCss.slice(dataEnd);
 
     fs.writeFileSync(cssPath, updatedCss, 'utf8');
     console.log('[成功] 本地主题 CSS 背景壁纸已成功更新！');
@@ -88,12 +85,17 @@ function replaceWallpaper(imagePath, cssPath, systemCssPath, darkenOpacity = 0.4
   }
 }
 
-// 命令行参数处理
-const args = process.argv.slice(2);
-const targetImage = args[0] ? path.resolve(args[0]) : path.resolve('d:/work/antigravity-background/主题样式/壁纸原图.jpg');
-const opacity = args[1] ? parseFloat(args[1]) : 0.40;
+// 导出核心替换函数供外部调用
+module.exports = { replaceWallpaper };
 
-const localCss = path.resolve('d:/work/antigravity-background/主题样式/晨雾森林毛玻璃主题.css');
-const sysCss = path.resolve('C:/Users/ylws/AppData/Roaming/BetterGravity/themes/晨雾森林毛玻璃主题.css');
+// 作为脚本直接运行时的命令行入口
+if (require.main === module) {
+  const args = process.argv.slice(2);
+  const targetImage = args[0] ? path.resolve(args[0]) : path.resolve('d:/work/antigravity-background/主题样式/壁纸原图.jpg');
+  const opacity = args[1] !== undefined ? parseFloat(args[1]) : null;
 
-replaceWallpaper(targetImage, localCss, sysCss, opacity);
+  const localCss = path.resolve('d:/work/antigravity-background/主题样式/晨雾森林毛玻璃主题.css');
+  const sysCss = path.resolve('C:/Users/ylws/AppData/Roaming/BetterGravity/themes/晨雾森林毛玻璃主题.css');
+
+  replaceWallpaper(targetImage, localCss, sysCss, opacity);
+}
