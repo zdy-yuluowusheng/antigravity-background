@@ -528,32 +528,40 @@ div[data-testid="conversation-view"] [class*="terminal"] {
 }
 
 /* ================= 10. 主对话框 / 输入框保持通透美观与清除深色黑条 ================= */
-/* 保持主输入框底层卡片透明，与晨雾背景自然融合 (严密排除上方浮动候选项列表与所有弹出选择框) */
-[data-testid="agent-input-box"] > div:not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]),
+/* 保持主输入框底层大容器透明，与晨雾背景自然融合 (严密排除上方浮动候选项列表与所有弹出选择框) */
+[data-testid="agent-input-box"],
+[data-testid="agent-input-box"] > div:not(.bg-card-border):not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]),
 [data-testid="agent-input-box"] .bg-card:not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]),
-[data-testid="agent-input-box"] .bg-card-border:not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]),
-[data-testid="agent-input-box"] [class*="bg-card"]:not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]),
-[data-testid="agent-input-box"] [class*="bg-card-border"]:not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]) {
+[data-testid="agent-input-box"] [class*="bg-card"]:not(.bg-card-border):not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]) {
     background-color: transparent !important;
     background: transparent !important;
     box-shadow: none !important;
 }
 
-/* 为主输入框赋予精致高透的玻璃外边框 (解构 backdrop-filter，防止破坏挂载其内部的上方候选项菜单模糊采样) */
+/* 为主输入框整体卡片赋予统一连续的晨雾毛玻璃雾化、精致高透外边框与自然微暗底色 (上下两部分彻底无缝融合) */
 [data-testid="agent-input-box"] .bg-card-border:not([data-mention-menu]):not([class*="bottom-full"]) {
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
     border-radius: 16px !important;
+    backdrop-filter: blur(16px) saturate(130%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(130%) !important;
+    background-color: rgba(13, 21, 18, 0.22) !important;
+    background: rgba(13, 21, 18, 0.22) !important;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.20) !important;
+    overflow: visible !important;
 }
 
-/* 将主输入框底部的毛玻璃仅局限于真实的文本输入卡片内部，杜绝祖先层级向上采样污染 */
-[data-testid="agent-input-box"] .bg-card-border > div.bg-card:not([data-mention-menu]):not([class*="bottom-full"]) {
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border-radius: 15px !important;
+/* 确保内部各子区域（上半截文本输入区、下半截工具栏按钮区）背景纯净透底，杜绝局部双重叠加导致不均 */
+[data-testid="agent-input-box"] .bg-card-border > div,
+[data-testid="agent-input-box"] .bg-card-border > div.bg-card,
+[data-testid="agent-input-box"] .bg-card-border form,
+[data-testid="agent-input-box"] .bg-card-border [class*="items-center"]:not(button):not(a):not(span) {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background-color: transparent !important;
+    background: transparent !important;
 }
 
-/* 输入框内部底栏按键与药丸按钮（如模型选择器触发按钮、语音等）适配微光透亮效果 */
+/* 输入框内部底栏按键与药丸按钮（如模型选择器触发按钮、Local工作区选择、语音等）适配微光透亮效果 */
 [data-testid="agent-input-box"] button[class*="bg-secondary"]:not([role="menuitem"]):not([role="option"]),
 [data-testid="agent-input-box"] .bg-secondary:not([role="menuitem"]):not([role="option"]):not([data-side]):not([role="menu"]):not([data-radix-popper-content-wrapper] *):not([data-mention-menu] *):not([class*="bottom-full"] *) {
     background-color: rgba(255, 255, 255, 0.10) !important;
