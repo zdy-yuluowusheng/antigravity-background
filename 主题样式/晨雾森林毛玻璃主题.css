@@ -458,6 +458,62 @@ button[class*="review-button"]:hover {
     background-color: rgba(255, 255, 255, 0.15) !important;
 }
 
+/* 8.5 代码变更行数指示器 (Diff / +增 -删行数胶囊，如 +92 -0 / Open Diff 触发按钮) */
+/* 
+ * 彻底解决代码变更按钮在鼠标悬停时因 Tailwind 的 hover:bg-secondary 呈现纯黑色块的问题。
+ * 平时彻底纯透明（无背景色、细边框平滑过渡），鼠标悬停时与文件胶囊保持一致的半透明微光高亮与微光白边。
+ */
+
+/* 1. 平时状态：纯透明底色，保留平滑过渡动画 */
+[data-testid="diff-line-count"],
+span[data-testid="diff-line-count"],
+div[data-testid="conversation-view"] [data-testid="diff-line-count"],
+div[data-testid="conversation-view"] span[data-testid="diff-line-count"],
+[class*="diff-line-count"],
+span[class*="hover:bg-secondary"]:has(> .text-green-500),
+span.cursor-pointer:has(> .text-green-500):has(> .text-red-500),
+span:has(> .text-green-500):has(> .text-red-500) {
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid transparent !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* 2. 悬停状态：强力覆盖原生 hover:bg-secondary 纯黑色块，统一为与文件胶囊一致的白色半透明微光与高亮边框 */
+[data-testid="diff-line-count"]:hover,
+span[data-testid="diff-line-count"]:hover,
+div[data-testid="conversation-view"] [data-testid="diff-line-count"]:hover,
+div[data-testid="conversation-view"] span[data-testid="diff-line-count"]:hover,
+[data-testid="diff-line-count"].cursor-pointer:hover,
+[class*="diff-line-count"]:hover,
+span[class*="hover:bg-secondary"]:has(> .text-green-500):hover,
+span.cursor-pointer:has(> .text-green-500):has(> .text-red-500):hover,
+span:has(> .text-green-500):has(> .text-red-500):hover {
+    background-color: rgba(255, 255, 255, 0.10) !important;
+    background: rgba(255, 255, 255, 0.10) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+    border-radius: 6px !important;
+    box-shadow: 0 1px 4px rgba(255, 255, 255, 0.04) !important;
+}
+
+/* 3. 悬停时内部增加(+)与删除(-)数字保持鲜明翠绿与绯红，防止被其他全局规则变白 */
+[data-testid="diff-line-count"] .text-green-500,
+[data-testid="diff-line-count"]:hover .text-green-500,
+span:has(> .text-green-500):has(> .text-red-500):hover .text-green-500 {
+    color: rgb(34, 197, 94) !important;
+}
+
+[data-testid="diff-line-count"] .text-red-500,
+[data-testid="diff-line-count"]:hover .text-red-500,
+span:has(> .text-green-500):has(> .text-red-500):hover .text-red-500 {
+    color: rgb(239, 68, 68) !important;
+}
+
 /* ================= 9. 命令行与执行步骤行：父级与子项全面统一为平时纯透明、悬停柔和白色微光 ================= */
 /* 
  * 彻底解决执行步骤（Ran node / Ran Copy-Item / Thought for / Worked for / Edited / 子项命令行）
