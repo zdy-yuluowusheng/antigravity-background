@@ -528,29 +528,34 @@ div[data-testid="conversation-view"] [class*="terminal"] {
 }
 
 /* ================= 10. 主对话框 / 输入框保持通透美观与清除深色黑条 ================= */
-/* 保持主输入框底层卡片透明，与晨雾背景自然融合 (排除上方浮动候选项列表) */
-[data-testid="agent-input-box"],
-[data-testid="agent-input-box"] .bg-card:not([data-mention-menu]):not([class*="bottom-full"]),
-[data-testid="agent-input-box"] .bg-card-border:not([data-mention-menu]):not([class*="bottom-full"]),
-[data-testid="agent-input-box"] [class*="bg-card"]:not([data-mention-menu]):not([class*="bottom-full"]),
-[data-testid="agent-input-box"] [class*="bg-card-border"]:not([data-mention-menu]):not([class*="bottom-full"]) {
+/* 保持主输入框底层卡片透明，与晨雾背景自然融合 (严密排除上方浮动候选项列表与所有弹出选择框) */
+[data-testid="agent-input-box"] > div:not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]),
+[data-testid="agent-input-box"] .bg-card:not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]),
+[data-testid="agent-input-box"] .bg-card-border:not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]),
+[data-testid="agent-input-box"] [class*="bg-card"]:not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]),
+[data-testid="agent-input-box"] [class*="bg-card-border"]:not([data-mention-menu]):not([class*="bottom-full"]):not([role="listbox"]):not([role="menu"]) {
     background-color: transparent !important;
     background: transparent !important;
     box-shadow: none !important;
 }
 
-/* 为主输入框赋予精致高透的玻璃外边框与轻微毛玻璃 */
-[data-testid="agent-input-box"] .bg-card-border {
+/* 为主输入框赋予精致高透的玻璃外边框 (解构 backdrop-filter，防止破坏挂载其内部的上方候选项菜单模糊采样) */
+[data-testid="agent-input-box"] .bg-card-border:not([data-mention-menu]):not([class*="bottom-full"]) {
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
     border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.20) !important;
+}
+
+/* 将主输入框底部的毛玻璃仅局限于真实的文本输入卡片内部，杜绝祖先层级向上采样污染 */
+[data-testid="agent-input-box"] .bg-card-border > div.bg-card:not([data-mention-menu]):not([class*="bottom-full"]) {
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.20) !important;
+    border-radius: 15px !important;
 }
 
 /* 输入框内部底栏按键与药丸按钮（如模型选择器触发按钮、语音等）适配微光透亮效果 */
 [data-testid="agent-input-box"] button[class*="bg-secondary"]:not([role="menuitem"]):not([role="option"]),
-[data-testid="agent-input-box"] .bg-secondary:not([role="menuitem"]):not([role="option"]):not([data-side]):not([role="menu"]):not([data-radix-popper-content-wrapper] *) {
+[data-testid="agent-input-box"] .bg-secondary:not([role="menuitem"]):not([role="option"]):not([data-side]):not([role="menu"]):not([data-radix-popper-content-wrapper] *):not([data-mention-menu] *):not([class*="bottom-full"] *) {
     background-color: rgba(255, 255, 255, 0.10) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
@@ -559,27 +564,27 @@ div[data-testid="conversation-view"] [class*="terminal"] {
     background-color: rgba(255, 255, 255, 0.18) !important;
 }
 
-/* 彻底清除输入框内部输入 @ 或 / 时出现的突兀黑色长条、黑底胶囊与深色占位块 */
-[data-testid="agent-input-box"] .bg-muted,
-[data-testid="agent-input-box"] [class*="bg-muted"],
-[data-testid="agent-input-box"] .bg-accent,
-[data-testid="agent-input-box"] [class*="bg-accent"],
-[data-testid="agent-input-box"] .bg-black,
-[data-testid="agent-input-box"] [class*="bg-black"],
-[data-testid="agent-input-box"] .bg-zinc-800,
-[data-testid="agent-input-box"] .bg-neutral-800,
-[data-testid="agent-input-box"] [class*="bg-zinc"],
-[data-testid="agent-input-box"] [class*="bg-neutral"] {
+/* 彻底清除输入框内部输入 @ 或 / 时出现的突兀黑色长条、黑底胶囊与深色占位块 (严格排除上方浮动候选项列表) */
+[data-testid="agent-input-box"] form .bg-muted:not([data-mention-menu] *):not([class*="bottom-full"] *),
+[data-testid="agent-input-box"] form [class*="bg-muted"]:not([data-mention-menu] *):not([class*="bottom-full"] *),
+[data-testid="agent-input-box"] form .bg-accent:not([data-mention-menu] *):not([class*="bottom-full"] *),
+[data-testid="agent-input-box"] form [class*="bg-accent"]:not([data-mention-menu] *):not([class*="bottom-full"] *),
+[data-testid="agent-input-box"] form .bg-black:not([data-mention-menu] *):not([class*="bottom-full"] *),
+[data-testid="agent-input-box"] form [class*="bg-black"]:not([data-mention-menu] *):not([class*="bottom-full"] *),
+[data-testid="agent-input-box"] form .bg-zinc-800:not([data-mention-menu] *):not([class*="bottom-full"] *),
+[data-testid="agent-input-box"] form .bg-neutral-800:not([data-mention-menu] *):not([class*="bottom-full"] *),
+[data-testid="agent-input-box"] form [class*="bg-zinc"]:not([data-mention-menu] *):not([class*="bottom-full"] *),
+[data-testid="agent-input-box"] form [class*="bg-neutral"]:not([data-mention-menu] *):not([class*="bottom-full"] *) {
     background-color: transparent !important;
     background: transparent !important;
     box-shadow: none !important;
 }
 
 /* 彻底清除输入框内部无文本、无图标的空按钮与占位框残影 (解决 @ 下方残留的小圈) */
-[data-testid="agent-input-box"] button:empty,
-[data-testid="agent-input-box"] button:not(:has(svg)):not(:has(img)):not(:has(span)),
-[data-testid="agent-input-box"] button.inline-flex:empty,
-[data-testid="agent-input-box"] *:empty:not([class*="avatar"]):not(input):not(textarea):not(img):not(svg) {
+[data-testid="agent-input-box"] form button:empty,
+[data-testid="agent-input-box"] form button:not(:has(svg)):not(:has(img)):not(:has(span)),
+[data-testid="agent-input-box"] form button.inline-flex:empty,
+[data-testid="agent-input-box"] form *:empty:not([class*="avatar"]):not(input):not(textarea):not(img):not(svg):not([role="option"]) {
     background-color: transparent !important;
     background: transparent !important;
     border-color: transparent !important;
@@ -587,13 +592,13 @@ div[data-testid="conversation-view"] [class*="terminal"] {
 }
 
 /* 对输入框内部渲染的真实提及胶囊、参数指示条、上下文药丸与输入附件赋予高级微光与清晰白字 */
-[data-testid="agent-input-box"] [class*="pill"]:not(:empty),
-[data-testid="agent-input-box"] [class*="chip"]:not(:empty),
-[data-testid="agent-input-box"] [class*="badge"]:not(:empty),
-[data-testid="agent-input-box"] [class*="token"]:not(:empty),
+[data-testid="agent-input-box"] form [class*="pill"]:not(:empty),
+[data-testid="agent-input-box"] form [class*="chip"]:not(:empty),
+[data-testid="agent-input-box"] form [class*="badge"]:not(:empty),
+[data-testid="agent-input-box"] form [class*="token"]:not(:empty),
 [data-testid="agent-input-box"] [data-testid="input-attachment"],
-[data-testid="agent-input-box"] [class*="mention"]:not(:empty),
-[data-testid="agent-input-box"] [class*="scope"]:not(:empty) {
+[data-testid="agent-input-box"] form [class*="mention"]:not(:empty),
+[data-testid="agent-input-box"] form [class*="scope"]:not(:empty) {
     background-color: rgba(255, 255, 255, 0.10) !important;
     background: rgba(255, 255, 255, 0.10) !important;
     border: 1px solid rgba(255, 255, 255, 0.14) !important;
@@ -756,153 +761,21 @@ div[data-testid="conversation-view"] th:hover {
     background-color: rgba(255, 255, 255, 0.12) !important;
 }
 
-/* ================= 15. 输入框 @ 与 / 候选项列表（Mention / Slash Commands）：1:1 对齐输入框通透毛玻璃雾化 ================= */
+/* ================= 15 & 16. 全局所有弹出选择卡片（模型选择/项目目录/工作区/@引用//命令候选项）统一极致轻透雾化与微光 ================= */
 /*
- * 解决输入框键入 @ 或 / 时，上方候选项列表在纯透明与太黑之间的失衡问题。
- * 对齐主对话输入框的暗调毛玻璃质感：
- * 采用微暗半透明底色 (rgba(13, 21, 18, 0.58)) + 16px 深度高斯模糊，彻底消除纯透明穿透，且与输入框浑然一体。
- * 彻底移除阻断模糊采样的 isolation，选中与悬停条目呈现细腻柔和的白色微光。
+ * 响应用户核心需求：将输入框键入 @ 或 / 时弹出的选择框，与模型选择框完全 1:1 统一！
+ * 1. 彻底阻隔后方文字：依托真实毛玻璃雾化 (rgba(13, 21, 18, 0.82) + 20px 深度高斯模糊)，彻底将后方文字化开遮挡，绝不透字重叠混乱。
+ * 2. 彻底抹平放大动作：锁死 Popper 与浮层的 scale 动画 (--tw-enter-scale: 1, @keyframes 归零)。
+ * 3. 悬停细腻白色微光：选项条目平时纯透明，鼠标悬停或键盘高亮呈现柔和白色半透明微光与高透细边框。
  */
 
-/* 1. 候选项菜单外层浮动卡片容器：精准覆盖所有定位浮层并施加 16px 毛玻璃雾化 */
-[data-mention-menu],
-div[role="listbox"][data-mention-menu],
-div[role="listbox"][aria-label="Mentions"],
-[data-testid="agent-input-box"] [data-mention-menu],
-[data-testid="agent-input-box"] div[role="listbox"][class*="bottom-full"],
-[data-testid="agent-input-box"] div[class*="bottom-full"][class*="bg-card"],
-[data-testid="agent-input-box"] div[class*="bottom-full"],
-div[class*="bottom-full"][class*="bg-card"],
-div[class*="bottom-full"][class*="rounded-2xl"],
-[data-testid="agent-input-box"] div[role="listbox"],
-[data-testid*="mention-menu"],
-[data-testid*="slash-menu"],
-[data-testid*="command-menu"],
-#typeahead-menu {
-    background-color: rgba(13, 21, 18, 0.58) !important;
-    background: rgba(13, 21, 18, 0.58) !important;
-    backdrop-filter: blur(16px) saturate(130%) !important;
-    -webkit-backdrop-filter: blur(16px) saturate(130%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.16) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.30) !important;
-    overflow: hidden !important;
-    transform: translateZ(0) !important;
-}
-
-/* 2. 候选项列表内层滚动容器与遮罩：通透无边框，保持一致圆角与间距 */
-[data-mention-menu] > div,
-[data-testid="agent-input-box"] [data-mention-menu] > div,
-[data-testid="agent-input-box"] div[role="listbox"] > div,
-div[class*="bottom-full"] > div {
-    background-color: transparent !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* 3. 候选项各行条目（Item）项容器：平时纯净通透，杜绝多层背景叠加 */
-[data-mention-menu] [role="option"],
-[data-testid="agent-input-box"] [data-mention-menu] [role="option"],
-div[class*="bottom-full"] [role="option"],
-[data-mention-menu] [cmdk-item],
-[data-mention-menu] li {
-    background-color: transparent !important;
-    background: transparent !important;
-    border: 1px solid transparent !important;
-    border-radius: 8px !important;
-    color: rgba(255, 255, 255, 0.88) !important;
-    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
-}
-
-/* 4. 候选项条目内层交互容器强制透底，清除原生深色条块 */
-[data-mention-menu] [role="option"] > div,
-[data-testid="agent-input-box"] [data-mention-menu] [role="option"] > div,
-div[class*="bottom-full"] [role="option"] > div {
-    background-color: transparent !important;
-    background: transparent !important;
-    border-color: transparent !important;
-    box-shadow: none !important;
-}
-
-/* 5. 候选项键盘当前高亮 / 鼠标悬停 / 激活条目：柔和白色半透明微光 */
-[data-mention-menu] [role="option"]:hover,
-[data-mention-menu] [role="option"][aria-selected="true"],
-[data-mention-menu] [role="option"][data-highlighted],
-[data-mention-menu] [cmdk-item]:hover,
-[data-mention-menu] [cmdk-item][data-selected="true"],
-[data-testid="agent-input-box"] [data-mention-menu] [role="option"]:hover,
-[data-testid="agent-input-box"] [data-mention-menu] [role="option"][aria-selected="true"],
-div[class*="bottom-full"] [role="option"]:hover,
-div[class*="bottom-full"] [role="option"][aria-selected="true"],
-[data-mention-menu] [role="option"] > div:hover,
-[data-mention-menu] [role="option"] > div.bg-secondary,
-[data-mention-menu] [role="option"][aria-selected="true"] > div,
-[data-testid="agent-input-box"] [data-mention-menu] .bg-secondary,
-[data-mention-menu] [role="option"] > div:hover > *,
-[data-mention-menu] [role="option"][aria-selected="true"] > div > * {
-    background-color: rgba(255, 255, 255, 0.12) !important;
-    background: rgba(255, 255, 255, 0.12) !important;
-    border: 1px solid rgba(255, 255, 255, 0.10) !important;
-    color: #ffffff !important;
-}
-
-/* 6. 候选项分类标题与次要描述信息清晰度优化 */
-[data-mention-menu] [class*="opacity-50"],
-[data-mention-menu] [class*="text-muted"],
-[data-mention-menu] [data-testid="menu-option-description"] {
-    color: rgba(255, 255, 255, 0.60) !important;
-}
-
-/* 7. 候选项标题与主文件名文字高亮呈现 */
-[data-mention-menu] [data-testid="menu-option-label"],
-[data-mention-menu] [data-testid="menu-option-label"] span,
-[data-mention-menu] strong {
-    color: #ffffff !important;
-    font-weight: 500 !important;
-}
-
-/* 8. 候选项内部滚动条精致纤细化，彻底消灭底部与右侧粗笨黑条 */
-[data-mention-menu]::-webkit-scrollbar,
-[data-mention-menu] *::-webkit-scrollbar,
-div[role="listbox"]::-webkit-scrollbar,
-div[role="listbox"] *::-webkit-scrollbar {
-    width: 4px !important;
-    height: 4px !important;
-}
-
-[data-mention-menu]::-webkit-scrollbar-thumb,
-[data-mention-menu] *::-webkit-scrollbar-thumb,
-div[role="listbox"]::-webkit-scrollbar-thumb,
-div[role="listbox"] *::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.20) !important;
-    border-radius: 4px !important;
-}
-
-[data-mention-menu]::-webkit-scrollbar-track,
-[data-mention-menu] *::-webkit-scrollbar-track,
-div[role="listbox"]::-webkit-scrollbar-track,
-div[role="listbox"] *::-webkit-scrollbar-track {
-    background: transparent !important;
-}
-
-/* ================= 16. 新对话窗口选择器菜单 (项目目录/模型选择/工作区) 极致轻透雾化与抗放大加固 ================= */
-/*
- * 1. 彻底根除背景放大动作：
- *    - 剥离所有 Popper 包装器与菜单卡片的 scale/zoom 动画，抹平 Tailwind enter / zoom-in-95 缩放矩阵。
- *    - 强制所有动画变量 (--tw-enter-scale, --tw-scale-x, --tw-scale-y) 锁死为 1。
- *    - 重写 keyframes (slideIn, enter, zoomIn, exit, zoomOut)，从源头拔除 scale 变形。
- *    - 强化 isolation 与 transform: translateZ(0)，形成独立图层边界，杜绝 backdrop-filter 向上采样放大。
- * 2. 1:1 对齐主对话框轻盈透明雾化效果：
- *    - 采用轻度暗调半透明底色 (rgba(13, 21, 18, 0.32)) + 16px 深度高斯模糊，与对话输入框质感天衣无缝。
- * 3. 彻底清除条目深色黑框：条目平时纯透明，悬停时呈现柔和白色半透明微光。
- */
-
-/* 1. Radix Popper 外层定位容器：禁用任何缩放与位移动画，只保留 Popper 自身的绝对坐标，严防放大镜效应 */
+/* 1. Radix Popper 外层定位容器与输入框上浮容器：禁用缩放与位移动画，严防放大镜效应 */
 [data-radix-popper-content-wrapper],
 div[role="presentation"][data-side],
 div[data-side],
-[data-portal] {
+[data-portal],
+[data-testid="agent-input-box"] div[class*="bottom-full"],
+div[class*="bottom-full"] {
     animation: none !important;
     animation-duration: 0s !important;
     animation-name: none !important;
@@ -915,7 +788,7 @@ div[data-side],
     --tw-enter-translate-y: 0 !important;
 }
 
-/* 2. 彻底禁用所有可能的模态全屏遮罩层 (Overlay) 滤镜与动画，防止遮罩淡入导致背景视觉缩放 */
+/* 2. 彻底禁用全屏遮罩层 (Overlay) 滤镜与动画 */
 [data-radix-dropdown-menu-overlay],
 [data-radix-popover-overlay],
 [data-radix-select-overlay],
@@ -929,7 +802,7 @@ div[data-side],
     transition: none !important;
 }
 
-/* 3. 下拉菜单真实浮层卡片：1:1 对齐主对话框的轻盈透明雾化核心，强力锁死 transform 与 scale */
+/* 3. 全局所有选择框真实浮层卡片（模型选择、项目目录、工作区选择、@引用菜单、/命令菜单）：完全 1:1 统一毛玻璃核心 */
 .animate-slideIn,
 [class*="animate-slideIn"],
 [class*="animate-in"],
@@ -944,7 +817,16 @@ div[data-side] > div,
 [data-radix-popover-content],
 [data-radix-select-content],
 div[role="menu"],
-div[role="listbox"]:not([data-mention-menu]),
+div[role="listbox"],
+[data-mention-menu],
+div[data-mention-menu],
+div[role="listbox"][data-mention-menu],
+div[role="listbox"][aria-label="Mentions"],
+[data-testid="agent-input-box"] [data-mention-menu],
+[data-testid="agent-input-box"] div[role="listbox"],
+[data-testid="agent-input-box"] div[class*="bottom-full"],
+div[class*="bottom-full"][class*="bg-card"],
+div[class*="bottom-full"][class*="rounded-2xl"],
 div[data-side][class*="bg-popover"],
 div[data-side][class*="bg-card"],
 div[data-side][class*="border"],
@@ -955,18 +837,22 @@ div[data-side][class*="shadow"],
 [data-testid*="model-picker"],
 [data-testid*="workspace-picker"],
 [data-testid*="worktree-picker"],
+[data-testid*="mention-menu"],
+[data-testid*="slash-menu"],
+[data-testid*="command-menu"],
+#typeahead-menu,
 div[data-portal] div[role="menu"],
 div[data-portal] div[role="listbox"] {
-    background-color: rgba(13, 21, 18, 0.32) !important;
-    background: rgba(13, 21, 18, 0.32) !important;
-    backdrop-filter: blur(16px) saturate(130%) !important;
-    -webkit-backdrop-filter: blur(16px) saturate(130%) !important;
+    background-color: rgba(13, 21, 18, 0.82) !important;
+    background: rgba(13, 21, 18, 0.82) !important;
+    backdrop-filter: blur(20px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(140%) !important;
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
     border-radius: 14px !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35) !important;
     overflow: hidden !important;
 
-    /* 独立图层与硬件加速隔离：严禁任何 scale 放大矩阵 */
+    /* 独立硬件加速图层隔离，彻底遮盖化开后方文字 */
     transform: translateZ(0) !important;
     -webkit-transform: translateZ(0) !important;
     transform-origin: unset !important;
@@ -981,13 +867,15 @@ div[data-portal] div[role="listbox"] {
     --tw-enter-translate-y: 0 !important;
     transition: opacity 0.12s ease-out !important;
     isolation: isolate !important;
+    z-index: 99999 !important;
 }
 
 /* 专项彻底禁用 animate-slideIn 与各类 scale/zoom 进入动画，确保背景绝对不被放大 */
 .animate-slideIn,
 [class*="animate-slideIn"],
 div[role="presentation"][data-side] > div,
-div[data-side] > div {
+div[data-side] > div,
+[data-mention-menu] {
     animation: none !important;
     animation-name: none !important;
     animation-duration: 0s !important;
@@ -996,69 +884,24 @@ div[data-side] > div {
 }
 
 /* 从源头重写 keyframes 动画，彻底抹平全局所有 scale 缩放矩阵 */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateZ(0) !important;
-    }
-    to {
-        opacity: 1;
-        transform: translateZ(0) !important;
-    }
-}
+@keyframes slideIn { from { opacity: 0; transform: translateZ(0) !important; } to { opacity: 1; transform: translateZ(0) !important; } }
+@keyframes enter   { from { opacity: 0; transform: translateZ(0) !important; } to { opacity: 1; transform: translateZ(0) !important; } }
+@keyframes zoomIn  { from { opacity: 0; transform: translateZ(0) !important; } to { opacity: 1; transform: translateZ(0) !important; } }
+@keyframes exit    { from { opacity: 1; transform: translateZ(0) !important; } to { opacity: 0; transform: translateZ(0) !important; } }
+@keyframes zoomOut { from { opacity: 1; transform: translateZ(0) !important; } to { opacity: 0; transform: translateZ(0) !important; } }
 
-@keyframes enter {
-    from {
-        opacity: 0;
-        transform: translateZ(0) !important;
-    }
-    to {
-        opacity: 1;
-        transform: translateZ(0) !important;
-    }
-}
-
-@keyframes zoomIn {
-    from {
-        opacity: 0;
-        transform: translateZ(0) !important;
-    }
-    to {
-        opacity: 1;
-        transform: translateZ(0) !important;
-    }
-}
-
-@keyframes exit {
-    from {
-        opacity: 1;
-        transform: translateZ(0) !important;
-    }
-    to {
-        opacity: 0;
-        transform: translateZ(0) !important;
-    }
-}
-
-@keyframes zoomOut {
-    from {
-        opacity: 1;
-        transform: translateZ(0) !important;
-    }
-    to {
-        opacity: 0;
-        transform: translateZ(0) !important;
-    }
-}
-
-/* 4. 下拉菜单内层滚动区与包装器：纯净通透无冗余边框与黑底 */
+/* 4. 下拉菜单与候选项内层滚动区包装器：纯净通透无冗余边框与黑底 */
 [data-radix-popper-content-wrapper] [class*="viewport"],
 [data-radix-menu-content] > div,
 [data-radix-dropdown-menu-content] > div,
 [data-radix-popover-content] > div,
 [data-radix-select-content] > div,
 div[role="menu"] > div,
-div[role="listbox"]:not([data-mention-menu]) > div,
+div[role="listbox"] > div,
+[data-mention-menu] > div,
+[data-testid="agent-input-box"] [data-mention-menu] > div,
+[data-testid="agent-input-box"] div[role="listbox"] > div,
+div[class*="bottom-full"] > div,
 div[data-side] [class*="viewport"],
 div[data-side] > div,
 [cmdk-list],
@@ -1069,7 +912,7 @@ div[data-side] > div,
     box-shadow: none !important;
 }
 
-/* 5. 项目搜索输入框（Search Projects）：微光底色与精致微白边框 */
+/* 5. 搜索输入框（如 Search Projects）：微光底色与精致微白边框 */
 [data-radix-popper-content-wrapper] input,
 [data-radix-menu-content] input,
 [data-radix-popover-content] input,
@@ -1090,12 +933,15 @@ div[data-side] input::placeholder,
     color: rgba(255, 255, 255, 0.45) !important;
 }
 
-/* 6. 下拉菜单各行条目（Item）与按钮：平时 100% 纯净通透，杜绝多余黑框与胶囊背景 */
+/* 6. 所有选择菜单与候选项各行条目（Item）与按钮：平时 100% 纯净通透，杜绝多余黑框与黑条 */
 [role="menuitem"],
 [role="menuitemcheckbox"],
 [role="menuitemradio"],
 div[role="menu"] [role="option"],
-div[role="listbox"]:not([data-mention-menu]) [role="option"],
+div[role="listbox"] [role="option"],
+[data-mention-menu] [role="option"],
+[data-testid="agent-input-box"] [data-mention-menu] [role="option"],
+div[class*="bottom-full"] [role="option"],
 [data-radix-collection-item],
 [cmdk-item],
 div[data-side] [role="menuitem"],
@@ -1105,7 +951,8 @@ div[data-side] button,
 [data-radix-popper-content-wrapper] button,
 [data-radix-popper-content-wrapper] [role="button"],
 div[role="menu"] button,
-div[role="menu"] [role="button"] {
+div[role="menu"] [role="button"],
+[data-mention-menu] li {
     background-color: transparent !important;
     background: transparent !important;
     color: rgba(255, 255, 255, 0.88) !important;
@@ -1120,14 +967,17 @@ div[role="menu"] [role="button"] {
 [role="option"] > *,
 [cmdk-item] > *,
 div[data-side] button > *,
-div[data-side] [role="button"] > * {
+div[data-side] [role="button"] > *,
+[data-mention-menu] [role="option"] > div,
+[data-testid="agent-input-box"] [data-mention-menu] [role="option"] > div,
+div[class*="bottom-full"] [role="option"] > div {
     background-color: transparent !important;
     background: transparent !important;
     border-color: transparent !important;
     box-shadow: none !important;
 }
 
-/* 7. 下拉菜单条目高亮、选中与鼠标悬停（Hover / Active / Highlighted）：柔和白色半透明微光 */
+/* 7. 所有选择菜单与候选项条目高亮、选中与鼠标悬停（Hover / Active / Highlighted）：柔和白色半透明微光，与模型选择 1:1 统一 */
 [role="menuitem"]:hover,
 [role="menuitem"][data-highlighted],
 [role="menuitem"][data-state="checked"],
@@ -1137,9 +987,18 @@ div[data-side] [role="button"] > * {
 div[role="menu"] [role="option"]:hover,
 div[role="menu"] [role="option"][data-highlighted],
 div[role="menu"] [role="option"][aria-selected="true"],
-div[role="listbox"]:not([data-mention-menu]) [role="option"]:hover,
-div[role="listbox"]:not([data-mention-menu]) [role="option"][data-highlighted],
-div[role="listbox"]:not([data-mention-menu]) [role="option"][aria-selected="true"],
+div[role="listbox"] [role="option"]:hover,
+div[role="listbox"] [role="option"][data-highlighted],
+div[role="listbox"] [role="option"][aria-selected="true"],
+[data-mention-menu] [role="option"]:hover,
+[data-mention-menu] [role="option"][aria-selected="true"],
+[data-mention-menu] [role="option"][data-highlighted],
+[data-mention-menu] [cmdk-item]:hover,
+[data-mention-menu] [cmdk-item][data-selected="true"],
+[data-testid="agent-input-box"] [data-mention-menu] [role="option"]:hover,
+[data-testid="agent-input-box"] [data-mention-menu] [role="option"][aria-selected="true"],
+div[class*="bottom-full"] [role="option"]:hover,
+div[class*="bottom-full"] [role="option"][aria-selected="true"],
 [data-radix-collection-item]:hover,
 [data-radix-collection-item][data-highlighted],
 [cmdk-item]:hover,
@@ -1153,6 +1012,12 @@ div[data-side] [role="button"]:hover,
 div[data-side] button:hover,
 [data-radix-popper-content-wrapper] button:hover,
 [data-radix-popper-content-wrapper] [role="button"]:hover,
+[data-mention-menu] [role="option"] > div:hover,
+[data-mention-menu] [role="option"] > div.bg-secondary,
+[data-mention-menu] [role="option"][aria-selected="true"] > div,
+[data-testid="agent-input-box"] [data-mention-menu] .bg-secondary,
+[data-mention-menu] [role="option"] > div:hover > *,
+[data-mention-menu] [role="option"][aria-selected="true"] > div > *,
 div[data-side] [role="menuitem"]:hover > *,
 div[data-side] [role="option"]:hover > * {
     background-color: rgba(255, 255, 255, 0.12) !important;
@@ -1165,7 +1030,8 @@ div[data-side] [role="option"]:hover > * {
 [role="separator"],
 div[role="menu"] [class*="separator"],
 div[data-side] [class*="separator"],
-div[data-side] hr {
+div[data-side] hr,
+[data-mention-menu] hr {
     background-color: rgba(255, 255, 255, 0.10) !important;
     border-color: rgba(255, 255, 255, 0.10) !important;
 }
@@ -1175,6 +1041,9 @@ div[role="menu"] [class*="text-muted"],
 div[role="menu"] [class*="opacity-50"],
 div[data-side] [class*="text-muted"],
 div[data-side] [class*="opacity-50"],
+[data-mention-menu] [class*="opacity-50"],
+[data-mention-menu] [class*="text-muted"],
+[data-mention-menu] [data-testid="menu-option-description"],
 [cmdk-group-heading] {
     color: rgba(255, 255, 255, 0.60) !important;
     font-weight: 500 !important;
@@ -1183,12 +1052,49 @@ div[data-side] [class*="opacity-50"],
 /* 10. 标签徽章微光胶囊（如 Fast, Thinking, Medium 等徽章）：微透边框无生硬黑底 */
 div[role="menu"] [class*="badge"],
 div[data-side] [class*="badge"],
-div[role="menu"] span[class*="rounded"] {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    border-color: rgba(255, 255, 255, 0.14) !important;
-    color: rgba(255, 255, 255, 0.85) !important;
+div[role="menu"] span[class*="rounded"],
+[data-mention-menu] [class*="badge"],
+[data-mention-menu] [data-testid="menu-option-label"],
+[data-mention-menu] [data-testid="menu-option-label"] span,
+[data-mention-menu] strong {
+    color: #ffffff !important;
 }
 
+div[role="menu"] [class*="badge"],
+div[data-side] [class*="badge"] {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* 11. 菜单内部滚动条精致纤细化，彻底消灭底部与右侧粗笨黑条 */
+[data-mention-menu]::-webkit-scrollbar,
+[data-mention-menu] *::-webkit-scrollbar,
+div[role="listbox"]::-webkit-scrollbar,
+div[role="listbox"] *::-webkit-scrollbar,
+div[role="menu"]::-webkit-scrollbar,
+div[role="menu"] *::-webkit-scrollbar {
+    width: 4px !important;
+    height: 4px !important;
+}
+
+[data-mention-menu]::-webkit-scrollbar-thumb,
+[data-mention-menu] *::-webkit-scrollbar-thumb,
+div[role="listbox"]::-webkit-scrollbar-thumb,
+div[role="listbox"] *::-webkit-scrollbar-thumb,
+div[role="menu"]::-webkit-scrollbar-thumb,
+div[role="menu"] *::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.20) !important;
+    border-radius: 4px !important;
+}
+
+[data-mention-menu]::-webkit-scrollbar-track,
+[data-mention-menu] *::-webkit-scrollbar-track,
+div[role="listbox"]::-webkit-scrollbar-track,
+div[role="listbox"] *::-webkit-scrollbar-track,
+div[role="menu"]::-webkit-scrollbar-track,
+div[role="menu"] *::-webkit-scrollbar-track {
+    background: transparent !important;
+}
 
 /* ================= 17. 对话流审批与确认卡片（Permission Prompts / ask_question）：精致微光与雾化改造 ================= */
 /*
