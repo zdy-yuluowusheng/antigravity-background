@@ -551,6 +551,206 @@
     };
   }
 
+  /**
+   * 处理单个 Mermaid 流程图图片元素，将其 SVG 数据流中的黑色大背景替换为完全透明，同时完整保留各节点卡片的深黑色
+   *
+   * @function processMermaidImg
+   * @param {HTMLImageElement} img - 目标 Mermaid 图片元素
+   * @returns {boolean} 若成功执行透明化替换返回 true，否则返回 false
+   * @throws {Error} 若内部解码、正则匹配或重新编码异常时捕获并记录日志，返回 false
+   */
+  function processMermaidImg(img) {
+    if (!img) return false;
+    const src = img.getAttribute('src') || '';
+    if (!src.startsWith('data:image/svg+xml;base64,')) return false;
+
+    // 若已经完成透明化标记，且不含黑色大背景特征，跳过重复处理
+    if (img.dataset.mermaidTransparent === 'true' && !src.includes('background:var(--bg)') && !src.includes('--bg:#')) {
+      return false;
+    }
+
+    try {
+      const rawBase64 = src.slice('data:image/svg+xml;base64,'.length);
+      let svgText = '';
+      if (typeof Buffer !== 'undefined') {
+        svgText = Buffer.from(rawBase64, 'base64').toString('utf8');
+      } else {
+        svgText = decodeURIComponent(escape(atob(rawBase64)));
+      }
+
+      // 如果已经纯透明且没有深黑大背景定义，记录标记并返回
+      if ((svgText.includes('background:transparent') || svgText.includes('--bg:transparent')) && !svgText.includes('background:var(--bg)')) {
+        img.dataset.mermaidTransparent = 'true';
+        return false;
+      }
+
+      let modified = false;
+
+      // 1. 将外层大画布背景 background:var(--bg) 替换为 background:transparent
+      if (svgText.includes('background:var(--bg)')) {
+        svgText = svgText.replace(/background:\s*var\(--bg\)/g, 'background:transparent');
+        modified = true;
+      }
+
+      // 2. 将 style 中的 --bg:#1F1F1F 或任意十六进制色值替换为 --bg:transparent
+      if (/--bg:\s*#[0-9a-fA-F]+/i.test(svgText)) {
+        svgText = svgText.replace(/--bg:\s*#[0-9a-fA-F]+/gi, '--bg:transparent');
+        modified = true;
+      }
+
+      // 3. 将分组大底色 --_group-fill 替换为透明
+      if (svgText.includes('--_group-fill:    var(--bg);')) {
+        svgText = svgText.replace('--_group-fill:    var(--bg);', '--_group-fill: transparent;');
+        modified = true;
+      }
+
+      if (modified) {
+        let newBase64 = '';
+        if (typeof Buffer !== 'undefined') {
+          newBase64 = Buffer.from(svgText, 'utf8').toString('base64');
+        } else {
+          newBase64 = btoa(unescape(encodeURIComponent(svgText)));
+        }
+        img.setAttribute('src', 'data:image/svg+xml;base64,' + newBase64);
+        img.dataset.mermaidTransparent = 'true';
+        if (typeof plugin !== 'undefined' && plugin && plugin.log) {
+          plugin.log.info('已成功将流程图大背景转为透明 (保留节点卡片深黑色)');
+        }
+        return true;
+      }
+    } catch (err) {
+      if (typeof plugin !== 'undefined' && plugin && plugin.log) {
+        plugin.log.error('处理流程图透明化异常: ' + err.message);
+      }
+    }
+    return false;
+  }
+
+  /**
+   * 动态扫描并消除总览面板（Overview）中终端会话列表项（pwsh.exe、PID条目）的深黑底色
+   *
+   * @function processOverviewTerminalItems
+   * @param {HTMLElement} [root=document] - 检索根节点
+   * @returns {void}
+   * @throws {Error} 若 DOM 操作异常时记录日志并安全退出
+   */
+  function processOverviewTerminalItems(root = document) {
+    if (!root) return;
+    try {
+      const allDivs = root.querySelectorAll ? Array.from(root.querySelectorAll('div, a, button')) : [];
+      for (let i = 0; i < allDivs.length; i++) {
+        const el = allDivs[i];
+        if (el.dataset && el.dataset.overviewTermCleaned === 'true') continue;
+        const text = el.textContent || '';
+        if ((text.includes('pwsh') || text.includes('PID') || text.includes('cmd.exe')) && el.children.length >= 2) {
+          const card = el.closest('div.px-2 > div > div, div[class*="rounded"]') || el;
+          if (card && card !== document.body) {
+            card.style.setProperty('background-color', 'transparent', 'important');
+            card.style.setProperty('background', 'transparent', 'important');
+            card.style.setProperty('border', '1px solid rgba(255, 255, 255, 0.10)', 'important');
+            card.style.setProperty('border-radius', '8px', 'important');
+            if (card.dataset) card.dataset.overviewTermCleaned = 'true';
+          }
+        }
+      }
+    } catch (err) {
+      if (typeof plugin !== 'undefined' && plugin && plugin.log) {
+        plugin.log.error('处理总览终端黑底异常: ' + err.message);
+      }
+    }
+  }
+
+  /**
+   * 启动 Mermaid 流程图与总览终端透明化保活与动态监听机制
+   * 包含首屏全量扫描、多频次定时守护与 MutationObserver DOM 变动监听（含 src 属性与新增子树）
+   *
+   * @function startMermaidTransparencyKeeper
+   * @returns {() => void} 用于断开 MutationObserver 与清理所有定时器的清理回调函数
+   * @throws {Error} 若内部监听器初始化失败予以捕获并输出日志，确保插件整体安全
+   */
+  function startMermaidTransparencyKeeper() {
+    let active = true;
+
+    const scanAll = (root = document) => {
+      if (!active || !root) return;
+      try {
+        // 1. 扫描并处理流程图
+        if (root.matches && root.matches('.mermaid-wrapper img, img[alt*="Mermaid"], img[alt*="mermaid"], img[src^="data:image/svg+xml"]')) {
+          processMermaidImg(root);
+        }
+        if (root.querySelectorAll) {
+          const targets = root.querySelectorAll('.mermaid-wrapper img, img[alt*="Mermaid"], img[alt*="mermaid"], img[src^="data:image/svg+xml"]');
+          for (let i = 0; i < targets.length; i++) {
+            processMermaidImg(targets[i]);
+          }
+        }
+        // 2. 扫描并消除总览面板终端会话黑底
+        processOverviewTerminalItems(root);
+      } catch (e) {
+        // 忽略遍历微小异常
+      }
+    };
+
+    // 1. 立即执行首次扫描
+    scanAll(document.body || document.documentElement);
+
+    // 2. 页面就绪关键时间点扫描
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => scanAll(), { once: true });
+    }
+    window.addEventListener('load', () => scanAll(), { once: true });
+
+    // 3. 页面前 8 秒内心跳守护（每 500ms 一次，共 16 次），确保首屏异步流程图渲染完成后立即透明化
+    const intervalTimer = setInterval(() => {
+      if (!active) return;
+      scanAll();
+    }, 500);
+
+    setTimeout(() => {
+      clearInterval(intervalTimer);
+    }, 8000);
+
+    // 4. MutationObserver 监听 DOM 树变化与属性变化
+    let observer = null;
+    try {
+      observer = new MutationObserver((mutations) => {
+        if (!active) return;
+        for (let i = 0; i < mutations.length; i++) {
+          const m = mutations[i];
+          if (m.type === 'childList') {
+            for (let j = 0; j < m.addedNodes.length; j++) {
+              const node = m.addedNodes[j];
+              if (node.nodeType === 1) { // ELEMENT_NODE
+                scanAll(node);
+              }
+            }
+          } else if (m.type === 'attributes' && m.attributeName === 'src') {
+            processMermaidImg(m.target);
+          }
+        }
+      });
+
+      observer.observe(document.body || document.documentElement, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['src']
+      });
+    } catch (err) {
+      if (typeof plugin !== 'undefined' && plugin && plugin.log) {
+        plugin.log.error('流程图 MutationObserver 启动失败: ' + err.message);
+      }
+    }
+
+    return () => {
+      active = false;
+      clearInterval(intervalTimer);
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }
+
   // 执行启动并注册清理回调
   if (typeof plugin !== 'undefined' && plugin && typeof plugin.onDispose === 'function') {
     plugin.log?.info('正在启动 Antigravity 2.0 深度简体中文汉化插件 (v1.1)...');
@@ -559,9 +759,13 @@
     // 启动高可靠窗口控制条透明化保活
     const disposeTitleBarKeeper = startTitleBarKeeper();
 
+    // 启动流程图大背景透明化保活
+    const disposeMermaidKeeper = startMermaidTransparencyKeeper();
+
     plugin.onDispose(function () {
       observer.disconnect();
       disposeTitleBarKeeper();
+      disposeMermaidKeeper();
       plugin.log?.info('已卸载简体中文汉化插件');
     });
   } else {
@@ -570,10 +774,12 @@
       document.addEventListener('DOMContentLoaded', () => {
         initLocalization();
         startTitleBarKeeper();
+        startMermaidTransparencyKeeper();
       }, { once: true });
     } else {
       initLocalization();
       startTitleBarKeeper();
+      startMermaidTransparencyKeeper();
     }
   }
 })();

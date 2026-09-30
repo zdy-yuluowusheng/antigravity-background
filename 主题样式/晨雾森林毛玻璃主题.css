@@ -881,6 +881,88 @@ div[class*="terminal-item"]:hover {
     -webkit-font-smoothing: antialiased !important;
 }
 
+/* 11.2.1 总览面板（Overview）中的终端会话列表项（pwsh.exe / PID 条目）黑底彻底消除与微光美化 */
+/*
+ * 彻底消除 Overview 面板下“终端会话”折叠区块中 pwsh.exe 等终端进程条目的突兀深黑实底（bg-secondary / bg-muted / bg-card）。
+ * 平时彻底纯透明（透出晨雾森林壁纸，或呈现极轻微光），悬停时微光高亮并显示精致细边框。
+ */
+
+/* 1. 总览面板中所有列表项与容器平时状态全面纯透明 */
+div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > div,
+div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > a,
+div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > button,
+div.py-3.flex.h-full.w-full.flex-col div[class*="w-full"]:has(button:has(span)) div.px-2 > div > *,
+div[class*="group/pane"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *,
+[data-testid*="auxiliary"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *,
+/* 终端专属类名与包含 PID 的条目 */
+[data-testid*="terminal-session"],
+[data-testid*="terminal-row"],
+[data-testid*="terminal-instance"],
+[data-testid*="terminal-process"],
+[data-testid*="session-row"],
+[data-testid*="terminal-pill"],
+[class*="terminal-session"],
+[class*="terminal-row"],
+[class*="terminal-instance"],
+[class*="terminal-process"],
+div[class*="rounded"]:has(span:not(:empty)):has(svg):has(button),
+div.flex.items-center.justify-between[class*="rounded"]:has(svg) {
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* 2. 悬停状态：覆盖原生深黑底色，呈现通透高雅的半透明白色微光浮层 */
+div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > div:hover,
+div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > a:hover,
+div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > button:hover,
+div.py-3.flex.h-full.w-full.flex-col div[class*="w-full"]:has(button:has(span)) div.px-2 > div > *:hover,
+div[class*="group/pane"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *:hover,
+[data-testid*="auxiliary"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *:hover,
+[data-testid*="terminal-session"]:hover,
+[data-testid*="terminal-row"]:hover,
+[data-testid*="terminal-instance"]:hover,
+[data-testid*="terminal-process"]:hover,
+[data-testid*="session-row"]:hover,
+[data-testid*="terminal-pill"]:hover,
+[class*="terminal-session"]:hover,
+[class*="terminal-row"]:hover,
+[class*="terminal-instance"]:hover,
+[class*="terminal-process"]:hover,
+div[class*="rounded"]:has(span:not(:empty)):has(svg):has(button):hover,
+div.flex.items-center.justify-between[class*="rounded"]:has(svg):hover {
+    background-color: rgba(255, 255, 255, 0.10) !important;
+    background: rgba(255, 255, 255, 0.10) !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* 3. 终端会话条目内部文字与图标明度增强（pwsh.exe、PID数字、操作按钮） */
+div.w-full.flex.flex-col.gap-2 div.px-2 span,
+div.w-full.flex.flex-col.gap-2 div.px-2 div,
+div.w-full.flex.flex-col.gap-2 div.px-2 svg,
+[data-testid*="terminal-session"] *,
+[class*="terminal-session"] * {
+    color: rgba(255, 255, 255, 0.90) !important;
+    -webkit-font-smoothing: antialiased !important;
+}
+
+/* PID 次要标签（PID 34996）保持优雅次级亮灰，外跳图标悬停高亮 */
+div.w-full.flex.flex-col.gap-2 div.px-2 span[class*="opacity-"],
+div.w-full.flex.flex-col.gap-2 div.px-2 span[class*="muted"] {
+    color: rgba(255, 255, 255, 0.70) !important;
+}
+
+div.w-full.flex.flex-col.gap-2 div.px-2 button:hover svg,
+div.w-full.flex.flex-col.gap-2 div.px-2 a:hover svg {
+    color: #ffffff !important;
+}
+
 /* 11.3 右侧辅助面板顶部导航 Tab（总览、审查、终端图标与文字）字体与图标明度加 20 */
 [class*="auxiliary"] button,
 [class*="auxiliaryPane"] button,
@@ -1539,3 +1621,59 @@ button[data-testid="interaction-continue-button"],
 button[data-testid="interaction-skip-button"] {
     border-radius: 8px !important;
 }
+
+/* ================= 18. 流程图（Mermaid / 架构与时序图）：背景纯透明、节点卡片保持黑色 ================= */
+/* 18.1 流程图外层容器全面纯透明，直显高清壁纸 */
+.mermaid-wrapper,
+div[class*="mermaid-wrapper"],
+pre:has(.mermaid-wrapper),
+pre:has(img[alt*="Mermaid"]),
+div:has(> .mermaid-wrapper),
+div:has(> pre > .mermaid-wrapper),
+div[role="button"][tabindex="0"]:has(> img[alt*="Mermaid"]),
+div[role="button"][tabindex="0"]:has(> .mermaid-wrapper) {
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
+/* 18.2 流程图外层 pre 容器边框与微光圆角 */
+pre:has(.mermaid-wrapper),
+pre:has(img[alt*="Mermaid"]) {
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+pre:has(.mermaid-wrapper):hover,
+pre:has(img[alt*="Mermaid"]):hover {
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* 18.3 流程图内部图片元素自适应与纯透明 */
+.mermaid-wrapper img,
+img[alt*="Mermaid diagram"],
+img[alt*="mermaid"],
+img[alt*="Mermaid"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* 18.4 流程图全屏预览弹窗与交互浮层（Lightbox / Modal）毛玻璃透视 */
+div[role="dialog"]:has(.mermaid-wrapper),
+div[role="dialog"]:has(img[alt*="Mermaid"]) {
+    background-color: rgba(18, 22, 26, 0.75) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
+}
+
