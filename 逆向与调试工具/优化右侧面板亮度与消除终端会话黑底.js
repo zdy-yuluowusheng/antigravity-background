@@ -172,6 +172,12 @@ div[class*="group/pane"] button:hover {
     background: transparent !important;
 }
 
+/* 11.6.0 彻底消除终端激活后底层穿透的常驻 Loading 旋转动画与占位图层 */
+[data-testid="terminal-active"] > div.pointer-events-none,
+[data-testid="terminal-active"] .animate-spin {
+    display: none !important;
+}
+
 /* 增强终端普通文字亮度 (从 80% 提升至 98% 亮白) */
 .terminal .xterm-rows,
 .terminal [class*="xterm-dom-renderer"],
