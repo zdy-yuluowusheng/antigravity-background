@@ -9,6 +9,35 @@ const crypto = require('crypto');
 const asar = require('C:/Users/ylws/AppData/Local/npm-cache/_npx/8b3f11f22d4db0c9/node_modules/asar');
 
 /**
+ * 部署 BetterGravity 运行时至 Antigravity resources 目录
+ *
+ * @function deployRuntime
+ * @param {string} resourcesDir - Antigravity 安装目录下的 resources 路径
+ * @returns {void}
+ * @throws {Error} 文件复制或目录创建失败时抛出错误
+ */
+function deployRuntime(resourcesDir) {
+  const runtimeSource = 'C:/Users/ylws/AppData/Local/BetterGravity/PatcherCache/runtime';
+  const runtimeRoot = path.join(resourcesDir, '.bettergravity');
+  const runtimeCode = path.join(runtimeRoot, 'runtime');
+
+  fs.mkdirSync(runtimeCode, { recursive: true });
+  const runtimeFiles = ['main.cjs', 'preload.cjs', 'repair.cjs', 'overlay.html'];
+  for (const file of runtimeFiles) {
+    const from = path.join(runtimeSource, file);
+    if (!fs.existsSync(from)) {
+      throw new Error(`找不到 BetterGravity 运行时文件: ${from}`);
+    }
+    fs.copyFileSync(from, path.join(runtimeCode, file));
+  }
+
+  for (const dir of ['themes', 'plugins']) {
+    fs.mkdirSync(path.join(runtimeRoot, dir), { recursive: true });
+  }
+  console.log(`[成功] 已部署 BetterGravity 运行时至 ${runtimeRoot}`);
+}
+
+/**
  * 构建 BetterGravity 引导 asar 包
  *
  * @function buildBootstrap
@@ -18,9 +47,18 @@ const asar = require('C:/Users/ylws/AppData/Local/npm-cache/_npx/8b3f11f22d4db0c
  */
 async function buildBootstrap(resourcesDir) {
   const originalAsar = path.join(resourcesDir, '_app.asar');
+  const currentAsar = path.join(resourcesDir, 'app.asar');
+
   if (!fs.existsSync(originalAsar)) {
-    throw new Error('未找到 _app.asar 文件: ' + originalAsar);
+    if (!fs.existsSync(currentAsar)) {
+      throw new Error('未找到 _app.asar 或 app.asar 文件: ' + resourcesDir);
+    }
+    console.log('[提示] 未找到 _app.asar，正在从官方 app.asar 复制备份...');
+    fs.copyFileSync(currentAsar, originalAsar);
+    console.log('[成功] 已完成 _app.asar 备份。');
   }
+
+  deployRuntime(resourcesDir);
 
   const pkgJsonRaw = asar.extractFile(originalAsar, 'package.json').toString('utf8');
   const pkg = JSON.parse(pkgJsonRaw);

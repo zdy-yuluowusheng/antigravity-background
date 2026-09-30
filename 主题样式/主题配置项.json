@@ -8,7 +8,12 @@
   "plugins": {
     "developerMode": true,
     "enabled": [
-      "chinese-localization"
+      "chinese-localization",
+      "compact",
+      "computer-use",
+      "fork-chat",
+      "in-built-browser",
+      "yolo"
     ]
   },
   "reapplyAfterHostUpdate": true

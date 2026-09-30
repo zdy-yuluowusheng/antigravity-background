@@ -26,7 +26,7 @@ function Invoke-PatchReplacement {
 
     [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     Write-Host "==========================================================" -ForegroundColor Green
-    Write-Host "  BetterGravity 3.0.0 for Antigravity 2.17.0 补丁修复程序" -ForegroundColor Green
+    Write-Host "  BetterGravity 3.0.0 for Antigravity 补丁自动修复程序" -ForegroundColor Green
     Write-Host "==========================================================" -ForegroundColor Green
     Write-Host ""
 
@@ -84,12 +84,24 @@ function Invoke-PatchReplacement {
         Write-Host "验证提示: $($_.Exception.Message)" -ForegroundColor Yellow
     }
 
-    Write-Host "[4/4] 正在拉起 Antigravity 2.0 桌面端..." -ForegroundColor Cyan
-    Start-Process "C:\Users\ylws\AppData\Local\Programs\antigravity\Antigravity.exe"
+    Write-Host "[4/4] 正在拉起 Antigravity 2.0 桌面端 (完全脱离控制台生命周期)..." -ForegroundColor Cyan
+    try {
+        $appPath = "C:\Users\ylws\AppData\Local\Programs\antigravity\Antigravity.exe"
+        $psi = New-Object System.Diagnostics.ProcessStartInfo
+        $psi.FileName = $appPath
+        $psi.UseShellExecute = $true
+        [System.Diagnostics.Process]::Start($psi) | Out-Null
+    } catch {
+        Write-Host "启动客户端提示: $($_.Exception.Message)" -ForegroundColor Yellow
+        Start-Process "C:\Users\ylws\AppData\Local\Programs\antigravity\Antigravity.exe"
+    }
+
     Write-Host ""
     Write-Host "==========================================================" -ForegroundColor Green
     Write-Host "  [完成] 客户端已重新启动！汉化插件与晨雾森林主题已恢复生效。" -ForegroundColor Green
+    Write-Host "  本脚本窗口将在 1 秒后自动关闭..." -ForegroundColor Gray
     Write-Host "==========================================================" -ForegroundColor Green
+    Start-Sleep -Milliseconds 1000
     return $true
 }
 
