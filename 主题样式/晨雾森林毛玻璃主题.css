@@ -277,15 +277,26 @@ aside div:has(> [data-testid="conversation-kebab"]) {
     -webkit-font-smoothing: antialiased !important;
 }
 
-/* ================= 5. 主对话画板与中心内容滑动区 ================= */
+/* ================= 5. 主对话画板与中心内容滑动区：绝对纯透直显壁纸，严禁任何暗底覆盖 ================= */
+/* 
+ * 严格保证主会话画板、主滑动视口及其父级窗格 (Pane) 100% 纯净透明，
+ * 绝不允许任何背景颜色、深色半透明遮罩或毛玻璃模糊污染主对话区。
+ */
 [data-testid="conversation-view"],
 [data-testid="autoscroll-viewport"],
 [class*="canvas"],
 [class*="chat-scroll"],
 [class*="conversation-view"],
-.overflow-y-auto {
+.overflow-y-auto,
+div:has(> [data-testid="conversation-view"]),
+div:has(> [data-testid="autoscroll-viewport"]),
+div[class*="group/pane"]:has([data-testid="conversation-view"]),
+div[class*="group/pane"]:has([data-testid="autoscroll-viewport"]) {
     background-color: transparent !important;
     background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
 }
 
 /* 对话正文通用文字对比度与清晰度增强 (明度 85，通透自然) */
@@ -762,20 +773,24 @@ form {
     box-shadow: none !important;
 }
 
-/* ================= 11. 右侧辅助面板（总览、审查、终端）：字体亮度加20与终端会话黑底彻底消除 ================= */
+/* ================= 11. 右侧辅助面板（总览、审查、终端）：精准隔离、字体提亮与消除终端黑底 ================= */
 /* 
- * 1. 彻底解决终端右侧终端会话（pwsh.exe 选中项/hover 项）深黑色实底色块问题，统一为通透微光浮层；
- * 2. 将总览 (Overview)、审查 (Review)、终端 (Terminal) 面板内部字体明度在原有基础上升高约 20 个百分点，
- *    使标题、代码审查、大纲条目与终端文字清晰锐利、通透舒适。
+ * 1. 严格限定选择器，仅对真正的右侧辅助面板生效，绝不污染左侧主会话区；
+ * 2. 彻底解决终端右侧终端会话（pwsh.exe 选中项/hover 项）深黑色实底色块问题，统一为通透微光浮层；
+ * 3. 将总览 (Overview)、审查 (Review)、终端 (Terminal) 面板内部字体明度在原有基础上升高约 20 个百分点。
  */
 
-/* 11.1 右侧辅助面板整体外层容器通透微光 */
-[class*="auxiliary"],
+/* 11.1 右侧辅助面板整体外层容器通透微光 (精确限定选择器，严密排除主会话窗口) */
+aside[class*="auxiliary"],
 [class*="auxiliaryPane"],
 [data-testid*="auxiliary-pane"],
 [class*="ArtifactViewer"],
 [data-testid="running-items-panel"],
-div[class*="group/pane"] {
+div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([data-testid*="terminal"]),
+div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([class*="xterm"]),
+div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([data-testid*="diff"]),
+div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([data-testid*="review"]),
+div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([data-testid*="overview"]) {
     background-color: rgba(12, 19, 16, 0.60) !important;
     backdrop-filter: blur(16px) !important;
     -webkit-backdrop-filter: blur(16px) !important;
@@ -815,7 +830,7 @@ div[class*="terminal-item"][class*="bg-secondary"] {
 
 /* 终端会话悬停状态：覆盖原生 hover:bg-muted 深黑色，统一为轻盈柔和的白色微光 */
 [data-testid*="terminal-item"]:hover,
-[data-testid*="terminal-item"].hover:bg-muted:hover,
+[data-testid*="terminal-item"].hover\:bg-muted:hover,
 div[class*="terminal-item"]:hover {
     background-color: rgba(255, 255, 255, 0.08) !important;
     background: rgba(255, 255, 255, 0.08) !important;
@@ -835,16 +850,14 @@ div[class*="terminal-item"]:hover {
 [class*="auxiliary"] button,
 [class*="auxiliaryPane"] button,
 [data-testid*="auxiliary"] button,
-[data-testid="aux-panel-plus-dropdown-trigger"],
-div[class*="group/pane"] button {
+[data-testid="aux-panel-plus-dropdown-trigger"] {
     color: rgba(255, 255, 255, 0.85) !important;
     -webkit-font-smoothing: antialiased !important;
 }
 
 [class*="auxiliary"] button:hover,
 [class*="auxiliaryPane"] button:hover,
-[data-testid*="auxiliary"] button:hover,
-div[class*="group/pane"] button:hover {
+[data-testid*="auxiliary"] button:hover {
     color: #ffffff !important;
     background-color: rgba(255, 255, 255, 0.10) !important;
 }
@@ -894,7 +907,7 @@ div[class*="group/pane"] button:hover {
     background: transparent !important;
 }
 
-/* 增强终端普通文字亮度 (从 80% 提升至 98% 亮白) */
+/* 增强终端普通文字亮度 (从 80% 提升至 96% 亮白) */
 .terminal .xterm-rows,
 .terminal [class*="xterm-dom-renderer"],
 .xterm-dom-renderer-owner-4,
@@ -904,9 +917,8 @@ div[class*="group/pane"] button:hover {
 }
 
 /* 终端顶栏与次级标签（如“终端会话 Project ∨”、“历史对话”等）明度提升至 85% */
-div[class*="group/pane"] [class*="text-muted"],
-div[class*="group/pane"] [class*="text-secondary"],
 [data-testid*="terminal"] [class*="text-muted"],
+[data-testid*="terminal"] [class*="text-secondary"],
 [data-testid*="terminal-group"] [class*="text-muted"] {
     color: rgba(255, 255, 255, 0.85) !important;
     -webkit-font-smoothing: antialiased !important;
