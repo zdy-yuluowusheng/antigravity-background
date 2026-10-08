@@ -7,9 +7,4 @@ echo ==========================================================
 echo Starting recovery script...
 echo.
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%APPDATA%\BetterGravity\restore.ps1"
-echo.
-echo ==========================================================
-echo Recovery finished! Auto closing window in 1 second...
-echo ==========================================================
-timeout /t 1 >nul
-exit
+exit 0

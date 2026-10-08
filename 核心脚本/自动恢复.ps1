@@ -87,21 +87,23 @@ function Invoke-PatchReplacement {
     Write-Host "[4/4] 正在拉起 Antigravity 2.0 桌面端 (完全脱离控制台生命周期)..." -ForegroundColor Cyan
     try {
         $appPath = "C:\Users\ylws\AppData\Local\Programs\antigravity\Antigravity.exe"
-        $psi = New-Object System.Diagnostics.ProcessStartInfo
-        $psi.FileName = $appPath
-        $psi.UseShellExecute = $true
-        [System.Diagnostics.Process]::Start($psi) | Out-Null
+        # 使用 WMI (Win32_Process.Create) 独立拉起，彻底脱离父级控制台进程树与句柄继承
+        # 即使控制台窗口被手动关闭，也绝对不会影响 Antigravity 运行
+        $createResult = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = "`"$appPath`"" }
+        if ($createResult.ReturnValue -ne 0) {
+            throw [System.InvalidOperationException]"WMI 进程创建返回值异常: $($createResult.ReturnValue)"
+        }
+        Write-Host "[成功] 已成功通过独立进程服务启动客户端 (PID: $($createResult.ProcessId))" -ForegroundColor Green
     } catch {
-        Write-Host "启动客户端提示: $($_.Exception.Message)" -ForegroundColor Yellow
-        Start-Process "C:\Users\ylws\AppData\Local\Programs\antigravity\Antigravity.exe"
+        Write-Host "独立进程启动提示: $($_.Exception.Message)，使用 start 独立外壳兜底..." -ForegroundColor Yellow
+        Start-Process "cmd.exe" -ArgumentList "/c start `"`" `"$appPath`"" -WindowStyle Hidden
     }
 
     Write-Host ""
     Write-Host "==========================================================" -ForegroundColor Green
     Write-Host "  [完成] 客户端已重新启动！汉化插件与晨雾森林主题已恢复生效。" -ForegroundColor Green
-    Write-Host "  本脚本窗口将在 1 秒后自动关闭..." -ForegroundColor Gray
+    Write-Host "  本脚本窗口即将自动退出..." -ForegroundColor Gray
     Write-Host "==========================================================" -ForegroundColor Green
-    Start-Sleep -Milliseconds 1000
     return $true
 }
 
