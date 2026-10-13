@@ -49,13 +49,23 @@ async function buildBootstrap(resourcesDir) {
   const originalAsar = path.join(resourcesDir, '_app.asar');
   const currentAsar = path.join(resourcesDir, 'app.asar');
 
-  if (!fs.existsSync(originalAsar)) {
+  let isBootstrap = false;
+  try {
+    asar.extractFile(currentAsar, '.bettergravity.json');
+    isBootstrap = true;
+  } catch (_) {
+    isBootstrap = false;
+  }
+
+  if (!isBootstrap) {
     if (!fs.existsSync(currentAsar)) {
-      throw new Error('未找到 _app.asar 或 app.asar 文件: ' + resourcesDir);
+      throw new Error('未找到 app.asar 文件: ' + resourcesDir);
     }
-    console.log('[提示] 未找到 _app.asar，正在从官方 app.asar 复制备份...');
+    console.log('[提示] 检测到官方全新核心包 app.asar，正在同步镜像至 _app.asar...');
     fs.copyFileSync(currentAsar, originalAsar);
-    console.log('[成功] 已完成 _app.asar 备份。');
+    console.log('[成功] 已完成官方核心包 _app.asar 镜像备份。');
+  } else if (!fs.existsSync(originalAsar)) {
+    throw new Error('当前 app.asar 已为引导包，但未找到官方原始核心包 _app.asar: ' + resourcesDir);
   }
 
   deployRuntime(resourcesDir);
