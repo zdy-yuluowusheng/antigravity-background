@@ -272,8 +272,8 @@ div[role="listbox"] *::-webkit-scrollbar-track {
  * @returns {void}
  */
 function main() {
-    const localCss = path.join(__dirname, '../主题样式/晨雾森林毛玻璃主题.css');
-    const systemCss = path.join(process.env.APPDATA, 'BetterGravity/themes/晨雾森林毛玻璃主题.css');
+    const localCss = path.join(__dirname, '../主题样式/透明UI主题.css');
+    const systemCss = path.join(process.env.APPDATA, 'BetterGravity/themes/透明UI主题.css');
 
     console.log('=== 开始执行输入框提及菜单雾化与黑条消除更新 ===');
     updateInputBoxMentionAndPills(localCss);

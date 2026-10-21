@@ -1,6 +1,6 @@
 /**
  * @file 更新代码块与链接透明雾化样式.js
- * @description 为晨雾森林毛玻璃主题追加代码块、行内代码、引用链接胶囊与文件变更状态条的透明毛玻璃雾化规则，并同步至系统
+ * @description 为透明UI主题追加代码块、行内代码、引用链接胶囊与文件变更状态条的透明毛玻璃雾化规则，并同步至系统
  */
 
 const fs = require('fs');
@@ -30,7 +30,7 @@ function generateFullUpdatedCss(baseCss) {
 
     // 1. 构建第 1 节（变量穿透与透明基础）
     const section1 = `/**
- * @name        晨雾森林毛玻璃主题
+ * @name        透明UI主题
  * @description 基于 wallhaven 晨雾松林丁达尔光壁纸定制的高级透明毛玻璃主题 (已嵌入原生 Base64 数据流)
  * @author      Antigravity Assistant
  * @version     1.7.0
@@ -226,7 +226,7 @@ div[class*="border-border"][class*="rounded-t"] {
     backdrop-filter: none !important;
 }
 
-/* 8.2 行内代码与引用链接胶囊 (Inline Code & Mention Chips，如 {} 主题样式/晨雾森林毛玻璃主题.css) */
+/* 8.2 行内代码与引用链接胶囊 (Inline Code & Mention Chips，如 {} 主题样式/透明UI主题.css) */
 code:not(pre code),
 .inline-pill,
 [class*="inline-pill"],
@@ -384,8 +384,8 @@ form {
  * @returns {void}
  */
 function main() {
-    const projectCssPath = path.resolve(__dirname, '../主题样式/晨雾森林毛玻璃主题.css');
-    const systemCssPath = 'C:/Users/ylws/AppData/Roaming/BetterGravity/themes/晨雾森林毛玻璃主题.css';
+    const projectCssPath = path.resolve(__dirname, '../主题样式/透明UI主题.css');
+    const systemCssPath = 'C:/Users/ylws/AppData/Roaming/BetterGravity/themes/透明UI主题.css';
 
     console.log('[1/3] 读取工程原主题 CSS: ' + projectCssPath);
     const rawCss = fs.readFileSync(projectCssPath, 'utf8');

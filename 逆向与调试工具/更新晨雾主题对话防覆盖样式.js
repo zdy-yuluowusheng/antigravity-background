@@ -30,7 +30,7 @@ function generateUpdatedCss(baseCss) {
 
     // 1. 构建第 1 节（变量穿透与透明基础）
     const section1 = `/**
- * @name        晨雾森林毛玻璃主题
+ * @name        透明UI主题
  * @description 基于 wallhaven 晨雾松林丁达尔光壁纸定制的高级透明毛玻璃主题 (已嵌入原生 Base64 数据流)
  * @author      Antigravity Assistant
  * @version     1.5.0
@@ -285,8 +285,8 @@ form {
  * @throws {Error} 若文件读写或同步过程出错抛出异常
  */
 function main() {
-    const projectCssPath = path.resolve(__dirname, '../主题样式/晨雾森林毛玻璃主题.css');
-    const systemCssPath = 'C:/Users/ylws/AppData/Roaming/BetterGravity/themes/晨雾森林毛玻璃主题.css';
+    const projectCssPath = path.resolve(__dirname, '../主题样式/透明UI主题.css');
+    const systemCssPath = 'C:/Users/ylws/AppData/Roaming/BetterGravity/themes/透明UI主题.css';
 
     console.log('[1/3] 读取工程原主题 CSS: ' + projectCssPath);
     const rawCss = fs.readFileSync(projectCssPath, 'utf8');

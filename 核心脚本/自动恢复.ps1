@@ -101,7 +101,7 @@ function Invoke-PatchReplacement {
 
     Write-Host ""
     Write-Host "==========================================================" -ForegroundColor Green
-    Write-Host "  [完成] 客户端已重新启动！汉化插件与晨雾森林主题已恢复生效。" -ForegroundColor Green
+    Write-Host "  [完成] 客户端已重新启动！汉化插件与透明UI主题已恢复生效。" -ForegroundColor Green
     Write-Host "  本脚本窗口即将自动退出..." -ForegroundColor Gray
     Write-Host "==========================================================" -ForegroundColor Green
     return $true

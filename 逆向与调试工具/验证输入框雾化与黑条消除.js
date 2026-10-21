@@ -45,5 +45,5 @@ function verifyInputBoxFixes(systemCssPath) {
     }
 }
 
-const sysCss = process.env.APPDATA + '\\BetterGravity\\themes\\晨雾森林毛玻璃主题.css';
+const sysCss = process.env.APPDATA + '\\BetterGravity\\themes\\透明UI主题.css';
 verifyInputBoxFixes(sysCss);

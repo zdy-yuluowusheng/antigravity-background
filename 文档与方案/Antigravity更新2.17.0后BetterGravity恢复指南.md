@@ -1,6 +1,6 @@
 # Antigravity 2.17.0 更新后 BetterGravity 恢复指南
 
-本文档记录了在 **Google Antigravity 自动更新到 2.17.0** 之后，恢复 BetterGravity 3.0.0、深度汉化包及晨雾森林毛玻璃主题的完整流程与准备就绪状态。
+本文档记录了在 **Google Antigravity 自动更新到 2.17.0** 之后，恢复 BetterGravity 3.0.0、深度汉化包及透明UI主题的完整流程与准备就绪状态。
 
 ---
 
@@ -19,7 +19,7 @@
      `C:\Users\ylws\AppData\Local\Programs\antigravity\resources\app.asar.bettergravity-staged`
 4. **用户自定义数据完好无损**：
    - 汉化插件：`C:\Users\ylws\AppData\Roaming\BetterGravity\plugins\chinese-localization`
-   - 晨雾主题：`C:\Users\ylws\AppData\Roaming\BetterGravity\themes\晨雾森林毛玻璃主题.css`
+   - 晨雾主题：`C:\Users\ylws\AppData\Roaming\BetterGravity\themes\透明UI主题.css`
 
 ---
 

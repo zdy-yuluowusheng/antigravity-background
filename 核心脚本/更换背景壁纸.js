@@ -94,8 +94,8 @@ if (require.main === module) {
   const targetImage = args[0] ? path.resolve(args[0]) : path.resolve('d:/work/antigravity-background/主题样式/壁纸原图.jpg');
   const opacity = args[1] !== undefined ? parseFloat(args[1]) : null;
 
-  const localCss = path.resolve('d:/work/antigravity-background/主题样式/晨雾森林毛玻璃主题.css');
-  const sysCss = path.resolve('C:/Users/ylws/AppData/Roaming/BetterGravity/themes/晨雾森林毛玻璃主题.css');
+  const localCss = path.resolve('d:/work/antigravity-background/主题样式/透明UI主题.css');
+  const sysCss = path.resolve('C:/Users/ylws/AppData/Roaming/BetterGravity/themes/透明UI主题.css');
 
   replaceWallpaper(targetImage, localCss, sysCss, opacity);
 }

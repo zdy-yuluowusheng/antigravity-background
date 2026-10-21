@@ -1,6 +1,6 @@
 /**
  * @file 更新候选项列表毛玻璃样式.js
- * @description 向晨雾森林毛玻璃主题注入第 15 节输入框 @ 与 / 候选项列表毛玻璃雾化规则，并全量同步至 BetterGravity 系统主题目录
+ * @description 向透明UI主题注入第 15 节输入框 @ 与 / 候选项列表毛玻璃雾化规则，并全量同步至 BetterGravity 系统主题目录
  * @author Antigravity Assistant
  */
 
@@ -167,9 +167,9 @@ function updateThemeAndDeploy(localCssPath, systemCssPath) {
 }
 
 try {
-    const localCss = path.resolve(__dirname, '../主题样式/晨雾森林毛玻璃主题.css');
+    const localCss = path.resolve(__dirname, '../主题样式/透明UI主题.css');
     const appData = process.env.APPDATA || 'C:/Users/ylws/AppData/Roaming';
-    const systemCss = path.join(appData, 'BetterGravity/themes/晨雾森林毛玻璃主题.css');
+    const systemCss = path.join(appData, 'BetterGravity/themes/透明UI主题.css');
 
     console.log('正在执行候选项列表毛玻璃雾化样式更新...');
     updateThemeAndDeploy(localCss, systemCss);

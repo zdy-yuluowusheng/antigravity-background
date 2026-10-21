@@ -46,9 +46,9 @@ function Sync-ProjectToSystem {
         if (-not (Test-Path $targetPlugins)) { New-Item -ItemType Directory -Path $targetPlugins -Force | Out-Null }
 
         # 1. 同步主题 CSS
-        $srcThemeCss = Join-Path $WorkspaceDir "主题样式\晨雾森林毛玻璃主题.css"
+        $srcThemeCss = Join-Path $WorkspaceDir "主题样式\透明UI主题.css"
         if (Test-Path $srcThemeCss) {
-            $dstThemeCss = Join-Path $targetThemes "晨雾森林毛玻璃主题.css"
+            $dstThemeCss = Join-Path $targetThemes "透明UI主题.css"
             Copy-Item -Path $srcThemeCss -Destination $dstThemeCss -Force
             Write-Host "[成功] 主题 CSS 已同步 -> $dstThemeCss" -ForegroundColor Green
         }

@@ -23,7 +23,7 @@
 然而官方客户端默认界面存在多层纯黑背景遮罩、侧边栏灰色色块、无内建背景壁纸与主题更换能力，且官方更新频繁时会重置核心引导文件。此外，Chromium 本地协议安全沙箱限制（`https://127.0.0.1` 严禁读取本地 `file:///` 图片）也给桌面端自定义带来了极高门槛。
 
 **本项目提供了一套完整的工程化落地方案**：
-* 🌲 **晨雾森林毛玻璃主题**：通过 CSS 深度穿透实现全界面毛玻璃高斯模糊与暗调微光质感，彻底消除原生 Tailwind 深黑遮罩与灰色色块；
+* 🌲 **透明UI主题**：通过 CSS 深度穿透实现全界面毛玻璃高斯模糊与暗调微光质感，彻底消除原生 Tailwind 深黑遮罩与灰色色块；
 * 🖼️ **全自动壁纸转码与注入**：支持一键将任意自定义图片（4K 智能压缩 + Base64 编码内嵌）部署为背景壁纸，规避沙箱限制并实现 0 延迟渲染；
 * 🇨🇳 **动态 DOM 汉化语言包**：基于 MutationObserver 实时监听 DOM 树实现无侵入动态汉化，不改动核心二进制代码；
 * ⚡ **更新自愈与全流程脚本**：提供应对官方频繁更新（如 2.17.0+）的一键恢复、双向同步与热重载脚本；
@@ -67,7 +67,7 @@ d:\work\antigravity-background\
 ├── 工程总览与使用指南.md                     # 项目内部全量技术总览与开发使用手册
 │
 ├── 主题样式\                                 # 核心 CSS 样式与壁纸资产
-│   ├── 晨雾森林毛玻璃主题.css                # 深度优化的毛玻璃主题样式文件（核心 CSS）
+│   ├── 透明UI主题.css                # 深度优化的毛玻璃主题样式文件（核心 CSS）
 │   ├── 壁纸原图.jpg                          # 2560x1440 标准高清壁纸原图
 │   ├── 壁纸原图_高保真.png                   # 原始 2.34MB 无损高保真壁纸原图
 │   └── 主题配置项.json                       # BetterGravity 对应的主题与插件启用配置
@@ -97,7 +97,7 @@ d:\work\antigravity-background\
 │   └── ... (共 20+ 个专项调试探针)
 │
 └── 文档与方案\                               # 详尽的专项攻坚白皮书与设计方案
-    ├── 晨雾森林毛玻璃主题使用说明.md         # 晨雾森林主题各区域透明度与参数微调手册
+    ├── 透明UI主题使用说明.md         # 透明UI主题各区域透明度与参数微调手册
     ├── Antigravity更新2.17.0后BetterGravity恢复指南.md # 官方版本更新后的恢复机制与避坑指导
     ├── BetterGravity汉化插件使用与配置说明.md # 汉化词典结构、动态变量匹配与配置指南
     ├── 界面样式逆向与任务栏透明化方案.md     # 侧边栏灰色遮罩及主输入框透明化的逆向与穿透方案
@@ -159,7 +159,7 @@ powershell -ExecutionPolicy Bypass -File .\核心脚本\一键更换背景壁纸
 ```
 
 ### 2. 微调主题样式
-直接编辑 [`主题样式/晨雾森林毛玻璃主题.css`](file:///d:/work/antigravity-background/主题样式/晨雾森林毛玻璃主题.css)：
+直接编辑 [`主题样式/透明UI主题.css`](file:///d:/work/antigravity-background/主题样式/透明UI主题.css)：
 * **调节元素透明度**：修改对应选择器下的 `rgba(r, g, b, 0.xx)` 不透明度数值；
 * **调节模糊磨砂度**：修改 `backdrop-filter: blur(16px)` 中的像素数值；
 * **保存后同步**：
@@ -221,7 +221,7 @@ powershell -ExecutionPolicy Bypass -File .\核心脚本\一键更换背景壁纸
 详细的技术实现方案与逆向分析报告可参阅 `文档与方案/` 目录：
 
 1. 📖 [工程总览与使用指南.md](file:///d:/work/antigravity-background/工程总览与使用指南.md) —— 本地工程开发全景与主入口
-2. 📖 [晨雾森林毛玻璃主题使用说明.md](file:///d:/work/antigravity-background/文档与方案/晨雾森林毛玻璃主题使用说明.md) —— 主题参数微调与设计规范手册
+2. 📖 [透明UI主题使用说明.md](file:///d:/work/antigravity-background/文档与方案/透明UI主题使用说明.md) —— 主题参数微调与设计规范手册
 3. 📖 [Antigravity更新2.17.0后BetterGravity恢复指南.md](file:///d:/work/antigravity-background/文档与方案/Antigravity更新2.17.0后BetterGravity恢复指南.md) —— 官方版本更新后的恢复机制与避坑指导
 4. 📖 [BetterGravity汉化插件使用与配置说明.md](file:///d:/work/antigravity-background/文档与方案/BetterGravity汉化插件使用与配置说明.md) —— 汉化词典结构、动态变量匹配与配置指南
 5. 📖 [界面样式逆向与任务栏透明化方案.md](file:///d:/work/antigravity-background/文档与方案/界面样式逆向与任务栏透明化方案.md) —— 侧边栏灰色遮罩及主输入框透明化的逆向与穿透方案

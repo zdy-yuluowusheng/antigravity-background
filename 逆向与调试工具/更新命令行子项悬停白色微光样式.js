@@ -120,7 +120,7 @@ function updateThemeWithSubitemRules(localCssPath, systemCssPath) {
   }
 }
 
-const localCss = 'd:/work/antigravity-background/主题样式/晨雾森林毛玻璃主题.css';
-const systemCss = 'C:/Users/ylws/AppData/Roaming/BetterGravity/themes/晨雾森林毛玻璃主题.css';
+const localCss = 'd:/work/antigravity-background/主题样式/透明UI主题.css';
+const systemCss = 'C:/Users/ylws/AppData/Roaming/BetterGravity/themes/透明UI主题.css';
 
 updateThemeWithSubitemRules(localCss, systemCss);

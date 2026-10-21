@@ -1,11 +1,11 @@
-# 晨雾森林毛玻璃主题使用说明
+# 透明UI主题使用说明
 
 本文档记录了为 **Antigravity 2.0 桌面端** 定制的壁纸毛玻璃主题配置详情。
 
 ---
 
 ## 一、主题基本信息
-* **主题名称**：晨雾森林毛玻璃主题 (`晨雾森林毛玻璃主题.css`)
+* **主题名称**：透明UI主题 (`透明UI主题.css`)
 * **适用平台**：Google Antigravity 2.0 (由 BetterGravity 驱动)
 * **底图文件**：`C:\Users\ylws\Pictures\wallhaven-3zgdd3_2560x1440.png`
 * **当前状态**：**已安装并已在 settings.json 中默认启用**
@@ -33,7 +33,7 @@
 ## 三、文件存储位置
 
 * **主题样式文件**：
-  `C:\Users\ylws\AppData\Roaming\BetterGravity\themes\晨雾森林毛玻璃主题.css`
+  `C:\Users\ylws\AppData\Roaming\BetterGravity\themes\透明UI主题.css`
 * **配置文件**：
   `C:\Users\ylws\AppData\Roaming\BetterGravity\settings.json`
 
@@ -41,7 +41,7 @@
 
 ## 四、后续个性化微调
 
-如果你想进一步调整透明度或模糊度，可以直接打开 `晨雾森林毛玻璃主题.css` 调整数值：
+如果你想进一步调整透明度或模糊度，可以直接打开 `透明UI主题.css` 调整数值：
 * **更透一点**：将各区域的 `rgba(..., 0.68)` 中的 `0.68` 改小（如 `0.5`）；
 * **更深一点**：改大数值（如 `0.8`）；
 * **更模糊 / 更清晰**：调整 `blur(12px)` 中的数值。

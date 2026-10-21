@@ -41,7 +41,7 @@
 
 ## 三、CSS 核心实现规则
 
-在 [`主题样式/晨雾森林毛玻璃主题.css`](file:///d:/work/antigravity-background/%E4%B8%BB%E9%A2%98%E6%A0%B7%E5%BC%8F/%E6%99%A8%E9%9B%BE%E6%A3%AE%E6%9E%97%E6%AF%9B%E7%8E%BB%E7%92%83%E4%B8%BB%E9%A2%98.css) 中追加第 14 节专属覆盖规则：
+在 [`主题样式/透明UI主题.css`](file:///d:/work/antigravity-background/%E4%B8%BB%E9%A2%98%E6%A0%B7%E5%BC%8F/%E9%80%8F%E6%98%8EUI%E4%B8%BB%E9%A2%98.css) 中追加第 14 节专属覆盖规则：
 
 ```css
 /* ================= 14. Markdown 数据表格（Table）与表头透明化：彻底消除黑底，呈现精致微光 ================= */

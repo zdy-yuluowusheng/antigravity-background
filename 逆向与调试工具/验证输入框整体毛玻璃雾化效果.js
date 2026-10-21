@@ -77,7 +77,7 @@ function verifyWholeInputBoxGlass(cssFilePath) {
  */
 function main() {
     const appData = process.env.APPDATA || (process.platform === 'darwin' ? process.env.HOME + '/Library/Preferences' : '/var/local');
-    const systemCss = path.join(appData, 'BetterGravity', 'themes', '晨雾森林毛玻璃主题.css');
+    const systemCss = path.join(appData, 'BetterGravity', 'themes', '透明UI主题.css');
 
     console.log(`正在校验系统主题文件: ${systemCss}`);
     verifyWholeInputBoxGlass(systemCss);

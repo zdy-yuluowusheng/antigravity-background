@@ -1,7 +1,7 @@
 /**
  * @file 统一输入框上下整体毛玻璃雾化.js
  * @description 修复输入框上半部分雾化、下半部分透明的样式割裂问题。
- * 将整个输入框卡片 (.bg-card-border) 统一赋予连续、均匀的晨雾森林毛玻璃雾化与微暗底色，
+ * 将整个输入框卡片 (.bg-card-border) 统一赋予连续、均匀的透明UI雾化与微暗底色，
  * 清除局部容器的重复模糊，确保输入文本区与底部操作栏浑然一体。
  * @author Antigravity Assistant
  */
@@ -163,9 +163,9 @@ form {
  * @returns {void}
  */
 function main() {
-    const localCss = path.join(__dirname, '..', '主题样式', '晨雾森林毛玻璃主题.css');
+    const localCss = path.join(__dirname, '..', '主题样式', '透明UI主题.css');
     const appData = process.env.APPDATA || (process.platform === 'darwin' ? process.env.HOME + '/Library/Preferences' : '/var/local');
-    const systemCss = path.join(appData, 'BetterGravity', 'themes', '晨雾森林毛玻璃主题.css');
+    const systemCss = path.join(appData, 'BetterGravity', 'themes', '透明UI主题.css');
 
     console.log('=== 开始执行统一输入框上下整体毛玻璃雾化任务 ===');
     console.log(`1. 更新本地工程文件: ${localCss}`);

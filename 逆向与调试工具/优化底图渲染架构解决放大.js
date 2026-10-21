@@ -84,9 +84,9 @@ body::before {
  * @returns {void}
  */
 function main() {
-  const workspaceCss = path.resolve(__dirname, '../主题样式/晨雾森林毛玻璃主题.css');
+  const workspaceCss = path.resolve(__dirname, '../主题样式/透明UI主题.css');
   const appData = process.env.APPDATA || 'C:/Users/ylws/AppData/Roaming';
-  const systemCss = path.join(appData, 'BetterGravity/themes/晨雾森林毛玻璃主题.css');
+  const systemCss = path.join(appData, 'BetterGravity/themes/透明UI主题.css');
 
   console.log('==========================================================');
   console.log('  正在重构底图渲染架构，根除 backdrop-filter 放大 Bug...');

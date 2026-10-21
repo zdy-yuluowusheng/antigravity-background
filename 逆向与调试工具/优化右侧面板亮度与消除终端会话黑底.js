@@ -208,5 +208,5 @@ div[class*="group/pane"] [class*="text-secondary"],
 }
 
 // 执行更新
-const targetPath = path.join(__dirname, '../主题样式/晨雾森林毛玻璃主题.css');
+const targetPath = path.join(__dirname, '../主题样式/透明UI主题.css');
 updateRightPanelAndTerminalTheme(targetPath);

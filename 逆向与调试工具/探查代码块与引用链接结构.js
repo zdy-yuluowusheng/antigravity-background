@@ -55,7 +55,7 @@ function injectCodeAndLinkProbe(pluginPath) {
         const allLinks = Array.from(document.querySelectorAll('a, button, [role="button"], span[class*="chip"], div[class*="chip"]'));
         allLinks.forEach(el => {
           const text = el.textContent || '';
-          if (text.includes('晨雾森林毛玻璃主题.css') || text.includes('主题样式') || el.className && typeof el.className === 'string' && (el.className.includes('file-link') || el.className.includes('mention') || el.className.includes('chip'))) {
+          if (text.includes('透明UI主题.css') || text.includes('主题样式') || el.className && typeof el.className === 'string' && (el.className.includes('file-link') || el.className.includes('mention') || el.className.includes('chip'))) {
             let curr = el;
             const chain = [];
             while (curr && chain.length < 4) {

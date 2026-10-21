@@ -1,6 +1,6 @@
 /**
  * @file 更新下拉菜单毛玻璃样式.js
- * @description 为晨雾森林毛玻璃主题注入项目目录、模型选择与工作区下拉菜单的轻盈透明雾化及微光悬停样式，彻底消除背景放大动作与条目黑框，并自动同步至系统目录
+ * @description 为透明UI主题注入项目目录、模型选择与工作区下拉菜单的轻盈透明雾化及微光悬停样式，彻底消除背景放大动作与条目黑框，并自动同步至系统目录
  * @author Antigravity Assistant
  */
 
@@ -303,9 +303,9 @@ function updateThemeCss(workspaceCssPath, systemCssPath) {
  * @returns {void}
  */
 function main() {
-  const workspaceCss = path.resolve(__dirname, '../主题样式/晨雾森林毛玻璃主题.css');
+  const workspaceCss = path.resolve(__dirname, '../主题样式/透明UI主题.css');
   const appData = process.env.APPDATA || 'C:/Users/ylws/AppData/Roaming';
-  const systemCss = path.join(appData, 'BetterGravity/themes/晨雾森林毛玻璃主题.css');
+  const systemCss = path.join(appData, 'BetterGravity/themes/透明UI主题.css');
 
   console.log('==========================================================');
   console.log('  正在注入下拉选择菜单轻盈透明雾化与无抖动微光悬停样式...');

@@ -42,9 +42,9 @@ function Sync-SystemToProject {
         $sysPlugins = Join-Path $TargetAppDataDir "plugins\chinese-localization"
 
         # 1. 拉取主题 CSS
-        $sysThemeCss = Join-Path $sysThemes "晨雾森林毛玻璃主题.css"
+        $sysThemeCss = Join-Path $sysThemes "透明UI主题.css"
         if (Test-Path $sysThemeCss) {
-            $projThemeCss = Join-Path $WorkspaceDir "主题样式\晨雾森林毛玻璃主题.css"
+            $projThemeCss = Join-Path $WorkspaceDir "主题样式\透明UI主题.css"
             Copy-Item -Path $sysThemeCss -Destination $projThemeCss -Force
             Write-Host "[成功] 主题 CSS 已拉取 -> $projThemeCss" -ForegroundColor Green
         }

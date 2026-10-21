@@ -1,6 +1,6 @@
 # Antigravity 2.23.0 更新后 BetterGravity 恢复指南
 
-本文档记录了在 **Google Antigravity 自动更新到 2.23.0** 之后，恢复 BetterGravity 3.0.0、深度汉化包及晨雾森林毛玻璃主题的完整流程与准备就绪状态。
+本文档记录了在 **Google Antigravity 自动更新到 2.23.0** 之后，恢复 BetterGravity 3.0.0、深度汉化包及透明UI主题的完整流程与准备就绪状态。
 
 ---
 
@@ -9,7 +9,7 @@
 今天 Antigravity 客户端自动升级到了最新版本 **v2.23.0**（原为 2.22.0）。在官方热更新过程中：
 1. 官方安装程序使用纯净的新版核心包覆盖了 `resources\app.asar`；
 2. 导致之前注入的 BetterGravity 引导入口被还原为官方原生状态；
-3. 官方原生客户端未加载 BetterGravity 运行时，因此无法读取本地的主题 CSS（晨雾森林毛玻璃壁纸主题）以及汉化插件。
+3. 官方原生客户端未加载 BetterGravity 运行时，因此无法读取本地的主题 CSS（透明UI壁纸主题）以及汉化插件。
 
 ---
 
@@ -28,7 +28,7 @@
      `C:\Users\ylws\AppData\Local\Programs\antigravity\resources\app.asar.bettergravity-staged`
 4. **用户自定义数据完好无损且已全量同步**：
    - 汉化插件：`C:\Users\ylws\AppData\Roaming\BetterGravity\plugins\chinese-localization`
-   - 晨雾主题：`C:\Users\ylws\AppData\Roaming\BetterGravity\themes\晨雾森林毛玻璃主题.css`
+   - 晨雾主题：`C:\Users\ylws\AppData\Roaming\BetterGravity\themes\透明UI主题.css`
    - 全套扩展插件：已在 `settings.json` 中配置保持启用
 
 ---

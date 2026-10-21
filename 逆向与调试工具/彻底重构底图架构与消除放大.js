@@ -423,8 +423,8 @@ div[role="menu"] span[class*="rounded"] {
  * @returns {void}
  */
 function main() {
-    const localCss = path.join(__dirname, '../主题样式/晨雾森林毛玻璃主题.css');
-    const systemCss = path.join(process.env.APPDATA, 'BetterGravity/themes/晨雾森林毛玻璃主题.css');
+    const localCss = path.join(__dirname, '../主题样式/透明UI主题.css');
+    const systemCss = path.join(process.env.APPDATA, 'BetterGravity/themes/透明UI主题.css');
 
     console.log('=== 开始执行底图架构与消除放大终极重构 (全维度加固) ===');
     applyUltimateAntiZoomFix(localCss);

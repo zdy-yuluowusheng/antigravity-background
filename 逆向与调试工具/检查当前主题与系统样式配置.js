@@ -56,7 +56,7 @@ function inspectThemeConfiguration(localCssPath, systemCssPath) {
     }
 }
 
-const localCss = path.join(__dirname, '../主题样式/晨雾森林毛玻璃主题.css');
+const localCss = path.join(__dirname, '../主题样式/透明UI主题.css');
 const systemCss = 'C:\\Users\\ylws\\AppData\\Roaming\\BetterGravity\\custom.css';
 
 inspectThemeConfiguration(localCss, systemCss);

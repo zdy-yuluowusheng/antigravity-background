@@ -502,9 +502,9 @@ div[role="menu"] *::-webkit-scrollbar-track {
  * @returns {void}
  */
 function main() {
-    const localCss = path.join(__dirname, '..', '主题样式', '晨雾森林毛玻璃主题.css');
+    const localCss = path.join(__dirname, '..', '主题样式', '透明UI主题.css');
     const appData = process.env.APPDATA || (process.platform === 'darwin' ? process.env.HOME + '/Library/Preferences' : '/var/local');
-    const systemCss = path.join(appData, 'BetterGravity', 'themes', '晨雾森林毛玻璃主题.css');
+    const systemCss = path.join(appData, 'BetterGravity', 'themes', '透明UI主题.css');
 
     console.log('=== 开始执行全量统一输入框提及菜单为模型选择样式流程 ===');
     console.log(`1. 处理本地工程文件: ${localCss}`);
