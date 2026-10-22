@@ -21,9 +21,9 @@ function applyGoogleLoginPatch(filePath) {
 
   let content = fs.readFileSync(filePath, 'utf8');
 
-  // 1. 网络请求头拦截锚点：在 configureSession 中对 accounts.google.com 动态剔除 Client Hints 并设置标准 Firefox UA
+  // 1. 网络请求头拦截锚点：使用规范标准的 <all_urls> 通配符并在回调中进行域判定，剔除 sec-ch-* 并设置 Firefox UA
   const target1 = 'configureSession(e){e.webRequest.onBeforeRequest({urls:["<all_urls>"]},(n,i)=>i({cancel:!this.isEnabled})),e.setPermissionCheckHandler';
-  const replace1 = 'configureSession(e){e.webRequest.onBeforeRequest({urls:["<all_urls>"]},(n,i)=>i({cancel:!this.isEnabled})),e.webRequest.onBeforeSendHeaders({urls:["*://accounts.google.com/*","*://accounts.google.*/*","*://*.accounts.google.com/*","*://oauth2.googleapis.com/*","*://accounts.youtube.com/*","*://myaccount.google.com/*"]},(n,i)=>{let s=n.requestHeaders;for(let h of Object.keys(s)){if(/^sec-ch-/i.test(h)||/^user-agent$/i.test(h))delete s[h]}s["User-Agent"]="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",i({requestHeaders:s})}),e.setPermissionCheckHandler';
+  const replace1 = 'configureSession(e){e.webRequest.onBeforeRequest({urls:["<all_urls>"]},(n,i)=>i({cancel:!this.isEnabled})),e.webRequest.onBeforeSendHeaders({urls:["<all_urls>"]},(n,i)=>{let u=n.url;if(u&&/(?:accounts|myaccount)\\.google\\.|oauth2\\.googleapis\\.com|accounts\\.youtube\\.com/i.test(u)){let s=n.requestHeaders;for(let h of Object.keys(s)){if(/^sec-ch-/i.test(h)||/^user-agent$/i.test(h))delete s[h]}s["User-Agent"]="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0",i({requestHeaders:s});return}i({requestHeaders:n.requestHeaders})}),e.setPermissionCheckHandler';
 
   // 2. DOM 运行环境锚点：在 WebContentsView 导航至 accounts.google.com 时动态将 navigator.userAgent 调整为 Firefox
   const target2 = 'this.view.setBackgroundColor("#181818"),this.contents=this.view.webContents;let t=this.contents;t.setUserAgent(t.getUserAgent().replace(/\\s(?:Antigravity|Electron)\\/\\S+/g,""));let n=()=>e.changed();';

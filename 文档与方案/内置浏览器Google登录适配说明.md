@@ -4,13 +4,14 @@
 
 ---
 
-## 一、问题背景
+## 一、问题背景与排查
 
-在 Antigravity 内置浏览器中访问 Google 登录页面（如使用 Google Flow、Google Labs、YouTube 或第三方 Google OAuth 登录）时，Google 风控安全机制会检测运行环境。
-
-如果检测到为基于 Chromium 的嵌入式容器或缺少特定专有组件，Google 会抛出安全拦截阻断：
-> *“无法登录。此浏览器或应用可能不安全。请尝试使用其他浏览器...”*
-> *（Couldn't sign you in. This browser or app may not be secure.）*
+1. **初始现象**：
+   在 Antigravity 内置浏览器中访问 Google 登录页面（如使用 Google Flow、Google Labs、YouTube 或第三方 Google OAuth 登录）时，Google 风控安全机制会检测运行环境，抛出安全拦截阻断：
+   > *“无法登录。此浏览器或应用可能不安全。请尝试使用其他浏览器...”*
+2. **Chromium URL 匹配规范注意点**：
+   在 Electron / Chromium 的 `webRequest` 接口中，URL Pattern 严禁在域名后缀位置使用通配符（例如 `*://accounts.google.*/*` 属于非法 Match Pattern，会导致 Electron 抛出异常使得浏览器初始化中断，出现 `In Built Browser is disabled` 报错）。
+   因此必须使用标准通配符 `<all_urls>`，在请求回调内部通过正则 `/(?:accounts|myaccount)\.google\.|oauth2\.googleapis\.com|accounts\.youtube\.com/i` 进行安全匹配。
 
 ---
 
@@ -30,10 +31,11 @@ flowchart TD
 ```
 
 ### 1. 网络层拦截（`webRequest.onBeforeSendHeaders`）
-* **拦截范围**：`*://accounts.google.com/*`, `*://accounts.google.*/*`, `*://oauth2.googleapis.com/*`, `*://accounts.youtube.com/*`, `*://myaccount.google.com/*`。
+* **过滤规则**：采用标准通配符 `urls: ["<all_urls>"]`。
 * **处理逻辑**：
-  * 清除请求头中所有可能泄露 Chromium 嵌入式特性的 Client Hints（`sec-ch-ua`, `sec-ch-ua-mobile`, `sec-ch-ua-platform` 等）；
-  * 强制注入标准桌面 Firefox User-Agent：
+  * 判断 `u && /(?:accounts|myaccount)\.google\.|oauth2\.googleapis\.com|accounts\.youtube\.com/i.test(u)`；
+  * 若匹配，则清除请求头中所有可能泄露 Chromium 嵌入式特性的 Client Hints（`sec-ch-ua`, `sec-ch-ua-mobile`, `sec-ch-ua-platform` 等）；
+  * 注入标准桌面 Firefox User-Agent：
     `Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0`。
 
 ### 2. DOM 运行环境动态切换（`did-start-navigation`）
@@ -44,8 +46,6 @@ flowchart TD
 ---
 
 ## 三、文件修改与备份对照
-
-为确保任何情况下均可秒级无损还原，已对所有相关文件进行了多重离线备份：
 
 | 文件类别 | 路径 | 说明 |
 | :--- | :--- | :--- |
