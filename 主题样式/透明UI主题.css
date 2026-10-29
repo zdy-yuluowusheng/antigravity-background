@@ -120,22 +120,39 @@ span[data-testid="breadcrumb-segment"]:hover {
     box-shadow: 0 2px 8px rgba(255, 255, 255, 0.06) !important;
 }
 
-/* 顶部 Open IDE 按钮、三点菜单、侧边栏折叠等控制按钮：平时通透、悬停白色微光高亮 (彻底消除黑底) */
+/* 顶部菜单栏 (Antigravity/Workspace/View/窗口设置)、导航图标与 Open IDE 等控制按钮：平时纯透无外框、悬停柔和白色微光 (彻底消除圆角线框与黑底) */
 [data-testid="open-editor-single"],
 [data-testid*="open-editor"],
 [data-testid*="open-ide"],
 [data-testid="titlebar-more-actions"],
 [data-testid="toggle-aux-sidebar"],
+[data-testid*="toggle-sidebar"],
+[data-testid*="sidebar-toggle"],
 button[data-testid="open-editor-single"],
-header button,
-header [role="button"],
-[data-testid="title-menu-bar"] button,
-[data-testid="title-menu-bar"] [role="button"] {
+header button:not([class*="window-controls"] *),
+header [role="button"]:not([class*="window-controls"] *),
+[data-testid="title-menu-bar"] button:not([class*="window-controls"] *),
+[data-testid="title-menu-bar"] [role="button"]:not([class*="window-controls"] *),
+[class*="title-menu-bar"] button:not([class*="window-controls"] *),
+[data-testid="title-bar"] button:not([class*="window-controls"] *),
+[class*="titlebar"] button:not([class*="window-controls"] *),
+[role="menubar"] button,
+[role="menubar"] [role="menuitem"],
+[data-radix-menubar-trigger],
+div[style*="app-region: drag"] button:not([class*="window-controls"] *),
+div[style*="app-region: no-drag"] button:not([class*="window-controls"] *),
+button[style*="app-region: no-drag"]:not([class*="window-controls"] *),
+button[aria-haspopup="menu"]:not([data-testid="agent-input-box"] *):not([data-testid="conversation-view"] *):not([role="dialog"] *) {
     background-color: transparent !important;
     background: transparent !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border: none !important;
+    border-color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     border-radius: 6px !important;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease !important;
+    transition: background-color 0.2s ease, color 0.2s ease !important;
 }
 
 [data-testid="open-editor-single"]:hover,
@@ -143,16 +160,32 @@ header [role="button"],
 [data-testid*="open-ide"]:hover,
 [data-testid="titlebar-more-actions"]:hover,
 [data-testid="toggle-aux-sidebar"]:hover,
+[data-testid*="toggle-sidebar"]:hover,
+[data-testid*="sidebar-toggle"]:hover,
 button[data-testid="open-editor-single"]:hover,
-header button:hover,
-header [role="button"]:hover,
-[data-testid="title-menu-bar"] button:hover,
-[data-testid="title-menu-bar"] [role="button"]:hover {
+header button:not([class*="window-controls"] *):hover,
+header [role="button"]:not([class*="window-controls"] *):hover,
+[data-testid="title-menu-bar"] button:not([class*="window-controls"] *):hover,
+[data-testid="title-menu-bar"] [role="button"]:not([class*="window-controls"] *):hover,
+[class*="title-menu-bar"] button:not([class*="window-controls"] *):hover,
+[data-testid="title-bar"] button:not([class*="window-controls"] *):hover,
+[class*="titlebar"] button:not([class*="window-controls"] *):hover,
+[role="menubar"] button:hover,
+[role="menubar"] button[aria-expanded="true"],
+[role="menubar"] [role="menuitem"]:hover,
+[data-radix-menubar-trigger]:hover,
+[data-radix-menubar-trigger][data-state="open"],
+div[style*="app-region: drag"] button:not([class*="window-controls"] *):hover,
+div[style*="app-region: no-drag"] button:not([class*="window-controls"] *):hover,
+button[style*="app-region: no-drag"]:not([class*="window-controls"] *):hover,
+button[aria-haspopup="menu"]:not([data-testid="agent-input-box"] *):not([data-testid="conversation-view"] *):not([role="dialog"] *):hover,
+button[aria-haspopup="menu"][aria-expanded="true"]:not([data-testid="agent-input-box"] *):not([data-testid="conversation-view"] *):not([role="dialog"] *) {
     background-color: rgba(255, 255, 255, 0.14) !important;
     background: rgba(255, 255, 255, 0.14) !important;
-    border-color: rgba(255, 255, 255, 0.24) !important;
+    border: none !important;
+    border-color: transparent !important;
     color: #ffffff !important;
-    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.06) !important;
+    box-shadow: none !important;
 }
 
 /* ================= 4. 左侧侧边栏：全面通透，直显壁纸背景 ================= */
@@ -175,34 +208,45 @@ nav {
     border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
-/* 彻底移除左侧侧边栏所有标题、列表项、条目按钮的长方形灰色背景遮罩与边框 */
+/* 彻底移除左侧侧边栏全区域（含顶部折叠/后退/前进/搜索图标、中间列表项、底部系统设置按钮）的背景遮罩与圆角线框 */
 [data-testid="conversation-list-sidebar"] button,
 [data-testid="conversation-list-sidebar"] a,
 [data-testid="conversation-list-sidebar"] [class*="headerbtn"],
 [data-testid="conversation-list-sidebar"] [class*="bg-sidebar"],
 [data-testid="conversation-list-sidebar"] [class*="bg-muted"],
 [data-testid="conversation-list-sidebar"] [data-testid="lifted-context-menu-trigger"],
+:where([data-testid="sidebar"], aside:not([class*="auxiliary"]), nav, .bg-sidebar, div:has([data-testid="conversation-list-sidebar"]):not(:has([data-testid="conversation-view"])):not(:has([data-testid="agent-input-box"]))) :is(button, a, [role="button"]):not([data-active="true"]):not([aria-selected="true"]),
 [data-testid="new-conversation-button"],
 [data-testid="history-button"],
 [data-testid="automations-button"],
-[data-testid="sidebar-add-project-button"] {
+[data-testid="sidebar-add-project-button"],
+[data-testid="settings-button"],
+button[data-testid*="settings"]:not([role="dialog"] *) {
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
+    border-color: transparent !important;
+    outline: none !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
 
-/* 鼠标悬停在普通侧边栏条目时的微光高亮交互，移开后恢复纯透明 */
+/* 鼠标悬停在普通侧边栏按钮与条目（含顶部导航小图标与底部系统设置）时的微光高亮交互，移开后恢复纯透明 */
 [data-testid="conversation-list-sidebar"] button:hover,
 [data-testid="conversation-list-sidebar"] a:hover,
 [data-testid="conversation-list-sidebar"] [class*="headerbtn"]:hover,
+:where([data-testid="sidebar"], aside:not([class*="auxiliary"]), nav, .bg-sidebar, div:has([data-testid="conversation-list-sidebar"]):not(:has([data-testid="conversation-view"])):not(:has([data-testid="agent-input-box"]))) :is(button, a, [role="button"]):not([data-active="true"]):not([aria-selected="true"]):hover,
 [data-testid="new-conversation-button"]:hover,
 [data-testid="history-button"]:hover,
 [data-testid="automations-button"]:hover,
-[data-testid="sidebar-add-project-button"]:hover {
+[data-testid="sidebar-add-project-button"]:hover,
+[data-testid="settings-button"]:hover,
+button[data-testid*="settings"]:not([role="dialog"] *):hover {
     background-color: rgba(255, 255, 255, 0.08) !important;
+    border: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
     border-radius: 8px !important;
 }
 
@@ -423,16 +467,17 @@ div[class*="border-border"][class*="rounded-t"] {
     -webkit-backdrop-filter: none !important;
 }
 
-/* 8.2 行内代码与引用链接胶囊 (如 {} 主题样式/透明UI主题.css) */
+/* 8.2 行内代码与引用链接胶囊 (如 {} 主题样式/透明UI主题.css，严格限定在对话区内防误伤侧栏与顶栏按钮) */
 code:not(pre code),
 .inline-pill,
 [class*="inline-pill"],
 .context-scope-mention,
 .context-scope-mention button,
 span[class*="context-scope-mention"] button,
-button:has(svg):has(span),
+[data-testid="conversation-view"] .prose button:has(svg):has(span),
+[data-testid="conversation-view"] [class*="prose"] button:has(svg):has(span),
 a[href*="file://"],
-[class*="chip"] {
+[data-testid="conversation-view"] [class*="chip"] {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
@@ -448,8 +493,10 @@ code:not(pre code):hover,
 .inline-pill:hover,
 .context-scope-mention button:hover,
 span[class*="context-scope-mention"] button:hover,
+[data-testid="conversation-view"] .prose button:has(svg):has(span):hover,
+[data-testid="conversation-view"] [class*="prose"] button:has(svg):has(span):hover,
 a[href*="file://"]:hover,
-[class*="chip"]:hover {
+[data-testid="conversation-view"] [class*="chip"]:hover {
     background-color: rgba(255, 255, 255, 0.10) !important;
     border-color: rgba(255, 255, 255, 0.22) !important;
 }
@@ -905,8 +952,8 @@ div[class*="group/pane"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *,
 [class*="terminal-row"],
 [class*="terminal-instance"],
 [class*="terminal-process"],
-div[class*="rounded"]:has(span:not(:empty)):has(svg):has(button),
-div.flex.items-center.justify-between[class*="rounded"]:has(svg) {
+:where([data-testid*="auxiliary"], div[class*="group/pane"]:not(:has([data-testid="conversation-view"]))) div[class*="rounded"]:has(span:not(:empty)):has(svg):has(button),
+:where([data-testid*="auxiliary"], div[class*="group/pane"]:not(:has([data-testid="conversation-view"]))) div.flex.items-center.justify-between[class*="rounded"]:has(svg) {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
@@ -934,8 +981,8 @@ div[class*="group/pane"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *:hover
 [class*="terminal-row"]:hover,
 [class*="terminal-instance"]:hover,
 [class*="terminal-process"]:hover,
-div[class*="rounded"]:has(span:not(:empty)):has(svg):has(button):hover,
-div.flex.items-center.justify-between[class*="rounded"]:has(svg):hover {
+:where([data-testid*="auxiliary"], div[class*="group/pane"]:not(:has([data-testid="conversation-view"]))) div[class*="rounded"]:has(span:not(:empty)):has(svg):has(button):hover,
+:where([data-testid*="auxiliary"], div[class*="group/pane"]:not(:has([data-testid="conversation-view"]))) div.flex.items-center.justify-between[class*="rounded"]:has(svg):hover {
     background-color: rgba(255, 255, 255, 0.10) !important;
     background: rgba(255, 255, 255, 0.10) !important;
     border-color: rgba(255, 255, 255, 0.22) !important;
@@ -963,20 +1010,176 @@ div.w-full.flex.flex-col.gap-2 div.px-2 a:hover svg {
     color: #ffffff !important;
 }
 
-/* 11.3 右侧辅助面板顶部导航 Tab（总览、审查、终端图标与文字）字体与图标明度加 20 */
+/* 11.3 右侧辅助面板顶部导航 Tab（button[data-tab-id] 及顶部控制图标）消除黑底与明度增强 */
 [class*="auxiliary"] button,
 [class*="auxiliaryPane"] button,
 [data-testid*="auxiliary"] button,
-[data-testid="aux-panel-plus-dropdown-trigger"] {
+[data-testid="aux-panel-plus-dropdown-trigger"],
+[data-aux-pane-open] button[data-tab-id] {
+    background-color: transparent !important;
+    background: transparent !important;
     color: rgba(255, 255, 255, 0.85) !important;
     -webkit-font-smoothing: antialiased !important;
 }
 
 [class*="auxiliary"] button:hover,
 [class*="auxiliaryPane"] button:hover,
-[data-testid*="auxiliary"] button:hover {
+[data-testid*="auxiliary"] button:hover,
+[data-testid="aux-panel-plus-dropdown-trigger"]:hover,
+[data-aux-pane-open] button[data-tab-id]:hover {
     color: #ffffff !important;
     background-color: rgba(255, 255, 255, 0.10) !important;
+    background: rgba(255, 255, 255, 0.10) !important;
+}
+
+/* 右侧面板顶部当前激活的 Tab 标签：覆盖原生 bg-secondary / bg-muted 纯黑块，改为柔和白色半透明微光 */
+[data-aux-pane-open] button[data-tab-id].bg-secondary,
+[data-aux-pane-open] button[data-tab-id].bg-muted,
+[data-aux-pane-open] button[data-tab-id][aria-selected="true"],
+[data-aux-pane-open] button[data-tab-id][data-active="true"] {
+    background-color: rgba(255, 255, 255, 0.16) !important;
+    background: rgba(255, 255, 255, 0.16) !important;
+    color: #ffffff !important;
+}
+
+/* 11.3.1 右侧边栏新建标签页 (aux-pane-new-tab-view)、快捷入口 (审查/Open File/终端/内置浏览器)、搜索结果及总览列表行 (Background Commands / Artifacts / Modified Files 等) 彻底消除选中与悬停黑底 */
+
+/* 1. 顶部搜索框 (Search tabs, files, extensions...) 清透微光美化与文字提亮 */
+[data-testid="new-tab-search-input"] {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease !important;
+}
+
+[data-testid="new-tab-search-input"]::placeholder {
+    color: rgba(255, 255, 255, 0.65) !important;
+}
+
+[data-testid="new-tab-search-input"]:focus {
+    background-color: rgba(255, 255, 255, 0.10) !important;
+    background: rgba(255, 255, 255, 0.10) !important;
+    border-color: rgba(255, 255, 255, 0.32) !important;
+}
+
+div:has(> [data-testid="new-tab-search-input"]) svg {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* 内嵌搜索结果列表容器保持纯透明，防止被全局浮动 listbox 规则赋予深色背景卡片 */
+[data-testid="aux-pane-new-tab-view"] div[role="listbox"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    z-index: auto !important;
+}
+
+/* 2. 右侧边栏所有功能项、搜索结果项与 PanelItemRow 行平时状态：纯透明无黑底无边框 */
+[data-aux-pane-open] [data-testid^="new-tab-card-"],
+[data-aux-pane-open] [data-testid^="new-tab-result-"],
+[data-aux-pane-open] [data-testid^="overview-panel-row-"],
+[data-aux-pane-open] [data-testid="overview-decorator-row"],
+[data-aux-pane-open] [data-testid="background-task-row"],
+[data-aux-pane-open] [data-testid="artifact-row"],
+[data-aux-pane-open] [data-testid="change-row"],
+[data-aux-pane-open] [data-testid="changed-file-row"],
+[data-aux-pane-open] [data-testid="sidecar-row"],
+[data-aux-pane-open] [data-testid^="accumulated-item-"],
+:is([data-testid="aux-pane-new-tab-view"], [data-testid="overview-panel"], [data-aux-pane-open] [data-testid^="overview-"]) :is(button, a, div[role="button"], [class*="hover:bg-secondary"], [class*="hover:bg-muted"], [class*="group-hover:bg-secondary"], [class*="group-hover:bg-muted"]):not([data-testid="new-tab-search-input"]) {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    color: rgba(255, 255, 255, 0.86) !important;
+    border-radius: 8px !important;
+    -webkit-font-smoothing: antialiased !important;
+    transition: background-color 0.16s ease, color 0.16s ease !important;
+}
+
+/* 3. 鼠标悬停 (:hover) 与选中激活 (aria-selected / aria-current / bg-secondary / bg-muted) 状态：彻底消除纯黑长条，呈现柔和白色半透明微光 */
+[data-aux-pane-open] [data-testid^="new-tab-card-"]:is(:hover, :focus-visible),
+[data-aux-pane-open] [data-testid^="new-tab-result-"]:is(:hover, :focus-visible, [aria-selected="true"], .bg-secondary, .bg-muted),
+[data-aux-pane-open] [data-testid^="overview-panel-row-"]:is(:hover, :focus-visible, [aria-current="true"], .bg-secondary, .bg-muted),
+[data-aux-pane-open] .group:hover > [data-testid^="overview-panel-row-"],
+[data-aux-pane-open] [data-testid="overview-decorator-row"]:is(:hover, :focus-visible, [aria-current="true"], .bg-secondary, .bg-muted),
+[data-aux-pane-open] .group:hover > [data-testid="overview-decorator-row"],
+[data-aux-pane-open] [data-testid="background-task-row"]:is(:hover, :focus-visible, [aria-current="true"], .bg-secondary, .bg-muted),
+[data-aux-pane-open] .group:hover > [data-testid="background-task-row"],
+[data-aux-pane-open] [data-testid="artifact-row"]:is(:hover, :focus-visible, [aria-current="true"], .bg-secondary, .bg-muted),
+[data-aux-pane-open] .group:hover > [data-testid="artifact-row"],
+[data-aux-pane-open] [data-testid="change-row"]:is(:hover, :focus-visible, [aria-current="true"], .bg-secondary, .bg-muted),
+[data-aux-pane-open] .group:hover > [data-testid="change-row"],
+[data-aux-pane-open] [data-testid="changed-file-row"]:is(:hover, :focus-visible, [aria-current="true"], .bg-secondary, .bg-muted),
+[data-aux-pane-open] .group:hover > [data-testid="changed-file-row"],
+[data-aux-pane-open] [data-testid="sidecar-row"]:is(:hover, :focus-visible, [aria-current="true"], .bg-secondary, .bg-muted),
+[data-aux-pane-open] .group:hover > [data-testid="sidecar-row"],
+[data-aux-pane-open] [data-testid^="accumulated-item-"]:is(:hover, :focus-visible, [aria-current="true"], .bg-secondary, .bg-muted),
+[data-aux-pane-open] .group:hover > [data-testid^="accumulated-item-"],
+:is([data-testid="aux-pane-new-tab-view"], [data-testid="overview-panel"], [data-aux-pane-open] [data-testid^="overview-"]) :is(button, a, div[role="button"], [class*="hover:bg-secondary"], [class*="hover:bg-muted"]):not([data-testid="new-tab-search-input"]):is(:hover, :focus-visible, [aria-selected="true"], [aria-current="true"], .bg-secondary, .bg-muted),
+:is([data-testid="aux-pane-new-tab-view"], [data-testid="overview-panel"], [data-aux-pane-open] [data-testid^="overview-"]) .group:hover > :is([class*="group-hover:bg-secondary"], [class*="group-hover:bg-muted"]) {
+    background-color: rgba(255, 255, 255, 0.14) !important;
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* 防止外层 .group[class*="hover:bg-secondary"] 与内层子按钮同时叠加两层半透明微光 */
+:is([data-testid="aux-pane-new-tab-view"], [data-testid="overview-panel"], [data-aux-pane-open] [data-testid^="overview-"]) .group:is([class*="hover:bg-secondary"], [class*="hover:bg-muted"]):hover > :is(button, a, div[role="button"]) {
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+/* 悬停与选中项内部的图标和普通文字同步提亮为纯白（保留代码变更 +N/-M 绿红语义着色与状态色） */
+:is(
+    [data-testid^="new-tab-card-"]:hover,
+    [data-testid^="new-tab-result-"]:is(:hover, [aria-selected="true"]),
+    [data-testid^="overview-panel-row-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="overview-panel-row-"],
+    [data-testid="overview-decorator-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="overview-decorator-row"],
+    [data-testid="background-task-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="background-task-row"],
+    [data-testid="artifact-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="artifact-row"],
+    [data-testid="change-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="change-row"],
+    [data-testid="changed-file-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="changed-file-row"],
+    [data-testid^="accumulated-item-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="accumulated-item-"]
+) *:not([class*="text-green"]):not([class*="text-emerald"]):not([class*="text-red"]):not([class*="text-rose"]):not([class*="text-amber"]):not([class*="text-yellow"]) {
+    color: #ffffff !important;
+}
+
+/* 4. 彻底清除列表项右侧悬浮操作区与顶部 Tab 关闭按钮容器的内联 linear-gradient(..., var(--secondary)/var(--muted) 25%) 黑色渐变遮罩 */
+[data-aux-pane-open] div[style*="var(--secondary)"],
+[data-aux-pane-open] div[style*="var(--muted)"],
+[data-testid="aux-pane-new-tab-view"] div[style*="var(--secondary)"],
+[data-aux-pane-open] .group > div.absolute[style*="linear-gradient"],
+[data-aux-pane-open] button[data-tab-id] div[style*="linear-gradient"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* 分组小标题（如 Background Commands）与计数圆徽章微光提亮 */
+[data-testid="aux-pane-new-tab-view"] [data-testid^="new-tab-group-"],
+[data-aux-pane-open] span.bg-border.rounded-full {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+[data-aux-pane-open] span.bg-border.rounded-full {
+    background-color: rgba(255, 255, 255, 0.16) !important;
+    opacity: 0.9 !important;
 }
 
 /* 11.4 总览面板 (Overview / Outline / 制品列表)：字体明度加 20 (拉升至 88% ~ 95%) */
@@ -1255,13 +1458,12 @@ div[class*="bottom-full"] {
     transition: none !important;
 }
 
-/* 3. 全局所有选择框真实浮层卡片（模型选择、项目目录、工作区选择、@引用菜单、/命令菜单）：完全 1:1 统一毛玻璃核心 */
-.animate-slideIn,
-[class*="animate-slideIn"],
-[class*="animate-in"],
-[class*="zoom-in"],
-[data-state="open"],
-[data-state="closed"],
+/* 3. 全局所有选择框真实浮层卡片（模型选择、项目目录、工作区选择、@引用菜单、/命令菜单；严格限定浮层容器，绝不误伤携带 data-state="closed" 的触发器按钮）：完全 1:1 统一毛玻璃核心 */
+div:is(.animate-slideIn, [class*="animate-slideIn"], [class*="animate-in"], [class*="zoom-in"]):not([role="button"]),
+[data-radix-popper-content-wrapper] > div[data-state="open"],
+[data-radix-popper-content-wrapper] > div[data-state="closed"],
+div[data-side][data-state="open"],
+div[data-side][data-state="closed"],
 div[role="presentation"][data-side] > div,
 div[data-side] > div,
 [data-radix-popper-content-wrapper] > div,
