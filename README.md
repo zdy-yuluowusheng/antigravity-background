@@ -98,7 +98,6 @@ d:\work\antigravity-background\
 │
 └── 文档与方案\                               # 详尽的专项攻坚白皮书与设计方案
     ├── 透明UI主题使用说明.md         # 透明UI主题各区域透明度与参数微调手册
-    ├── Antigravity更新2.17.0后BetterGravity恢复指南.md # 官方版本更新后的恢复机制与避坑指导
     ├── BetterGravity汉化插件使用与配置说明.md # 汉化词典结构、动态变量匹配与配置指南
     ├── 界面样式逆向与任务栏透明化方案.md     # 侧边栏灰色遮罩及主输入框透明化的逆向与穿透方案
     ├── 对话提问防重叠与毛玻璃雾化矩形框方案.md # 用户提问防文字穿透重叠与毛玻璃雾化矩形框方案
@@ -222,14 +221,13 @@ powershell -ExecutionPolicy Bypass -File .\核心脚本\一键更换背景壁纸
 
 1. 📖 [工程总览与使用指南.md](file:///d:/work/antigravity-background/工程总览与使用指南.md) —— 本地工程开发全景与主入口
 2. 📖 [透明UI主题使用说明.md](file:///d:/work/antigravity-background/文档与方案/透明UI主题使用说明.md) —— 主题参数微调与设计规范手册
-3. 📖 [Antigravity更新2.17.0后BetterGravity恢复指南.md](file:///d:/work/antigravity-background/文档与方案/Antigravity更新2.17.0后BetterGravity恢复指南.md) —— 官方版本更新后的恢复机制与避坑指导
-4. 📖 [BetterGravity汉化插件使用与配置说明.md](file:///d:/work/antigravity-background/文档与方案/BetterGravity汉化插件使用与配置说明.md) —— 汉化词典结构、动态变量匹配与配置指南
-5. 📖 [界面样式逆向与任务栏透明化方案.md](file:///d:/work/antigravity-background/文档与方案/界面样式逆向与任务栏透明化方案.md) —— 侧边栏灰色遮罩及主输入框透明化的逆向与穿透方案
-6. 📖 [对话提问防重叠与毛玻璃雾化矩形框方案.md](file:///d:/work/antigravity-background/文档与方案/对话提问防重叠与毛玻璃雾化矩形框方案.md) —— 提问卡片防文字穿透重叠与毛玻璃雾化矩形框方案
-7. 📖 [代码块与链接胶囊透明雾化方案.md](file:///d:/work/antigravity-background/文档与方案/代码块与链接胶囊透明雾化方案.md) —— 代码块、文件引用胶囊与变更条透明雾化技术方案
-8. 📖 [命令行与步骤折叠条悬停白色微光方案.md](file:///d:/work/antigravity-background/文档与方案/命令行与步骤折叠条悬停白色微光方案.md) —— 命令行执行条与折叠项平时纯透、悬停柔和白色微光方案
-9. 📖 [Markdown表格与表头透明微光方案.md](file:///d:/work/antigravity-background/文档与方案/Markdown表格与表头透明微光方案.md) —— Markdown 数据表格与表头消除黑底及透明微光方案
-10. 📖 [输入框候选项列表毛玻璃雾化方案.md](file:///d:/work/antigravity-background/文档与方案/输入框候选项列表毛玻璃雾化方案.md) —— 输入框候选项列表消除文字穿透重叠与毛玻璃雾化方案
+3. 📖 [BetterGravity汉化插件使用与配置说明.md](file:///d:/work/antigravity-background/文档与方案/BetterGravity汉化插件使用与配置说明.md) —— 汉化词典结构、动态变量匹配与配置指南
+4. 📖 [界面样式逆向与任务栏透明化方案.md](file:///d:/work/antigravity-background/文档与方案/界面样式逆向与任务栏透明化方案.md) —— 侧边栏灰色遮罩及主输入框透明化的逆向与穿透方案
+5. 📖 [对话提问防重叠与毛玻璃雾化矩形框方案.md](file:///d:/work/antigravity-background/文档与方案/对话提问防重叠与毛玻璃雾化矩形框方案.md) —— 提问卡片防文字穿透重叠与毛玻璃雾化矩形框方案
+6. 📖 [代码块与链接胶囊透明雾化方案.md](file:///d:/work/antigravity-background/文档与方案/代码块与链接胶囊透明雾化方案.md) —— 代码块、文件引用胶囊与变更条透明雾化技术方案
+7. 📖 [命令行与步骤折叠条悬停白色微光方案.md](file:///d:/work/antigravity-background/文档与方案/命令行与步骤折叠条悬停白色微光方案.md) —— 命令行执行条与折叠项平时纯透、悬停柔和白色微光方案
+8. 📖 [Markdown表格与表头透明微光方案.md](file:///d:/work/antigravity-background/文档与方案/Markdown表格与表头透明微光方案.md) —— Markdown 数据表格与表头消除黑底及透明微光方案
+9. 📖 [输入框候选项列表毛玻璃雾化方案.md](file:///d:/work/antigravity-background/文档与方案/输入框候选项列表毛玻璃雾化方案.md) —— 输入框候选项列表消除文字穿透重叠与毛玻璃雾化方案
 
 ---
 
