@@ -1,13 +1,25 @@
 /**
  * @name        透明UI主题
- * @description 基于 wallhaven 晨雾松林丁达尔光壁纸定制的高级透明主题 (命令行悬停白色微光版)
+ * @description 基于 wallhaven 晨雾松林丁达尔光壁纸定制的高级透明主题 (v2.30.0 Onyx 引擎适配与命令行悬停白色微光版)
  * @author      Antigravity Assistant
- * @version     2.0.0
+ * @version     2.30.0
  */
 
-/* ================= 1. 变量与纯黑容器全面穿透 ================= */
-:root {
+/* ================= 1. 变量与纯黑容器全面穿透 (含 v2.30.0 Onyx 新主题引擎适配) ================= */
+:root,
+html,
+body,
+body[data-agy-theme],
+body[data-newux-theme="onyx"],
+body[data-agy-theme][data-newux-theme="onyx"].dark,
+body[data-agy-theme][data-newux-theme="onyx"].light {
     --background: 0 0% 0% / 0 !important;
+    --body-background: transparent !important;
+    --shell: transparent !important;
+    --shell-canvas: transparent !important;
+    --content: transparent !important;
+    --home-glow: transparent !important;
+    --scrim: rgba(0, 0, 0, 0.45) !important;
     --sidebar: 0 0% 0% / 0 !important;
     --sidebar-background: 0 0% 0% / 0 !important;
     --sidebar-muted: 0 0% 0% / 0 !important;
@@ -15,6 +27,14 @@
     --sidebar-accent: rgba(52, 211, 153, 0.16) !important;
     --card: 0 0% 0% / 0 !important;
     --card-border: 0 0% 0% / 0 !important;
+    --glass: rgba(13, 21, 18, 0.28) !important;
+    --glass-border: rgba(255, 255, 255, 0.16) !important;
+    --glass-highlight: rgba(255, 255, 255, 0.08) !important;
+    --onyx-frame: transparent !important;
+    --onyx-well: rgba(255, 255, 255, 0.08) !important;
+    --onyx-raised: transparent !important;
+    --onyx-selected: rgba(52, 211, 153, 0.16) !important;
+    --onyx-key: rgba(255, 255, 255, 0.16) !important;
 }
 
 .h-screen.w-screen,
@@ -862,11 +882,11 @@ form {
  * 3. 将总览 (Overview)、审查 (Review)、终端 (Terminal) 面板内部字体明度在原有基础上升高约 20 个百分点。
  */
 
-/* 11.1 右侧辅助面板整体外层容器通透微光 (精确限定选择器，严密排除主会话窗口) */
+/* 11.1 右侧辅助面板整体外层容器通透微光 (精确限定选择器，严密排除主会话窗口与文档预览正文) */
 aside[class*="auxiliary"],
 [class*="auxiliaryPane"],
 [data-testid*="auxiliary-pane"],
-[class*="ArtifactViewer"],
+[class*="ArtifactViewer"]:not(:has(section.codex-docx-preview), :has(.codex-docx-preview-wrapper)),
 [data-testid="running-items-panel"],
 div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([data-testid*="terminal"]),
 div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([class*="xterm"]),
@@ -877,6 +897,64 @@ div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([data-
     backdrop-filter: blur(16px) !important;
     -webkit-backdrop-filter: blur(16px) !important;
     border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* 文档与分页预览（Word / DOCX / PDF / 表格等）高清透亮保护，彻底根除雾化与模糊 */
+.popcorn-paged-annotation-preview,
+[class*="paged-annotation-preview"],
+[class*="popcorn-paged"],
+.popcorn-annotation-batch,
+[class*="annotation-batch"],
+[class*="document-preview"],
+[class*="file-preview"],
+[class*="office-preview"],
+.codex-docx-preview-wrapper,
+section.codex-docx-preview,
+.codex-docx-preview,
+article:has(section.codex-docx-preview),
+[data-testid="artifact-docx-comment-layer"],
+.popcorn-review-bar-overlay,
+.popcorn-review-bar-overlay-content,
+div[data-popcorn-review-bar],
+[data-tab-id*="docx"],
+[data-tab-id*="doc"],
+[data-tab-id*="xlsx"],
+[data-tab-id*="xls"],
+[data-tab-id*="pdf"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* 保护 Word 文档自身的白底纸张，确保正文排版纯净清晰 */
+.codex-docx-preview-wrapper > section.codex-docx-preview {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.25) !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* 确保分页预览容器内部所有层级（纸张、段落、文字、表格、批注、遮罩）100% 清晰锐利，严禁继承或覆盖任何模糊滤镜 */
+.popcorn-paged-annotation-preview *,
+[class*="paged-annotation-preview"] *,
+.popcorn-annotation-batch *,
+.codex-docx-preview-wrapper *,
+section.codex-docx-preview *,
+.codex-docx-preview *,
+.popcorn-review-bar-overlay *,
+.popcorn-review-bar-overlay-content * {
+    filter: none !important;
+    -webkit-filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
 /* 11.2 终端右侧终端会话列表（pwsh.exe 选中项与列表项）黑底彻底消除与微光美化 */
@@ -1877,5 +1955,291 @@ div[role="dialog"]:has(img[alt*="Mermaid"]) {
     -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
     border: 1px solid rgba(255, 255, 255, 0.18) !important;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
+}
+
+
+/* -------------------------------------------------------------
+ * 文件型产物卡片（Word、Excel 等）单层大透明框保护规则
+ * 避免内层 group/resource-card 与外层容器产生双重框重叠视觉缺陷
+ * ------------------------------------------------------------- */
+div:has(> [class*="group/resource-card"]),
+div[class*="bg-surface-elevated-secondary"]:has([class*="group/resource-card"]),
+[class*="extension:bg-background-primary-soft"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    box-shadow: none !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+}
+
+[class*="group/resource-card"],
+div.group\/resource-card,
+[class*="group/resource-card"][class*="bg-primary-soft"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    border-width: 0 !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    border-radius: inherit !important;
+}
+
+[class*="group/resource-card"]:hover,
+[class*="group/resource-card"]:has(button:hover) {
+    background: rgba(255, 255, 255, 0.05) !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: none !important;
+    border-width: 0 !important;
+    border-color: transparent !important;
+}
+
+/* ================= 19. Antigravity v2.30.0 Onyx 新架构与新增组件深度适配 ================= */
+/*
+ * 针对 v2.30.0 引入的 data-agy-theme / data-newux-theme="onyx" 主题架构及重构后的 DOM 结构：
+ * 1. 新版内嵌外壳（.agy-shell / .agy-inset-shell / .agy-sheet / [data-main-content-body] / [data-tiling-pane]）全面透明化，清除首页光晕与分屏外框遮罩；
+ * 2. 新版双层主输入框（.surface-composer > .surface-composer-card）消除 #0D0D11 4px 粗黑外框与 #15151A 实心内胆，恢复通透毛玻璃；
+ * 3. 新版用户提问气泡（.agy-user-bubble-frame > .agy-user-bubble）与右上角操作栏（.user-input-buttons-container）清除实心底色与 25px 黑色浓影；
+ * 4. 新版侧边栏会话行（.agy-sidebar-row）选中态与右侧操作按钮渐变遮罩（.agy-row-actions::before / .agy-status-overflow）去黑块；
+ * 5. 新版对话接管确认卡片（.agy-takeover-card）、回到底部按钮（.agy-scroll-bottom）与胶囊切换组（[data-slot="toggle-group"]）通透微光化。
+ */
+
+/* 19.1 新版内嵌外壳、Sheet 容器与分屏窗格全面透明化 */
+body[data-agy-theme] .agy-shell,
+body[data-agy-theme] .agy-inset-shell,
+body[data-agy-theme] .agy-sheet,
+body[data-agy-home-glow] .agy-sheet:has(.agy-home),
+body[data-agy-theme] .agy-sheet[data-sheet-inset] [data-main-content-body],
+body[data-agy-theme] .agy-inset-shell [data-side-panel-body],
+body[data-agy-theme] [data-split-panes] .agy-sheet[data-sheet-inset] [data-tiling-pane],
+body[data-agy-theme] .agy-inset-shell [data-testid="bottom-terminal-panel"],
+body[data-agy-theme] .agy-inset-shell [data-splitter-band]::after,
+body[data-agy-theme] .agy-sheet[data-sheet-inset] [data-splitter-band]::after,
+.agy-shell,
+.agy-inset-shell,
+.agy-sheet,
+[data-main-content-body],
+[data-tiling-pane] {
+    background-color: transparent !important;
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* 清除分屏窗格与内嵌卡片边缘伪元素外扩的 var(--shell-canvas) 实心遮罩阴影，仅保留柔和微光细边 */
+body[data-agy-theme] .agy-sheet[data-sheet-inset] [data-main-content-body]::after,
+body[data-agy-theme] .agy-inset-shell [data-side-panel-body]::after,
+body[data-agy-theme] [data-split-panes] .agy-sheet[data-sheet-inset] [data-tiling-pane]::after,
+body[data-agy-theme] .agy-inset-shell [data-testid="bottom-terminal-panel"]::after {
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.10) !important;
+}
+
+/* 19.2 新版双层主输入框（.surface-composer > .surface-composer-card）毛玻璃融合与消除 4px 粗黑外框 */
+body[data-agy-theme] .surface-composer,
+body[data-agy-theme][data-newux-theme="onyx"].dark .surface-composer,
+body[data-agy-theme][data-newux-theme="onyx"].light .surface-composer,
+#antigravity\.agentSidePanelInputBox.surface-composer,
+[data-testid="agent-input-box"] .surface-composer,
+.surface-composer.bg-card-border {
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    border-radius: 16px !important;
+    backdrop-filter: blur(16px) saturate(130%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(130%) !important;
+    background-color: rgba(13, 21, 18, 0.22) !important;
+    background: rgba(13, 21, 18, 0.22) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.20) !important;
+    overflow: visible !important;
+}
+
+body[data-agy-theme] .surface-composer:focus-within,
+body[data-agy-theme][data-newux-theme="onyx"].dark .surface-composer:focus-within,
+#antigravity\.agentSidePanelInputBox.surface-composer:focus-within {
+    border-color: rgba(255, 255, 255, 0.26) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.26), inset 0 0 0 0.5px rgba(255, 255, 255, 0.12) !important;
+}
+
+body[data-agy-theme] .surface-composer-card,
+body[data-agy-theme][data-newux-theme="onyx"].dark .surface-composer-card,
+body[data-agy-theme][data-newux-theme="onyx"].light .surface-composer-card,
+[data-testid="agent-input-box"] .surface-composer-card,
+.surface-composer > .surface-composer-card {
+    background-color: transparent !important;
+    background: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* 修复因 --background 设为全透明导致 .text-background 反色按钮（如输入框右下角语音模式按钮 voice-live-pill、发送箭头按钮）内部 SVG currentColor 变透明空白的问题 */
+.text-background,
+.bg-foreground.text-background,
+.bg-foreground.text-background *,
+.bg-foreground.text-background svg,
+[data-testid="voice-live-pill"]:not(.bg-red-600),
+[data-testid="voice-live-pill"]:not(.bg-red-600) *,
+[data-testid="voice-live-pill"]:not(.bg-red-600) svg {
+    color: #0e1613 !important;
+}
+
+[data-testid="voice-live-pill"]:not(.bg-red-600) svg rect,
+[data-testid="voice-live-pill"]:not(.bg-red-600) svg path {
+    fill: #0e1613 !important;
+}
+
+/* 19.3 新版用户消息气泡（.agy-user-bubble-frame > .agy-user-bubble）与右上角悬浮操作栏去黑影 */
+body[data-agy-theme] .agy-user-bubble-frame,
+body[data-agy-theme][data-newux-theme] .agy-user-bubble-frame,
+.agy-user-bubble-frame {
+    background-color: rgba(13, 21, 18, 0.22) !important;
+    background: rgba(13, 21, 18, 0.22) !important;
+    backdrop-filter: blur(12px) saturate(125%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(125%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18) !important;
+}
+
+body[data-agy-theme] .agy-user-bubble,
+body[data-agy-theme][data-newux-theme] .agy-user-bubble,
+[data-testid="user-message-bubble"].agy-user-bubble,
+.agy-user-bubble {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+body[data-agy-theme] .agy-user-bubble-header,
+body[data-agy-theme][data-newux-theme] .agy-user-bubble-header,
+.agy-user-bubble-header {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+body[data-agy-theme] .agy-user-bubble .user-input-buttons-container,
+body[data-agy-theme][data-newux-theme] .agy-user-bubble .user-input-buttons-container,
+body[data-agy-theme] .user-input-buttons-shadow,
+.user-input-buttons-container,
+.user-input-buttons-shadow {
+    background-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* 19.4 新版侧边栏会话行（.agy-sidebar-row）选中态与右侧操作按钮渐变遮罩清理 */
+body[data-agy-theme] .agy-sidebar-row:not([data-selected="true"]):not(:hover),
+body[data-agy-theme][data-newux-theme="onyx"].dark .agy-sidebar-row:not([data-selected="true"]):not(:hover),
+.agy-sidebar-row:not([data-selected="true"]):not(:hover) {
+    background-color: transparent !important;
+    background: transparent !important;
+    --row-bg: transparent !important;
+}
+
+body[data-agy-theme] .agy-sidebar-row:hover:not([data-selected="true"]),
+body[data-agy-theme][data-newux-theme="onyx"].dark .agy-sidebar-row:hover:not([data-selected="true"]),
+.agy-sidebar-row:hover:not([data-selected="true"]) {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    --row-bg: transparent !important;
+    border-radius: 8px !important;
+}
+
+body[data-agy-theme] .agy-sidebar-row[data-selected="true"],
+body[data-agy-theme][data-newux-theme="onyx"].dark .agy-sidebar-row[data-selected="true"],
+body[data-agy-theme] .agy-sidebar-row[data-selected="true"]:hover,
+body[data-agy-theme][data-newux-theme="onyx"].dark .agy-sidebar-row[data-selected="true"]:hover,
+.agy-sidebar-row[data-selected="true"] {
+    background-color: rgba(52, 211, 153, 0.16) !important;
+    background: rgba(52, 211, 153, 0.16) !important;
+    --row-bg: transparent !important;
+    border: 1px solid rgba(52, 211, 153, 0.22) !important;
+    border-radius: 8px !important;
+}
+
+body[data-agy-theme] .agy-row-actions,
+body[data-agy-theme] .agy-row-actions::before,
+body[data-agy-theme] .agy-sidebar-row .agy-row-actions,
+body[data-agy-theme] .agy-sidebar-row .agy-row-actions::before,
+body[data-agy-theme] [data-testid="conversation-row-history"] .agy-row-actions,
+body[data-agy-theme] [data-testid="conversation-row-history"] .agy-row-actions::before,
+.agy-row-actions,
+.agy-row-actions::before {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    box-shadow: none !important;
+}
+
+body[data-agy-theme] .agy-status-overflow,
+.agy-status-overflow {
+    background: rgba(255, 255, 255, 0.12) !important;
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+/* 19.5 新版对话流接管确认卡片（.agy-takeover-card）、浮层玻璃面板与切换按钮组适配 */
+body[data-agy-theme] .agy-takeover-frame,
+body[data-agy-theme][data-newux-theme] .agy-takeover-frame,
+.agy-takeover-frame {
+    background-color: rgba(13, 21, 18, 0.28) !important;
+    background: rgba(13, 21, 18, 0.28) !important;
+    backdrop-filter: blur(16px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(135%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24) !important;
+}
+
+body[data-agy-theme] .agy-takeover-card,
+body[data-agy-theme][data-newux-theme] .agy-takeover-card,
+.agy-takeover-card {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+body[data-agy-theme] .agy-takeover-card [data-testid="ask-question-option"]:hover,
+body[data-agy-theme] .agy-takeover-card [data-testid="ask-question-writein"]:hover,
+body[data-agy-theme] .agy-takeover-card [data-testid="permission-target-editor"] {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+}
+
+body[data-agy-theme] .agy-scroll-bottom,
+body[data-agy-theme] .agy-scroll-bottom:hover,
+.agy-scroll-bottom {
+    background-color: rgba(18, 28, 24, 0.55) !important;
+    background: rgba(18, 28, 24, 0.55) !important;
+    background-image: none !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+body[data-agy-theme][data-newux-theme="onyx"].dark [data-slot="toggle-group"],
+[data-slot="toggle-group"] {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+body[data-agy-theme][data-newux-theme="onyx"].dark [data-slot="toggle-group"] > button[data-pressed],
+[data-slot="toggle-group"] > button[data-pressed] {
+    background-color: rgba(255, 255, 255, 0.18) !important;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.14) !important;
 }
 

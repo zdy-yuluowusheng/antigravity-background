@@ -1,12 +1,44 @@
 /**
  * @file 准备恢复补丁.js
- * @description 构建 BetterGravity 3.0 针对 Antigravity 2.17.0 的引导代理包
+ * @description 构建 BetterGravity 3.0 针对 Antigravity (支持 v2.30.0+) 的引导代理包，并同步最新透明主题与汉化插件至 Roaming 目录
  */
 
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const asar = require('C:/Users/ylws/AppData/Local/npm-cache/_npx/8b3f11f22d4db0c9/node_modules/asar');
+
+/**
+ * 将工程目录中的最新透明主题与汉化插件同步至 BetterGravity 用户配置目录 (%APPDATA%\BetterGravity)
+ *
+ * @function syncUserCustomizations
+ * @returns {void}
+ * @throws {Error} 当源文件不存在或写入目标目录失败时抛出异常
+ */
+function syncUserCustomizations() {
+  const projectRoot = path.resolve(__dirname, '..');
+  const roamingRoot = 'C:/Users/ylws/AppData/Roaming/BetterGravity';
+  const themeSrc = path.join(projectRoot, '主题样式', '透明UI主题.css');
+  const themeDest = path.join(roamingRoot, 'themes', '透明UI主题.css');
+  const i18nJsSrc = path.join(projectRoot, '汉化插件', 'index.js');
+  const i18nJsonSrc = path.join(projectRoot, '汉化插件', 'plugin.json');
+  const i18nDestDir = path.join(roamingRoot, 'plugins', 'chinese-localization');
+
+  if (fs.existsSync(themeSrc)) {
+    fs.mkdirSync(path.dirname(themeDest), { recursive: true });
+    fs.copyFileSync(themeSrc, themeDest);
+    console.log(`[成功] 已同步最新透明主题至 ${themeDest}`);
+  }
+
+  if (fs.existsSync(i18nJsSrc)) {
+    fs.mkdirSync(i18nDestDir, { recursive: true });
+    fs.copyFileSync(i18nJsSrc, path.join(i18nDestDir, 'index.js'));
+    if (fs.existsSync(i18nJsonSrc)) {
+      fs.copyFileSync(i18nJsonSrc, path.join(i18nDestDir, 'plugin.json'));
+    }
+    console.log(`[成功] 已同步最新汉化插件至 ${i18nDestDir}`);
+  }
+}
 
 /**
  * 部署 BetterGravity 运行时至 Antigravity resources 目录
@@ -69,6 +101,7 @@ async function buildBootstrap(resourcesDir) {
   }
 
   deployRuntime(resourcesDir);
+  syncUserCustomizations();
 
   const pkgJsonRaw = asar.extractFile(originalAsar, 'package.json').toString('utf8');
   const pkg = JSON.parse(pkgJsonRaw);
