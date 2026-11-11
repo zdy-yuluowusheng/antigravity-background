@@ -487,17 +487,18 @@ div[class*="border-border"][class*="rounded-t"] {
     -webkit-backdrop-filter: none !important;
 }
 
-/* 8.2 行内代码与引用链接胶囊 (如 {} 主题样式/透明UI主题.css，严格限定在对话区内防误伤侧栏与顶栏按钮) */
-code:not(pre code),
-.inline-pill,
-[class*="inline-pill"],
+/* 8.2 行内代码与引用链接胶囊单层大框规范：彻底根除多层套娃重叠，严格只在最外层保留单一通透大框 */
+/* 1. 独立行内代码（未嵌套在任何链接或胶囊内） */
+code:not(pre code):not(:has(.inline-pill)):not(:has(a)),
+/* 2. 最外层上下文作用域引用胶囊容器 */
 .context-scope-mention,
-.context-scope-mention button,
-span[class*="context-scope-mention"] button,
-[data-testid="conversation-view"] .prose button:has(svg):has(span),
-[data-testid="conversation-view"] [class*="prose"] button:has(svg):has(span),
-a[href*="file://"],
-[data-testid="conversation-view"] [class*="chip"] {
+/* 3. 独立存在且未被 .context-scope-mention 包裹的引用胶囊与链接 */
+.inline-pill:not(.context-scope-mention *),
+[class*="inline-pill"]:not(.context-scope-mention *),
+a[href*="file://"]:not(.context-scope-mention *):not(:has(.inline-pill)),
+[data-testid="conversation-view"] .prose button:has(svg):has(span):not(.context-scope-mention *),
+[data-testid="conversation-view"] [class*="prose"] button:has(svg):has(span):not(.context-scope-mention *),
+[data-testid="conversation-view"] [class*="chip"]:not(.context-scope-mention *) {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
@@ -507,18 +508,61 @@ a[href*="file://"],
     transition: background-color 0.2s ease, border-color 0.2s ease !important;
 }
 
-/* 引用链接胶囊鼠标悬停微光反馈 */
-code:not(pre code):hover,
-[class*="inline-pill"]:hover,
-.inline-pill:hover,
-.context-scope-mention button:hover,
-span[class*="context-scope-mention"] button:hover,
-[data-testid="conversation-view"] .prose button:has(svg):has(span):hover,
-[data-testid="conversation-view"] [class*="prose"] button:has(svg):has(span):hover,
-a[href*="file://"]:hover,
-[data-testid="conversation-view"] [class*="chip"]:hover {
+.context-scope-mention {
+    display: inline-flex !important;
+    align-items: baseline !important;
+    vertical-align: baseline !important;
+}
+
+/* 4. 最外层大框鼠标悬停微光反馈 */
+code:not(pre code):not(:has(.inline-pill)):not(:has(a)):hover,
+.context-scope-mention:hover,
+.inline-pill:not(.context-scope-mention *):hover,
+[class*="inline-pill"]:not(.context-scope-mention *):hover,
+a[href*="file://"]:not(.context-scope-mention *):not(:has(.inline-pill)):hover,
+[data-testid="conversation-view"] .prose button:has(svg):has(span):not(.context-scope-mention *):hover,
+[data-testid="conversation-view"] [class*="prose"] button:has(svg):has(span):not(.context-scope-mention *):hover,
+[data-testid="conversation-view"] [class*="chip"]:not(.context-scope-mention *):hover {
     background-color: rgba(255, 255, 255, 0.10) !important;
     border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+/* 5. 核心去重保护：彻底消除胶囊内部所有子元素（button/code/span/图标）的多层嵌套边框与内层背景 */
+.context-scope-mention *,
+.context-scope-mention button,
+.context-scope-mention .inline-pill,
+.context-scope-mention [class*="inline-pill"],
+.context-scope-mention code,
+.context-scope-mention a,
+.inline-pill code,
+[class*="inline-pill"] code,
+a code,
+button code,
+.context-scope-mention:hover *,
+.inline-pill:hover code,
+[class*="inline-pill"]:hover code,
+a:hover code,
+button:hover code {
+    border: none !important;
+    border-width: 0 !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    outline: none !important;
+}
+
+/* 6. 反向嵌套保护：若 code 标签外层包裹了链接或胶囊，外层 code 自身去框，把框留给胶囊 */
+code:has(a),
+code:has(button),
+code:has(.inline-pill),
+code:has([class*="inline-pill"]) {
+    border: none !important;
+    border-width: 0 !important;
+    border-color: transparent !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
 
 /* 8.3 文件变更状态条与折叠栏 (如 3 files changed +46 -43 > 与 审查 按钮) */
@@ -2128,11 +2172,14 @@ body[data-agy-theme][data-newux-theme] .agy-user-bubble-header,
 
 body[data-agy-theme] .agy-user-bubble .user-input-buttons-container,
 body[data-agy-theme][data-newux-theme] .agy-user-bubble .user-input-buttons-container,
+body[data-agy-theme] .agy-user-bubble-card .user-input-buttons-container,
+body[data-agy-theme][data-newux-theme] .agy-user-bubble-card .user-input-buttons-container,
 body[data-agy-theme] .user-input-buttons-shadow,
 .user-input-buttons-container,
 .user-input-buttons-shadow {
-    background-color: transparent !important;
-    background: transparent !important;
+    background-color: rgba(18, 28, 24, 0.45) !important;
+    background: rgba(18, 28, 24, 0.45) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
     box-shadow: none !important;
 }
 
@@ -2242,4 +2289,41 @@ body[data-agy-theme][data-newux-theme="onyx"].dark [data-slot="toggle-group"] > 
     background-color: rgba(255, 255, 255, 0.18) !important;
     box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.14) !important;
 }
+
+/* 19.6 v2.31.0 新增提示横幅（.agy-callout）、浮动胶囊（.agy-pill.surface-opaque）、辅助标签页（.agy-aux-tab）与下拉浮层（.agy-overlay）透明化适配 */
+body[data-agy-theme] .agy-callout,
+.agy-callout {
+    background-color: rgba(13, 21, 18, 0.28) !important;
+    background: rgba(13, 21, 18, 0.28) !important;
+    backdrop-filter: blur(12px) saturate(125%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(125%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+body[data-agy-theme] .agy-pill.surface-opaque,
+.agy-pill.surface-opaque {
+    background-color: rgba(18, 28, 24, 0.65) !important;
+    background: rgba(18, 28, 24, 0.65) !important;
+    backdrop-filter: blur(14px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(135%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+}
+
+body[data-agy-theme] .agy-overlay.surface-glass,
+.agy-overlay.surface-glass {
+    background-color: rgba(16, 24, 21, 0.78) !important;
+    background: rgba(16, 24, 21, 0.78) !important;
+    backdrop-filter: blur(20px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+}
+
+body[data-agy-theme] .agy-aux-tab.bg-muted,
+body[data-agy-theme] .agy-aux-tab.bg-secondary,
+.agy-aux-tab.bg-muted,
+.agy-aux-tab.bg-secondary {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+}
+
 
