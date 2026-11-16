@@ -689,41 +689,43 @@ div:has(> [data-testid="diff-line-count"]) span:not(.text-green-500):not(.text-r
     color: rgba(255, 255, 255, 0.90) !important;
 }
 
-/* ================= 9. 命令行与执行步骤行：父级与子项全面统一为平时纯透明、悬停柔和白色微光 ================= */
+/* ================= 9. 命令行与执行步骤行：平时彻底无框纯透明，仅悬停呈现柔和白色微光 ================= */
 /* 
  * 彻底解决执行步骤（Ran node / Ran Copy-Item / Thought for / Worked for / Edited / 子项命令行）
- * 无论处于折叠还是展开状态，在鼠标悬停时因 Tailwind 的 hover:bg-muted 回退为深黑色的问题。
- * 平时彻底纯透明，鼠标悬停时呈现纯正柔和的白色半透明微光浮层与高亮白边，绝不显黑底。
+ * 平时保持无边框纯透明（避免对话流出现大量重叠方框），鼠标悬停时优雅呈现白色半透明微光与高透细边，绝不显黑底；
+ * 同时通过 :not(...) 保护已单独适配边框的变更文件卡片、审查按钮、产物卡与用户气泡不受影响。
  */
 
-/* 1. 平时状态：父级折叠条、run-command-step 子项命令行、工作时长与思考条全面纯透明 */
+/* 1. 平时状态：父级折叠条、run-command-step 子项命令行、工作时长与思考条全面纯透明无框 */
 div[data-testid="conversation-view"] [data-testid="run-command-step"] > div,
 div[data-testid="conversation-view"] [data-testid="run-command-step"] [role="button"],
 div[data-testid="conversation-view"] [data-testid="run-command-step"],
 div[data-testid="conversation-view"] button[data-testid="tool-group-collapsible"],
 div[data-testid="conversation-view"] button[data-testid="worked-for-collapsible"],
+div[data-testid="conversation-view"] button[data-testid="progress-updates-collapsible"],
 div[data-testid="conversation-view"] button[data-testid="thinking-collapsible-trigger"],
 div[data-testid="conversation-view"] button[data-testid*="-collapsible"],
 div[data-testid="conversation-view"] button[data-testid*="tool-group"],
-div[data-testid="conversation-view"] button[class*="min-h-8"],
-div[data-testid="conversation-view"] button[class*="tabular-nums"],
-div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg,
-div[data-testid="conversation-view"] button.cursor-pointer[class*="min-h-8"],
-div[data-testid="conversation-view"] div[role="button"].cursor-pointer,
-div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"],
-div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg,
-div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"],
-div[data-testid="conversation-view"] [class*="hover:bg-muted"],
-div[data-testid="conversation-view"] .hover\:bg-muted,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]),
+div[data-testid="conversation-view"] button[class*="tabular-nums"]:not(.review-button):not([data-testid="changed-files-card-review"]),
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]),
+div[data-testid="conversation-view"] button.cursor-pointer[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]),
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card),
+div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card),
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card),
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card),
+div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"])[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]),
+div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"]).hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]),
 [data-testid="run-command-step"] [role="button"],
 button[data-testid="tool-group-collapsible"],
 button[data-testid="worked-for-collapsible"],
+button[data-testid="progress-updates-collapsible"],
 button[data-testid="thinking-collapsible-trigger"] {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid transparent !important;
     border-radius: 8px !important;
     box-shadow: none !important;
     color: rgba(255, 255, 255, 0.90) !important;
@@ -736,54 +738,56 @@ div[data-testid="conversation-view"] [data-testid="run-command-step"] > div *,
 div[data-testid="conversation-view"] [data-testid="run-command-step"] [role="button"] *,
 div[data-testid="conversation-view"] button[data-testid="tool-group-collapsible"] *,
 div[data-testid="conversation-view"] button[data-testid="worked-for-collapsible"] *,
+div[data-testid="conversation-view"] button[data-testid="progress-updates-collapsible"] *,
 div[data-testid="conversation-view"] button[data-testid="thinking-collapsible-trigger"] *,
 div[data-testid="conversation-view"] button[data-testid*="-collapsible"] *,
 div[data-testid="conversation-view"] button[data-testid*="tool-group"] *,
-div[data-testid="conversation-view"] button[class*="min-h-8"] *,
-div[data-testid="conversation-view"] button[class*="tabular-nums"] *,
-div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg *,
-div[data-testid="conversation-view"] button.cursor-pointer[class*="min-h-8"] *,
-div[data-testid="conversation-view"] div[role="button"].cursor-pointer *,
-div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"] *,
-div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg *,
-div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"] *,
-div[data-testid="conversation-view"] [class*="hover:bg-muted"] *,
-div[data-testid="conversation-view"] .hover\:bg-muted *,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]) *,
+div[data-testid="conversation-view"] button[class*="tabular-nums"]:not(.review-button):not([data-testid="changed-files-card-review"]) *,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]) *,
+div[data-testid="conversation-view"] button.cursor-pointer[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]) *,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) *,
+div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) *,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) *,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card) *,
 [data-testid="run-command-step"] [role="button"] *,
 button[data-testid="tool-group-collapsible"] *,
 button[data-testid="worked-for-collapsible"] *,
+button[data-testid="progress-updates-collapsible"] *,
 button[data-testid="thinking-collapsible-trigger"] * {
     color: rgba(255, 255, 255, 0.90) !important;
 }
 
-/* 3. 悬停与选中状态：彻底消灭 Tailwind hover:bg-muted 黑底，统一呈现白色半透明微光浮层与高亮边框 */
+/* 3. 悬停与选中状态：彻底消灭 Tailwind hover:bg-muted 黑底，仅悬停时呈现白色半透明微光浮层与高亮边框 */
 div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:hover,
 div[data-testid="conversation-view"] [data-testid="run-command-step"] [role="button"]:hover,
 div[data-testid="conversation-view"] button[data-testid="tool-group-collapsible"]:hover,
 div[data-testid="conversation-view"] button[data-testid="worked-for-collapsible"]:hover,
+div[data-testid="conversation-view"] button[data-testid="progress-updates-collapsible"]:hover,
 div[data-testid="conversation-view"] button[data-testid="thinking-collapsible-trigger"]:hover,
 div[data-testid="conversation-view"] button[data-testid*="-collapsible"]:hover,
 div[data-testid="conversation-view"] button[data-testid*="tool-group"]:hover,
-div[data-testid="conversation-view"] button[class*="min-h-8"]:hover,
-div[data-testid="conversation-view"] button[class*="tabular-nums"]:hover,
-div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:hover,
-div[data-testid="conversation-view"] button.cursor-pointer[class*="min-h-8"]:hover,
-div[data-testid="conversation-view"] div[role="button"].cursor-pointer:hover,
-div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"]:hover,
-div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:hover,
-div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:hover,
-div[data-testid="conversation-view"] [class*="hover:bg-muted"]:hover,
-div[data-testid="conversation-view"] .hover\:bg-muted:hover,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]):hover,
+div[data-testid="conversation-view"] button[class*="tabular-nums"]:not(.review-button):not([data-testid="changed-files-card-review"]):hover,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]):hover,
+div[data-testid="conversation-view"] button.cursor-pointer[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]):hover,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover,
+div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card):hover,
+div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"])[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover,
+div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"]).hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover,
 [data-testid="run-command-step"] [role="button"]:hover,
 button[data-testid="tool-group-collapsible"]:hover,
 button[data-testid="worked-for-collapsible"]:hover,
+button[data-testid="progress-updates-collapsible"]:hover,
 button[data-testid="thinking-collapsible-trigger"]:hover {
-    background-color: rgba(255, 255, 255, 0.12) !important;
-    background: rgba(255, 255, 255, 0.12) !important;
-    border: 1px solid rgba(255, 255, 255, 0.28) !important;
-    border-color: rgba(255, 255, 255, 0.28) !important;
+    background-color: rgba(255, 255, 255, 0.10) !important;
+    background: rgba(255, 255, 255, 0.10) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
     color: #ffffff !important;
-    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.06) !important;
 }
 
 /* 4. 悬停时内部文本与图标同步转为纯白色高亮 */
@@ -791,15 +795,16 @@ div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:hove
 div[data-testid="conversation-view"] [data-testid="run-command-step"] [role="button"]:hover *,
 div[data-testid="conversation-view"] button[data-testid="tool-group-collapsible"]:hover *,
 div[data-testid="conversation-view"] button[data-testid="worked-for-collapsible"]:hover *,
+div[data-testid="conversation-view"] button[data-testid="progress-updates-collapsible"]:hover *,
 div[data-testid="conversation-view"] button[data-testid="thinking-collapsible-trigger"]:hover *,
-div[data-testid="conversation-view"] button[class*="min-h-8"]:hover *,
-div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:hover *,
-div[data-testid="conversation-view"] div[role="button"].cursor-pointer:hover *,
-div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"]:hover *,
-div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:hover *,
-div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:hover *,
-div[data-testid="conversation-view"] [class*="hover:bg-muted"]:hover *,
-div[data-testid="conversation-view"] .hover\:bg-muted:hover *,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]):hover *,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]):hover *,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover *,
+div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover *,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover *,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card):hover *,
+div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"])[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover *,
+div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"]).hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover *,
 [data-testid="run-command-step"] [role="button"]:hover * {
     color: #ffffff !important;
 }
@@ -2325,5 +2330,114 @@ body[data-agy-theme] .agy-aux-tab.bg-secondary,
     background-color: rgba(255, 255, 255, 0.12) !important;
     background: rgba(255, 255, 255, 0.12) !important;
 }
+
+/* 19.7 v2.32.1 全面透明化与毛玻璃深度适配（FastPick/命令面板、SurfaceGlass/SurfaceOpaque 浮层、侧边栏悬停预览、悬停操作栏渐变消除、分屏 Splitter 带、PDF 阅读器与 Chief of Staff 标签） */
+body[data-agy-theme] .agy-fastpick.surface-glass,
+.agy-fastpick.surface-glass,
+body[data-agy-theme] .quick-input-widget.surface-glass,
+.quick-input-widget.surface-glass,
+body[data-agy-theme] .agy-toast.surface-glass,
+.agy-toast.surface-glass,
+body[data-agy-theme] .surface-glass:not(.surface-composer-card):not(.agy-overlay):not(.compact-tooltip):not(.agy-selection-pill) {
+    background-color: rgba(16, 24, 21, 0.82) !important;
+    background: rgba(16, 24, 21, 0.82) !important;
+    backdrop-filter: blur(24px) saturate(155%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(155%) !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+body[data-agy-theme] .compact-tooltip.surface-glass,
+.compact-tooltip.surface-glass,
+body[data-agy-theme] .agy-selection-pill.surface-glass,
+.agy-selection-pill.surface-glass {
+    background-color: rgba(16, 24, 21, 0.86) !important;
+    background: rgba(16, 24, 21, 0.86) !important;
+    backdrop-filter: blur(16px) saturate(145%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+/* 浮动不透明表面容器（Side Question 面板、语音状态条、标题栏下拉菜单、侧滑抽屉、拖拽预览与浮层弹窗）统一转为深色通透毛玻璃 */
+body[data-agy-theme] .surface-opaque:not(.agy-pill),
+.surface-opaque:not(.agy-pill),
+body[data-agy-theme] [data-testid="side-question-panel"].surface-opaque,
+body[data-agy-theme] [data-testid="voice-mic-warning"].surface-opaque,
+body[data-agy-theme] [data-testid="voice-mic-switched"].surface-opaque,
+body[data-agy-theme] [data-testid="voice-error-tip"].surface-opaque,
+body[data-agy-theme] [data-testid="plugin-sidebar-drag-overlay"].surface-opaque {
+    background-color: rgba(15, 23, 20, 0.78) !important;
+    background: rgba(15, 23, 20, 0.78) !important;
+    backdrop-filter: blur(20px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* 通用模态弹窗（排除已单独适配的设置面板）与引导提示卡片 */
+body[data-agy-theme] .agy-dialog:not(.settings-modal-container),
+.agy-dialog:not(.settings-modal-container) {
+    background-color: rgba(16, 24, 21, 0.82) !important;
+    background: rgba(16, 24, 21, 0.82) !important;
+    backdrop-filter: blur(24px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+body[data-agy-theme] .agy-tip-card,
+.agy-tip-card {
+    background-color: rgba(16, 24, 21, 0.58) !important;
+    background: rgba(16, 24, 21, 0.58) !important;
+    backdrop-filter: blur(16px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(140%) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+body[data-agy-theme] .agy-card,
+.agy-card {
+    background-color: rgba(13, 21, 18, 0.24) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* 折叠态侧边栏悬停预览浮层（peek-surface="open"）启用毛玻璃，避免与底层对话文字重叠；常驻展开态保持全透明 */
+body[data-agy-theme] .agy-inset-shell [data-peek-surface="open"] > *,
+.agy-inset-shell [data-peek-surface="open"] > * {
+    background-color: rgba(14, 22, 19, 0.78) !important;
+    background: rgba(14, 22, 19, 0.78) !important;
+    backdrop-filter: blur(22px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(150%) !important;
+}
+
+/* 彻底清除 .agy-hover-actions 列表项悬停操作栏的内联渐变遮罩 */
+body[data-agy-theme] .agy-hover-actions,
+.agy-hover-actions {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* 分屏拖拽分隔带主体与 Chief of Staff 画布状态条透明化 */
+body[data-agy-theme] .agy-sheet[data-sheet-inset] [data-testid="tiling-splitter"] > [data-splitter-band],
+.agy-sheet[data-sheet-inset] [data-testid="tiling-splitter"] > [data-splitter-band] {
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+body[data-agy-theme] [data-testid="cos-canvas-label"],
+[data-testid="cos-canvas-label"] {
+    background-color: rgba(16, 24, 21, 0.36) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* v2.32.1 内置 PDF 阅读器（.pdf-sdk-root）暗色实心背景变量透明化与工具栏毛玻璃 */
+.pdf-sdk-root {
+    --sdk-background-base: transparent !important;
+    --sdk-background-viewport: transparent !important;
+    --sdk-background-primary: rgba(16, 24, 21, 0.36) !important;
+    --sdk-background-secondary: rgba(16, 24, 21, 0.28) !important;
+    --sdk-background-tertiary: rgba(255, 255, 255, 0.10) !important;
+    --sdk-toolbar-bg: rgba(16, 24, 21, 0.62) !important;
+    --sdk-sidebar-bg: rgba(14, 22, 19, 0.56) !important;
+    --sdk-border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
 
 

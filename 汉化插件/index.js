@@ -868,7 +868,257 @@
     'Dark Theme': '深色主题',
     'Font Size': '字体大小',
     'Code Preview': '代码预览',
-    'Reset to preset': '重置为预设'
+    'Reset to preset': '重置为预设',
+
+    // === v2.32.1 新增全量界面词条（支线提问 / 协同智能体 / 连接器与 AI 额度 / 工作区与终端 / 分屏标签页 / 批注与 PDF） ===
+    'Side Question': '支线提问',
+    'Side Questions': '支线提问',
+    'New Side Question': '新建支线提问',
+    'Delete Side Question': '删除支线提问',
+    'Stop Side Question': '停止支线提问',
+    'Ask a side question without interrupting the main conversation': '发起支线提问（不打断主对话）',
+    'Ask a quick question without interrupting the main conversation.': '快速提问，不会打断当前主对话。',
+    'Failed to send side question': '发送支线提问失败',
+    'Failed to start side question': '发起支线提问失败',
+    'Failed to delete side question': '删除支线提问失败',
+    'Are you sure you want to delete this side question? This action cannot be undone.': '确定要删除这条支线提问吗？此操作无法撤销。',
+    'Open in full conversation': '在完整对话中打开',
+    'Previous question': '上一个问题',
+    'Next question': '下一个问题',
+
+    'Active Tasks & Conversations:': '活动任务与对话：',
+    'No agent is working right now.': '当前没有正在运行的智能体。',
+    'Chief of Staff canvas': '统筹幕僚画布 (Chief of Staff)',
+    'Chief of Staff voice mode is active': '统筹幕僚语音模式已激活',
+    'Stop All Subagents': '停止所有子智能体',
+    'Stop Subagent': '停止子智能体',
+    'Stop this agent': '停止此智能体',
+    'Subagent ended': '子智能体已结束',
+    'Resume this agent where it paused': '从暂停处继续此智能体',
+    'Agent terminated due to error': '智能体因错误而终止',
+    'Agent Edits': '智能体编辑',
+    'Agent Hooks Configuration': '智能体钩子配置',
+    'Cancel All Tasks': '取消所有任务',
+    'Cancel Task': '取消任务',
+    'Cancel Step': '取消步骤',
+    'Delete Task': '删除任务',
+    'Remote agents are busy': '远程智能体繁忙',
+    'Loading subagent...': '正在加载子智能体...',
+    'Loading trajectory...': '正在加载执行轨迹...',
+    'Build with one agent or a team': '使用单个智能体或智能体团队进行构建',
+    'Describe what you want. Your agent plans and builds it, and brings in other agents when needed.': '描述你的需求。智能体将自主规划与构建，并在需要时协作调用其他子智能体。',
+    "Here's how you and your agents work together": '了解你与智能体如何协同工作',
+
+    'Connectors': '连接器',
+    'Search connectors': '搜索连接器',
+    'Apps connected to your account': '已关联到此账号的应用',
+    'Sign in to finish setting up this plugin.': '请登录以完成此插件的配置。',
+    'Disabled. Open Details to finish setup or enable.': '已禁用。请打开详情完成配置或启用。',
+    'Disabled. Open the plugin page to finish setup.': '已禁用。请打开插件页面完成配置。',
+    'Enable the plugin to sign in.': '请先启用插件后再登录。',
+    'Enable this plugin to manage its accounts.': '请先启用此插件以管理其账号。',
+    'Encountered an error while running the plugin.': '运行此插件时遇到错误。',
+    'Services this plugin connects to on your behalf.': '此插件代您连接的外部服务。',
+    'Plugins are packaged collections of skills and MCPs to help the Agent': '插件是打包的技能（Skills）与 MCP 服务集合，用于增强智能体能力',
+    'Find plugins - bundles of skills, agents, MCP servers, UI extensions and more, and install them in one click.': '探索并一键安装插件——涵盖技能、智能体、MCP 服务器与界面扩展等。',
+    'UI Extensions': '界面扩展',
+    'UI extensions': '界面扩展',
+    'Configured servers': '已配置服务器',
+    'Context Providers': '上下文提供程序',
+    'Search customizations...': '搜索自定义配置...',
+    'No customizations match your search.': '没有匹配的自定义配置。',
+    'There are no customizations enabled.': '当前未启用任何自定义配置。',
+    'No matching plugins found.': '未找到匹配的插件。',
+    'No plugins available.': '暂无可用插件。',
+    'No sign-in needed': '无需登录',
+    'Not signed in': '未登录',
+    'Not Signed In': '未登录',
+    'Authenticated as': '已认证账号：',
+    'Authentication Required': '需要身份验证',
+    'Authentication expired': '身份验证已过期',
+    'Sign in again': '重新登录',
+    'Sign in needed': '需要登录',
+    'Sign in required': '需要登录',
+    'Sign-in required': '需要登录',
+    'Restart sign-in': '重新开始登录',
+    'Continue with different account': '使用其他账号继续',
+    'Purchase Credits': '购买 AI 额度',
+    'Model quota reached': '已达模型配额上限',
+    'Baseline model quota reached': '已达基础模型配额上限',
+    'Insufficient AI Credits': 'AI 额度不足',
+    'Enable Overages': '启用超额按量使用',
+    'AI Credits Used to Generate Response': '已使用 AI 额度生成本次回复',
+    'No MCP servers installed': '未安装 MCP 服务器',
+    'Loading MCP servers...': '正在加载 MCP 服务器...',
+    'View MCP servers': '查看 MCP 服务器',
+    'Browse MCP resources': '浏览 MCP 资源',
+    'Search for MCP servers to add to your configuration': '搜索并添加 MCP 服务器至配置',
+
+    'All Workspaces': '所有工作区',
+    'Create Project': '创建项目',
+    'Archive Conversation': '归档对话',
+    'Archive Workspace': '归档工作区',
+    'Archive project': '归档项目',
+    'Clone current workspace into a new independent workspace': '将当前工作区克隆为新的独立工作区',
+    'Select workspace': '选择工作区',
+    'Select Project': '选择项目',
+    'Select Environment': '选择运行环境',
+    'Select Worktree': '选择 Worktree 分支目录',
+    'Previous Worktrees': '历史 Worktree',
+    'No previous worktrees': '暂无历史 Worktree',
+    'New Worktree': '新建 Worktree',
+    'Work in a New Worktree': '在新的 Worktree 中工作',
+    'Run in a new worktree': '在新的 Worktree 中运行',
+    'Run in your current workspace': '在当前工作区中运行',
+    'Workspace setup warning': '工作区配置警告',
+    'Too many environments running': '运行中的环境数量过多',
+    'Reopen Locally': '在本地重新打开',
+    'Add Terminal': '新建终端',
+    'New Terminal': '新建终端',
+    'Kill Terminal': '终止终端',
+    'Delete Terminal': '删除终端',
+    'Split Terminal': '拆分终端',
+    'No active terminals. Click + to create one.': '暂无活动终端，点击 + 号创建一个。',
+    'Connecting to terminal...': '正在连接终端...',
+    'Creating terminal...': '正在创建终端...',
+    'Standalone Terminals': '独立终端',
+    'Toggle Terminal Panel': '切换终端面板',
+    'Toggle Side Panel': '切换侧边面板',
+    'Toggle Thumbnails': '切换缩略图',
+    'Close Tab': '关闭标签页',
+    'Close Other Tabs': '关闭其他标签页',
+    'Close Tabs to the Left': '关闭左侧标签页',
+    'Close Tabs to the Right': '关闭右侧标签页',
+    'Close Panel': '关闭面板',
+    'Split Right': '向右分屏',
+    'Split Down': '向下分屏',
+    'Remove from Split': '从分屏中移除',
+    'Open in Built-in Browser': '在内置浏览器中打开',
+    'Open in External Browser': '在外部浏览器中打开',
+    'Open in external browser': '在外部浏览器中打开',
+    'Open in New Tab': '在新标签页中打开',
+    'Open in new tab': '在新标签页中打开',
+    'Open in New Window': '在新窗口中打开',
+    'Open in Side Panel': '在侧边面板中打开',
+    'Open in side pane': '在侧边窗格中打开',
+    'Open in Tab': '在标签页中打开',
+    'Open in tab': '在标签页中打开',
+    'Open in Hub': '在工作台中打开',
+    'Open in Antigravity IDE': '在 Antigravity IDE 中打开',
+    'Open Antigravity IDE': '打开 Antigravity IDE',
+    'Open the page in system browser': '在系统浏览器中打开页面',
+    'Reload Window': '重新加载窗口',
+    'Reload this window.': '重新加载当前窗口。',
+    'Check for Updates': '检查更新',
+    'Update Available': '发现新版本',
+    'A new version is available.': '有可用新版本。',
+
+    'Show Details': '显示详情',
+    'Dismiss': '忽略',
+    'Open Diff': '查看差异',
+    'Open File': '打开文件',
+    'Copy Path': '复制路径',
+    'Copy File Path': '复制文件路径',
+    'Copy File Name': '复制文件名',
+    'Copy Config File Path': '复制配置文件路径',
+    'Copy Content': '复制内容',
+    'Copy Link': '复制链接',
+    'Copy Link Address': '复制链接地址',
+    'Copy Image': '复制图片',
+    'Copy Image Address': '复制图片地址',
+    'Copy command': '复制命令',
+    'Copy debug info': '复制调试信息',
+    'Copy full URL to clipboard': '复制完整链接到剪贴板',
+    'Artifact Comments': '制品批注',
+    'File Comments': '文件批注',
+    'File Diff Comments': '文件差异批注',
+    'Add inline comment': '添加行内批注',
+    'Delete comment': '删除批注',
+    'Edit comment': '编辑批注',
+    'Submit comment': '提交批注',
+    'Discard comment draft': '丢弃批注草稿',
+    'Resume comment draft': '继续编辑批注草稿',
+    'Write a comment...': '输入批注内容...',
+    'Select text in the artifact to add a comment': '选中制品中的文本以添加批注',
+    'Drag to select a region to comment': '拖拽框选区域以添加批注',
+    'Click to view or edit comment': '点击查看或编辑批注',
+    'Branch Changes': '分支变更',
+    'Staged Changes': '暂存区更改',
+    'Staged index changes and working tree changes': '已暂存与工作区更改',
+    'Include unstaged changes': '包含未暂存的更改',
+    'Untracked (Unstaged)': '未跟踪（未暂存）',
+    'No changes to review': '没有需要审查的变更',
+    'Merge Conflict': '合并冲突',
+    'Commit succeeded': '提交成功',
+    'Amend succeeded': '修改提交成功',
+    'Push succeeded': '推送成功',
+    'Failed to Amend': '修改提交失败',
+    'Failed to Commit': '提交失败',
+    'Failed to Push': '推送失败',
+    'Failed to Generate Commit Message': '生成提交信息失败',
+    'Download PDF': '下载 PDF',
+    'Export as PDF': '导出为 PDF',
+    'Thumbnails': '缩略图',
+    'Previous Page': '上一页',
+    'Next Page': '下一页',
+    'Zoom in (+)': '放大 (+)',
+    'Zoom out (-)': '缩小 (-)',
+    'Reset zoom (0)': '重置缩放 (0)',
+    'Match Case (Aa)': '区分大小写 (Aa)',
+    'Match Whole Word (ab)': '全词匹配 (ab)',
+    'Use Regular Expression (.*)': '使用正则表达式 (.*)',
+    'Next Match (Enter)': '下一匹配项 (Enter)',
+    'Previous Match (Shift+Enter)': '上一匹配项 (Shift+Enter)',
+    'Reset All to Defaults': '全部恢复默认',
+    'Reset to Default': '恢复默认',
+    'Notification Preferences': '通知偏好设置',
+    'Enable Notifications': '启用通知',
+    'Enable Recommended Skills': '启用推荐技能',
+    'Settings Unavailable': '设置不可用',
+    'Try Again': '重试',
+    'Something went wrong': '出错了',
+    'Something went wrong!': '发生错误！',
+    'Waiting for user input': '等待用户输入',
+    'Working Directory:': '工作目录：',
+    'Working directory:': '工作目录：',
+    'Running processes are killed. This cannot be undone.': '正在运行的进程将被强制终止，此操作无法撤销。',
+    'Remote Control Instances': '远程控制实例',
+    'Pinned Conversations': '置顶对话',
+    'Conversation History': '对话历史',
+    'Conversation Name': '对话名称',
+    'Conversation ID': '对话 ID',
+    'Conversation Archived': '对话已归档',
+    'Conversation Unarchived': '对话已取消归档',
+    'Conversation copied as Markdown to clipboard': '对话已作为 Markdown 复制到剪贴板',
+    'Rename Conversation': '重命名对话',
+    'Delete Conversation': '删除对话',
+    'Are you sure you want to delete this conversation? This action cannot be undone.': '确定要删除此对话吗？此操作无法撤销。',
+    'Delete Permanently': '永久删除',
+    'Permanently delete': '永久删除',
+    'Sort Conversations': '排序对话',
+    'Search Conversations': '搜索对话',
+    'Search for conversations...': '搜索对话...',
+    'Search projects...': '搜索项目...',
+    'Filter files...': '筛选文件...',
+    'Filter resources...': '筛选资源...',
+    'Filter rows...': '筛选行...',
+    'Only Archived': '仅看已归档',
+    'Only Unread': '仅看未读',
+    'Archived Only': '仅看已归档',
+    'Mark All as Read': '全部标为已读',
+    'View archived in the sidebar': '在侧边栏中查看已归档',
+    'Create New': '新建',
+    'New Group': '新建分组',
+    'Rename Group': '重命名分组',
+    'Move to Group': '移动到分组',
+    'Remove from Group': '从分组移除',
+    'Enter project name...': '输入项目名称...',
+    'Type absolute path or navigate folders...': '输入绝对路径或浏览文件夹...',
+    'Custom Flags': '自定义实验标志',
+    'This chat is archived.': '此对话已归档。',
+    "This chat's environment is paused": '此对话的运行环境已暂停',
+    'Go to Accounts': '前往账号管理',
+    'Manage and delete your data anytime': '随时管理并删除您的数据'
   };
 
   /**
@@ -1150,6 +1400,92 @@
     {
       pattern: /^Good to see you, (.+)\. What's next\?$/,
       replacement: '很高兴见到你，$1。接下来做什么？'
+    },
+
+    // === v2.32.1 动态模板正则匹配 ===
+    {
+      pattern: /^Available AI Credits:\s*(.+)$/,
+      replacement: '可用 AI 额度：$1'
+    },
+    {
+      pattern: /^Build with (.+) Plugins$/,
+      replacement: '使用 $1 构建插件'
+    },
+    {
+      pattern: /^Version\s+([0-9]+\.[0-9]+.*)$/,
+      replacement: '版本 $1'
+    },
+    {
+      pattern: /^(\d+)\s+files?\s+changed$/,
+      replacement: '已更改 $1 个文件'
+    },
+    {
+      pattern: /^Created automation "(.+)"\.$/,
+      replacement: '已创建自动化任务“$1”。'
+    },
+    {
+      pattern: /^Connected to (.+)$/,
+      replacement: '已连接到 $1'
+    },
+    {
+      pattern: /^Enabled "(.+)"\.$/,
+      replacement: '已启用“$1”。'
+    },
+    {
+      pattern: /^Started "(.+)"\.$/,
+      replacement: '已启动“$1”。'
+    },
+    {
+      pattern: /^Restarted "(.+)"\.$/,
+      replacement: '已重启“$1”。'
+    },
+    {
+      pattern: /^Deleted "(.+)"\.$/,
+      replacement: '已删除“$1”。'
+    },
+    {
+      pattern: /^System default \((.+)\)$/,
+      replacement: '系统默认 ($1)'
+    },
+    {
+      pattern: /^Unfold lines (\d+)-(\d+)$/,
+      replacement: '展开第 $1-$2 行'
+    },
+    {
+      pattern: /^Message from (.+)$/,
+      replacement: '来自 $1 的消息'
+    },
+    {
+      pattern: /^Messaging (.+)$/,
+      replacement: '正在联系 $1'
+    },
+    {
+      pattern: /^Messaged (.+)$/,
+      replacement: '已联系 $1'
+    },
+    {
+      pattern: /^Choose (Antigravity|Jetski)'s Voice$/,
+      replacement: '选择 $1 语音'
+    },
+    {
+      pattern: /^Zoom (\d+)%, reset to fit$/,
+      replacement: '缩放 $1%，点击重置自适应'
+    },
+    {
+      pattern: /^Remove (.+) from Recent$/,
+      replacement: '从最近记录中移除 $1'
+    },
+    {
+      pattern: /^Open the (.+) plugin$/,
+      replacement: '打开 $1 插件'
+    },
+    {
+      pattern: /^Help us improve (.+)\.$/,
+      replacement: '帮助我们改进 $1。'
+    },
+    {
+      pattern: /^Your quota for (.+) has been reached\. Switch to another available model to continue\.$/,
+      replacement: '模型 $1 的配额已用尽，请切换其他可用模型以继续。'
     }
   ];
 
@@ -1616,7 +1952,8 @@
   }
 
   /**
-   * 动态扫描并消除总览面板（Overview）中终端会话列表项（pwsh.exe、PID条目）的深黑底色
+   * 动态扫描并消除总览面板（Overview）与右侧辅助面板中终端会话列表项的深黑底色，
+   * 严格限定作用范围在辅助/总览面板叶子列表项内，绝不波及主对话区或祖先外框容器
    *
    * @function processOverviewTerminalItems
    * @param {HTMLElement} [root=document] - 检索根节点
@@ -1626,22 +1963,89 @@
   function processOverviewTerminalItems(root = document) {
     if (!root) return;
     try {
-      const allDivs = root.querySelectorAll ? Array.from(root.querySelectorAll('div, a, button')) : [];
-      for (let i = 0; i < allDivs.length; i++) {
-        const el = allDivs[i];
-        if (el.dataset && el.dataset.overviewTermCleaned === 'true') continue;
-        const text = el.textContent || '';
-        if ((text.includes('pwsh') || text.includes('PID') || text.includes('cmd.exe')) && el.children.length >= 2) {
-          const card = el.closest('div.px-2 > div > div, div[class*="rounded"]') || el;
-          if (card && card !== document.body) {
-            card.style.setProperty('background-color', 'transparent', 'important');
-            card.style.setProperty('background', 'transparent', 'important');
-            card.style.setProperty('border', '1px solid rgba(255, 255, 255, 0.10)', 'important');
-            card.style.setProperty('border-radius', '8px', 'important');
-            if (card.dataset) card.dataset.overviewTermCleaned = 'true';
-          }
+      // 若之前版本曾在对话区或包含对话区的祖先容器上误注入过内联边框，热重载时自动清除残留
+      const staleNodes = typeof document !== 'undefined' && document.querySelectorAll
+        ? document.querySelectorAll('[data-overview-term-cleaned="true"]')
+        : [];
+      for (let i = 0; i < staleNodes.length; i++) {
+        const node = staleNodes[i];
+        const inConvo = node.matches?.('[data-testid="conversation-view"]') ||
+          !!node.closest?.('[data-testid="conversation-view"]') ||
+          !!node.querySelector?.('[data-testid="conversation-view"]');
+        if (inConvo) {
+          node.style.removeProperty('border');
+          node.style.removeProperty('border-radius');
+          node.style.removeProperty('background-color');
+          node.style.removeProperty('background');
+          if (node.dataset) delete node.dataset.overviewTermCleaned;
         }
       }
+
+      // 若传入节点处于主对话区内或本身包裹主对话区，直接跳过，避免穿透扫描污染对话流
+      if (
+        root !== document &&
+        root !== document.body &&
+        root !== document.documentElement &&
+        (root.matches?.('[data-testid="conversation-view"]') ||
+          root.closest?.('[data-testid="conversation-view"]') ||
+          root.querySelector?.('[data-testid="conversation-view"]'))
+      ) {
+        return;
+      }
+
+      const panelRootSelector = [
+        '[data-aux-pane-open]',
+        '[data-side-panel-body]',
+        '[data-testid^="overview-panel-host"]',
+        '[data-testid*="auxiliary"]',
+        '[class*="auxiliary"]'
+      ].join(', ');
+      const itemSelector = [
+        '[data-testid^="overview-terminal-"]',
+        '[data-testid*="terminal-item"]',
+        '[data-testid*="terminal-row"]',
+        '[data-testid*="terminal-session"]'
+      ].join(', ');
+
+      const candidateSet = new Set();
+      if (root.matches?.(itemSelector)) {
+        candidateSet.add(root);
+      }
+      if (root.querySelectorAll) {
+        const directItems = root.querySelectorAll(itemSelector);
+        for (let i = 0; i < directItems.length; i++) candidateSet.add(directItems[i]);
+
+        const panelContainers = root.matches?.(panelRootSelector)
+          ? [root]
+          : Array.from(root.querySelectorAll(panelRootSelector));
+        for (let p = 0; p < panelContainers.length; p++) {
+          const panel = panelContainers[p];
+          if (!panel || panel.closest?.('[data-testid="conversation-view"]')) continue;
+          const rows = panel.querySelectorAll('div[class*="rounded-md"], div[class*="rounded-lg"]');
+          for (let r = 0; r < rows.length; r++) candidateSet.add(rows[r]);
+        }
+      }
+
+      candidateSet.forEach((card) => {
+        if (!card || card === document.body || card === document.documentElement) return;
+        if (card.closest?.('[data-testid="conversation-view"]') || card.querySelector?.('[data-testid="conversation-view"]')) return;
+        if (card.dataset && card.dataset.overviewTermCleaned === 'true') return;
+        const text = card.textContent || '';
+        const isExactTerminalItem = !!card.matches?.(itemSelector);
+        const isLeafFallbackRow = !isExactTerminalItem &&
+          !card.querySelector?.(itemSelector) &&
+          !card.querySelector?.('div[class*="rounded-md"], div[class*="rounded-lg"]') &&
+          text.length < 300 &&
+          (text.includes('pwsh') || text.includes('PID') || text.includes('cmd.exe')) &&
+          card.children.length >= 2;
+        if (!isExactTerminalItem && !isLeafFallbackRow) return;
+
+        card.style.setProperty('background-color', 'transparent', 'important');
+        card.style.setProperty('background', 'transparent', 'important');
+        card.style.setProperty('border', '1px solid rgba(255, 255, 255, 0.10)', 'important');
+        card.style.setProperty('border-radius', '8px', 'important');
+        if (card.dataset) card.dataset.overviewTermCleaned = 'true';
+      });
     } catch (err) {
       if (typeof plugin !== 'undefined' && plugin && plugin.log) {
         plugin.log.error('处理总览终端黑底异常: ' + err.message);
