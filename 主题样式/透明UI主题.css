@@ -109,6 +109,7 @@ header,
     background-color: rgba(10, 16, 14, 0.25) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
+    contain: style !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
@@ -149,20 +150,20 @@ span[data-testid="breadcrumb-segment"]:hover {
 [data-testid*="toggle-sidebar"],
 [data-testid*="sidebar-toggle"],
 button[data-testid="open-editor-single"],
-header button:not([class*="window-controls"] *),
-header [role="button"]:not([class*="window-controls"] *),
-[data-testid="title-menu-bar"] button:not([class*="window-controls"] *),
-[data-testid="title-menu-bar"] [role="button"]:not([class*="window-controls"] *),
-[class*="title-menu-bar"] button:not([class*="window-controls"] *),
-[data-testid="title-bar"] button:not([class*="window-controls"] *),
-[class*="titlebar"] button:not([class*="window-controls"] *),
+header button:not([class*="window-controls"] button),
+header [role="button"]:not([class*="window-controls"] [role="button"]),
+[data-testid="title-menu-bar"] button:not([class*="window-controls"] button),
+[data-testid="title-menu-bar"] [role="button"]:not([class*="window-controls"] [role="button"]),
+[class*="title-menu-bar"] button:not([class*="window-controls"] button),
+[data-testid="title-bar"] button:not([class*="window-controls"] button),
+[class*="titlebar"] button:not([class*="window-controls"] button),
 [role="menubar"] button,
 [role="menubar"] [role="menuitem"],
 [data-radix-menubar-trigger],
-div[style*="app-region: drag"] button:not([class*="window-controls"] *),
-div[style*="app-region: no-drag"] button:not([class*="window-controls"] *),
-button[style*="app-region: no-drag"]:not([class*="window-controls"] *),
-button[aria-haspopup="menu"]:not([data-testid="agent-input-box"] *):not([data-testid="conversation-view"] *):not([role="dialog"] *) {
+div[style*="app-region: drag"] button:not([class*="window-controls"] button),
+div[style*="app-region: no-drag"] button:not([class*="window-controls"] button),
+button[style*="app-region: no-drag"]:not([class*="window-controls"] button),
+button[aria-haspopup="menu"]:not([data-testid="agent-input-box"] button):not([data-testid="conversation-view"] button):not([role="dialog"] button) {
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
@@ -183,23 +184,23 @@ button[aria-haspopup="menu"]:not([data-testid="agent-input-box"] *):not([data-te
 [data-testid*="toggle-sidebar"]:hover,
 [data-testid*="sidebar-toggle"]:hover,
 button[data-testid="open-editor-single"]:hover,
-header button:not([class*="window-controls"] *):hover,
-header [role="button"]:not([class*="window-controls"] *):hover,
-[data-testid="title-menu-bar"] button:not([class*="window-controls"] *):hover,
-[data-testid="title-menu-bar"] [role="button"]:not([class*="window-controls"] *):hover,
-[class*="title-menu-bar"] button:not([class*="window-controls"] *):hover,
-[data-testid="title-bar"] button:not([class*="window-controls"] *):hover,
-[class*="titlebar"] button:not([class*="window-controls"] *):hover,
+header button:not([class*="window-controls"] button):hover,
+header [role="button"]:not([class*="window-controls"] [role="button"]):hover,
+[data-testid="title-menu-bar"] button:not([class*="window-controls"] button):hover,
+[data-testid="title-menu-bar"] [role="button"]:not([class*="window-controls"] [role="button"]):hover,
+[class*="title-menu-bar"] button:not([class*="window-controls"] button):hover,
+[data-testid="title-bar"] button:not([class*="window-controls"] button):hover,
+[class*="titlebar"] button:not([class*="window-controls"] button):hover,
 [role="menubar"] button:hover,
 [role="menubar"] button[aria-expanded="true"],
 [role="menubar"] [role="menuitem"]:hover,
 [data-radix-menubar-trigger]:hover,
 [data-radix-menubar-trigger][data-state="open"],
-div[style*="app-region: drag"] button:not([class*="window-controls"] *):hover,
-div[style*="app-region: no-drag"] button:not([class*="window-controls"] *):hover,
-button[style*="app-region: no-drag"]:not([class*="window-controls"] *):hover,
-button[aria-haspopup="menu"]:not([data-testid="agent-input-box"] *):not([data-testid="conversation-view"] *):not([role="dialog"] *):hover,
-button[aria-haspopup="menu"][aria-expanded="true"]:not([data-testid="agent-input-box"] *):not([data-testid="conversation-view"] *):not([role="dialog"] *) {
+div[style*="app-region: drag"] button:not([class*="window-controls"] button):hover,
+div[style*="app-region: no-drag"] button:not([class*="window-controls"] button):hover,
+button[style*="app-region: no-drag"]:not([class*="window-controls"] button):hover,
+button[aria-haspopup="menu"]:not([data-testid="agent-input-box"] button):not([data-testid="conversation-view"] button):not([role="dialog"] button):hover,
+button[aria-haspopup="menu"][aria-expanded="true"]:not([data-testid="agent-input-box"] button):not([data-testid="conversation-view"] button):not([role="dialog"] button) {
     background-color: rgba(255, 255, 255, 0.14) !important;
     background: rgba(255, 255, 255, 0.14) !important;
     border: none !important;
@@ -235,13 +236,15 @@ nav {
 [data-testid="conversation-list-sidebar"] [class*="bg-sidebar"],
 [data-testid="conversation-list-sidebar"] [class*="bg-muted"],
 [data-testid="conversation-list-sidebar"] [data-testid="lifted-context-menu-trigger"],
-:where([data-testid="sidebar"], aside:not([class*="auxiliary"]), nav, .bg-sidebar, div:has([data-testid="conversation-list-sidebar"]):not(:has([data-testid="conversation-view"])):not(:has([data-testid="agent-input-box"]))) :is(button, a, [role="button"]):not([data-active="true"]):not([aria-selected="true"]),
+:where([data-testid="sidebar"], aside:not([class*="auxiliary"]), nav, .bg-sidebar, [class*="sidebar"]:not([class*="auxiliary"])) button:not([data-active="true"]):not([aria-selected="true"]),
+:where([data-testid="sidebar"], aside:not([class*="auxiliary"]), nav, .bg-sidebar, [class*="sidebar"]:not([class*="auxiliary"])) a:not([data-active="true"]):not([aria-selected="true"]),
+:where([data-testid="sidebar"], aside:not([class*="auxiliary"]), nav, .bg-sidebar, [class*="sidebar"]:not([class*="auxiliary"])) [role="button"]:not([data-active="true"]):not([aria-selected="true"]),
 [data-testid="new-conversation-button"],
 [data-testid="history-button"],
 [data-testid="automations-button"],
 [data-testid="sidebar-add-project-button"],
 [data-testid="settings-button"],
-button[data-testid*="settings"]:not([role="dialog"] *) {
+button[data-testid*="settings"]:not([role="dialog"] button) {
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
@@ -256,13 +259,15 @@ button[data-testid*="settings"]:not([role="dialog"] *) {
 [data-testid="conversation-list-sidebar"] button:hover,
 [data-testid="conversation-list-sidebar"] a:hover,
 [data-testid="conversation-list-sidebar"] [class*="headerbtn"]:hover,
-:where([data-testid="sidebar"], aside:not([class*="auxiliary"]), nav, .bg-sidebar, div:has([data-testid="conversation-list-sidebar"]):not(:has([data-testid="conversation-view"])):not(:has([data-testid="agent-input-box"]))) :is(button, a, [role="button"]):not([data-active="true"]):not([aria-selected="true"]):hover,
+:where([data-testid="sidebar"], aside:not([class*="auxiliary"]), nav, .bg-sidebar, [class*="sidebar"]:not([class*="auxiliary"])) button:not([data-active="true"]):not([aria-selected="true"]):hover,
+:where([data-testid="sidebar"], aside:not([class*="auxiliary"]), nav, .bg-sidebar, [class*="sidebar"]:not([class*="auxiliary"])) a:not([data-active="true"]):not([aria-selected="true"]):hover,
+:where([data-testid="sidebar"], aside:not([class*="auxiliary"]), nav, .bg-sidebar, [class*="sidebar"]:not([class*="auxiliary"])) [role="button"]:not([data-active="true"]):not([aria-selected="true"]):hover,
 [data-testid="new-conversation-button"]:hover,
 [data-testid="history-button"]:hover,
 [data-testid="automations-button"]:hover,
 [data-testid="sidebar-add-project-button"]:hover,
 [data-testid="settings-button"]:hover,
-button[data-testid*="settings"]:not([role="dialog"] *):hover {
+button[data-testid*="settings"]:not([role="dialog"] button):hover {
     background-color: rgba(255, 255, 255, 0.08) !important;
     border: none !important;
     border-color: transparent !important;
@@ -453,8 +458,7 @@ pre,
 div[class*="word-break-all"][class*="rounded-xl"],
 div[class*="whitespace-pre-wrap"][class*="rounded-xl"],
 div[class*="whitespace-pre-wrap"][class*="bg-muted"],
-div:has(> div > .code-block),
-div:has(> .code-block) {
+div[data-testid="conversation-view"] div:has(> div > .code-block, > .code-block) {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
@@ -489,16 +493,15 @@ div[class*="border-border"][class*="rounded-t"] {
 
 /* 8.2 行内代码与引用链接胶囊单层大框规范：彻底根除多层套娃重叠，严格只在最外层保留单一通透大框 */
 /* 1. 独立行内代码（未嵌套在任何链接或胶囊内） */
-code:not(pre code):not(:has(.inline-pill)):not(:has(a)),
+code:not(pre code):not(:has(.inline-pill, a, button)),
 /* 2. 最外层上下文作用域引用胶囊容器 */
 .context-scope-mention,
 /* 3. 独立存在且未被 .context-scope-mention 包裹的引用胶囊与链接 */
-.inline-pill:not(.context-scope-mention *),
-[class*="inline-pill"]:not(.context-scope-mention *),
-a[href*="file://"]:not(.context-scope-mention *):not(:has(.inline-pill)),
-[data-testid="conversation-view"] .prose button:has(svg):has(span):not(.context-scope-mention *),
-[data-testid="conversation-view"] [class*="prose"] button:has(svg):has(span):not(.context-scope-mention *),
-[data-testid="conversation-view"] [class*="chip"]:not(.context-scope-mention *) {
+.inline-pill:not(.context-scope-mention .inline-pill),
+[class*="inline-pill"]:not(.context-scope-mention [class*="inline-pill"]),
+a[href*="file://"]:not(.context-scope-mention a):not(:has(.inline-pill)),
+[data-testid="conversation-view"] [class*="prose"] button:has(svg):has(span):not(.context-scope-mention button),
+[data-testid="conversation-view"] [class*="chip"]:not(.context-scope-mention [class*="chip"]) {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
@@ -515,20 +518,23 @@ a[href*="file://"]:not(.context-scope-mention *):not(:has(.inline-pill)),
 }
 
 /* 4. 最外层大框鼠标悬停微光反馈 */
-code:not(pre code):not(:has(.inline-pill)):not(:has(a)):hover,
+code:not(pre code):not(:has(.inline-pill, a, button)):hover,
 .context-scope-mention:hover,
-.inline-pill:not(.context-scope-mention *):hover,
-[class*="inline-pill"]:not(.context-scope-mention *):hover,
-a[href*="file://"]:not(.context-scope-mention *):not(:has(.inline-pill)):hover,
-[data-testid="conversation-view"] .prose button:has(svg):has(span):not(.context-scope-mention *):hover,
-[data-testid="conversation-view"] [class*="prose"] button:has(svg):has(span):not(.context-scope-mention *):hover,
-[data-testid="conversation-view"] [class*="chip"]:not(.context-scope-mention *):hover {
+.inline-pill:not(.context-scope-mention .inline-pill):hover,
+[class*="inline-pill"]:not(.context-scope-mention [class*="inline-pill"]):hover,
+a[href*="file://"]:not(.context-scope-mention a):not(:has(.inline-pill)):hover,
+[data-testid="conversation-view"] [class*="prose"] button:has(svg):has(span):not(.context-scope-mention button):hover,
+[data-testid="conversation-view"] [class*="chip"]:not(.context-scope-mention [class*="chip"]):hover {
     background-color: rgba(255, 255, 255, 0.10) !important;
     border-color: rgba(255, 255, 255, 0.22) !important;
 }
 
 /* 5. 核心去重保护：彻底消除胶囊内部所有子元素（button/code/span/图标）的多层嵌套边框与内层背景 */
-.context-scope-mention *,
+.context-scope-mention span,
+.context-scope-mention div,
+.context-scope-mention svg,
+.context-scope-mention path,
+.context-scope-mention p,
 .context-scope-mention button,
 .context-scope-mention .inline-pill,
 .context-scope-mention [class*="inline-pill"],
@@ -538,7 +544,10 @@ a[href*="file://"]:not(.context-scope-mention *):not(:has(.inline-pill)):hover,
 [class*="inline-pill"] code,
 a code,
 button code,
-.context-scope-mention:hover *,
+.context-scope-mention:hover span,
+.context-scope-mention:hover div,
+.context-scope-mention:hover svg,
+.context-scope-mention:hover path,
 .inline-pill:hover code,
 [class*="inline-pill"]:hover code,
 a:hover code,
@@ -553,10 +562,7 @@ button:hover code {
 }
 
 /* 6. 反向嵌套保护：若 code 标签外层包裹了链接或胶囊，外层 code 自身去框，把框留给胶囊 */
-code:has(a),
-code:has(button),
-code:has(.inline-pill),
-code:has([class*="inline-pill"]) {
+code:has(a, button, .inline-pill, [class*="inline-pill"]) {
     border: none !important;
     border-width: 0 !important;
     border-color: transparent !important;
@@ -632,9 +638,9 @@ span[data-testid="diff-line-count"],
 div[data-testid="conversation-view"] [data-testid="diff-line-count"],
 div[data-testid="conversation-view"] span[data-testid="diff-line-count"],
 [class*="diff-line-count"],
-span[class*="hover:bg-secondary"]:has(> .text-green-500),
-span.cursor-pointer:has(> .text-green-500):has(> .text-red-500),
-span:has(> .text-green-500):has(> .text-red-500) {
+:where([data-testid="conversation-view"], [data-aux-pane-open], [data-side-panel-body], [data-testid*="diff"], [data-testid*="review"]) span[class*="hover:bg-secondary"]:has(> .text-green-500),
+:where([data-testid="conversation-view"], [data-aux-pane-open], [data-side-panel-body], [data-testid*="diff"], [data-testid*="review"]) span.cursor-pointer:has(> .text-green-500):has(> .text-red-500),
+:where([data-testid="conversation-view"], [data-aux-pane-open], [data-side-panel-body], [data-testid*="diff"], [data-testid*="review"]) span:has(> .text-green-500):has(> .text-red-500) {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
@@ -652,9 +658,9 @@ div[data-testid="conversation-view"] [data-testid="diff-line-count"]:hover,
 div[data-testid="conversation-view"] span[data-testid="diff-line-count"]:hover,
 [data-testid="diff-line-count"].cursor-pointer:hover,
 [class*="diff-line-count"]:hover,
-span[class*="hover:bg-secondary"]:has(> .text-green-500):hover,
-span.cursor-pointer:has(> .text-green-500):has(> .text-red-500):hover,
-span:has(> .text-green-500):has(> .text-red-500):hover {
+:where([data-testid="conversation-view"], [data-aux-pane-open], [data-side-panel-body], [data-testid*="diff"], [data-testid*="review"]) span[class*="hover:bg-secondary"]:has(> .text-green-500):hover,
+:where([data-testid="conversation-view"], [data-aux-pane-open], [data-side-panel-body], [data-testid*="diff"], [data-testid*="review"]) span.cursor-pointer:has(> .text-green-500):has(> .text-red-500):hover,
+:where([data-testid="conversation-view"], [data-aux-pane-open], [data-side-panel-body], [data-testid*="diff"], [data-testid*="review"]) span:has(> .text-green-500):has(> .text-red-500):hover {
     background-color: rgba(255, 255, 255, 0.10) !important;
     background: rgba(255, 255, 255, 0.10) !important;
     border: 1px solid rgba(255, 255, 255, 0.22) !important;
@@ -666,13 +672,13 @@ span:has(> .text-green-500):has(> .text-red-500):hover {
 /* 3. 悬停时内部增加(+)与删除(-)数字保持鲜明翠绿与绯红，防止被其他全局规则变白 */
 [data-testid="diff-line-count"] .text-green-500,
 [data-testid="diff-line-count"]:hover .text-green-500,
-span:has(> .text-green-500):has(> .text-red-500):hover .text-green-500 {
+:where([data-testid="conversation-view"], [data-aux-pane-open], [data-side-panel-body], [data-testid*="diff"], [data-testid*="review"]) span:has(> .text-green-500):has(> .text-red-500):hover .text-green-500 {
     color: rgb(34, 197, 94) !important;
 }
 
 [data-testid="diff-line-count"] .text-red-500,
 [data-testid="diff-line-count"]:hover .text-red-500,
-span:has(> .text-green-500):has(> .text-red-500):hover .text-red-500 {
+:where([data-testid="conversation-view"], [data-aux-pane-open], [data-side-panel-body], [data-testid*="diff"], [data-testid*="review"]) span:has(> .text-green-500):has(> .text-red-500):hover .text-red-500 {
     color: rgb(239, 68, 68) !important;
 }
 
@@ -680,12 +686,17 @@ span:has(> .text-green-500):has(> .text-red-500):hover .text-red-500 {
 .files-changed-header,
 [class*="files-changed"],
 [data-testid="files-changed-header"],
-div:has(> [data-testid="diff-line-count"]) {
+:where([data-testid="conversation-view"], [data-aux-pane-open], [data-side-panel-body], [data-testid*="diff"], [data-testid*="review"]) div:has(> [data-testid="diff-line-count"]) {
     color: rgba(255, 255, 255, 0.90) !important;
     -webkit-font-smoothing: antialiased !important;
 }
 
-div:has(> [data-testid="diff-line-count"]) span:not(.text-green-500):not(.text-red-500) {
+.files-changed-header span:not(.text-green-500):not(.text-red-500),
+[class*="files-changed"] span:not(.text-green-500):not(.text-red-500),
+[data-testid="files-changed-header"] span:not(.text-green-500):not(.text-red-500),
+[data-testid="changed-files-card-header"] span:not(.text-green-500):not(.text-red-500),
+[data-testid="change-row"] span:not(.text-green-500):not(.text-red-500),
+[data-testid="changed-file-row"] span:not(.text-green-500):not(.text-red-500) {
     color: rgba(255, 255, 255, 0.90) !important;
 }
 
@@ -714,8 +725,12 @@ div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.file
 div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card),
 div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card),
 div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card),
-div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"])[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]),
-div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"]).hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]),
+div[data-testid="conversation-view"] button[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]),
+div[data-testid="conversation-view"] [role="button"][class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]),
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"][class*="hover:bg-muted"],
+div[data-testid="conversation-view"] button.hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]),
+div[data-testid="conversation-view"] [role="button"].hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]),
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"].hover\:bg-muted,
 [data-testid="run-command-step"] [role="button"],
 button[data-testid="tool-group-collapsible"],
 button[data-testid="worked-for-collapsible"],
@@ -734,27 +749,90 @@ button[data-testid="thinking-collapsible-trigger"] {
 }
 
 /* 2. 平时状态内部所有子级文本、命令代码与图标直接保持 90 明度高亮 */
-div[data-testid="conversation-view"] [data-testid="run-command-step"] > div *,
-div[data-testid="conversation-view"] [data-testid="run-command-step"] [role="button"] *,
-div[data-testid="conversation-view"] button[data-testid="tool-group-collapsible"] *,
-div[data-testid="conversation-view"] button[data-testid="worked-for-collapsible"] *,
-div[data-testid="conversation-view"] button[data-testid="progress-updates-collapsible"] *,
-div[data-testid="conversation-view"] button[data-testid="thinking-collapsible-trigger"] *,
-div[data-testid="conversation-view"] button[data-testid*="-collapsible"] *,
-div[data-testid="conversation-view"] button[data-testid*="tool-group"] *,
-div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]) *,
-div[data-testid="conversation-view"] button[class*="tabular-nums"]:not(.review-button):not([data-testid="changed-files-card-review"]) *,
-div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]) *,
-div[data-testid="conversation-view"] button.cursor-pointer[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]) *,
-div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) *,
-div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) *,
-div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) *,
-div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card) *,
-[data-testid="run-command-step"] [role="button"] *,
-button[data-testid="tool-group-collapsible"] *,
-button[data-testid="worked-for-collapsible"] *,
-button[data-testid="progress-updates-collapsible"] *,
-button[data-testid="thinking-collapsible-trigger"] * {
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div span,
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div svg,
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div path,
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div code,
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div div,
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div p,
+[data-testid="run-command-step"] [role="button"] span,
+[data-testid="run-command-step"] [role="button"] svg,
+[data-testid="run-command-step"] [role="button"] path,
+[data-testid="run-command-step"] [role="button"] code,
+[data-testid="run-command-step"] [role="button"] div,
+[data-testid="run-command-step"] [role="button"] p,
+button[data-testid="tool-group-collapsible"] span,
+button[data-testid="tool-group-collapsible"] svg,
+button[data-testid="tool-group-collapsible"] path,
+button[data-testid="tool-group-collapsible"] code,
+button[data-testid="tool-group-collapsible"] div,
+button[data-testid="tool-group-collapsible"] p,
+button[data-testid="worked-for-collapsible"] span,
+button[data-testid="worked-for-collapsible"] svg,
+button[data-testid="worked-for-collapsible"] path,
+button[data-testid="worked-for-collapsible"] code,
+button[data-testid="worked-for-collapsible"] div,
+button[data-testid="worked-for-collapsible"] p,
+button[data-testid="progress-updates-collapsible"] span,
+button[data-testid="progress-updates-collapsible"] svg,
+button[data-testid="progress-updates-collapsible"] path,
+button[data-testid="progress-updates-collapsible"] code,
+button[data-testid="progress-updates-collapsible"] div,
+button[data-testid="progress-updates-collapsible"] p,
+button[data-testid="thinking-collapsible-trigger"] span,
+button[data-testid="thinking-collapsible-trigger"] svg,
+button[data-testid="thinking-collapsible-trigger"] path,
+button[data-testid="thinking-collapsible-trigger"] code,
+button[data-testid="thinking-collapsible-trigger"] div,
+button[data-testid="thinking-collapsible-trigger"] p,
+div[data-testid="conversation-view"] button[data-testid*="-collapsible"] span,
+div[data-testid="conversation-view"] button[data-testid*="-collapsible"] svg,
+div[data-testid="conversation-view"] button[data-testid*="-collapsible"] path,
+div[data-testid="conversation-view"] button[data-testid*="-collapsible"] code,
+div[data-testid="conversation-view"] button[data-testid*="-collapsible"] div,
+div[data-testid="conversation-view"] button[data-testid*="-collapsible"] p,
+div[data-testid="conversation-view"] button[data-testid*="tool-group"] span,
+div[data-testid="conversation-view"] button[data-testid*="tool-group"] svg,
+div[data-testid="conversation-view"] button[data-testid*="tool-group"] path,
+div[data-testid="conversation-view"] button[data-testid*="tool-group"] code,
+div[data-testid="conversation-view"] button[data-testid*="tool-group"] div,
+div[data-testid="conversation-view"] button[data-testid*="tool-group"] p,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]) span,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]) svg,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]) path,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]) code,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]) div,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]) p,
+div[data-testid="conversation-view"] button[class*="tabular-nums"]:not(.review-button):not([data-testid="changed-files-card-review"]) span,
+div[data-testid="conversation-view"] button[class*="tabular-nums"]:not(.review-button):not([data-testid="changed-files-card-review"]) svg,
+div[data-testid="conversation-view"] button[class*="tabular-nums"]:not(.review-button):not([data-testid="changed-files-card-review"]) path,
+div[data-testid="conversation-view"] button[class*="tabular-nums"]:not(.review-button):not([data-testid="changed-files-card-review"]) code,
+div[data-testid="conversation-view"] button[class*="tabular-nums"]:not(.review-button):not([data-testid="changed-files-card-review"]) div,
+div[data-testid="conversation-view"] button[class*="tabular-nums"]:not(.review-button):not([data-testid="changed-files-card-review"]) p,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]) span,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]) svg,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]) path,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]) code,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]) div,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]) p,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) span,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) svg,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) path,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) code,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) div,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) p,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) span,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) svg,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) path,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) code,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) div,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card) p,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card) span,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card) svg,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card) path,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card) code,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card) div,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card) p {
     color: rgba(255, 255, 255, 0.90) !important;
 }
 
@@ -775,8 +853,12 @@ div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.file
 div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover,
 div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover,
 div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card):hover,
-div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"])[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover,
-div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"]).hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover,
+div[data-testid="conversation-view"] button[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover,
+div[data-testid="conversation-view"] [role="button"][class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"][class*="hover:bg-muted"]:hover,
+div[data-testid="conversation-view"] button.hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover,
+div[data-testid="conversation-view"] [role="button"].hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"].hover\:bg-muted:hover,
 [data-testid="run-command-step"] [role="button"]:hover,
 button[data-testid="tool-group-collapsible"]:hover,
 button[data-testid="worked-for-collapsible"]:hover,
@@ -791,21 +873,108 @@ button[data-testid="thinking-collapsible-trigger"]:hover {
 }
 
 /* 4. 悬停时内部文本与图标同步转为纯白色高亮 */
-div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:hover *,
-div[data-testid="conversation-view"] [data-testid="run-command-step"] [role="button"]:hover *,
-div[data-testid="conversation-view"] button[data-testid="tool-group-collapsible"]:hover *,
-div[data-testid="conversation-view"] button[data-testid="worked-for-collapsible"]:hover *,
-div[data-testid="conversation-view"] button[data-testid="progress-updates-collapsible"]:hover *,
-div[data-testid="conversation-view"] button[data-testid="thinking-collapsible-trigger"]:hover *,
-div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]):hover *,
-div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]):hover *,
-div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover *,
-div[data-testid="conversation-view"] div.cursor-pointer[class*="min-h-8"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover *,
-div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover *,
-div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card):hover *,
-div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"])[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover *,
-div[data-testid="conversation-view"] :is(button, [role="button"], [data-testid="ephemeral-tool-status"]).hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover *,
-[data-testid="run-command-step"] [role="button"]:hover * {
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:hover span,
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:hover svg,
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:hover path,
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:hover code,
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:hover div,
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:hover p,
+[data-testid="run-command-step"] [role="button"]:hover span,
+[data-testid="run-command-step"] [role="button"]:hover svg,
+[data-testid="run-command-step"] [role="button"]:hover path,
+[data-testid="run-command-step"] [role="button"]:hover code,
+[data-testid="run-command-step"] [role="button"]:hover div,
+[data-testid="run-command-step"] [role="button"]:hover p,
+button[data-testid="tool-group-collapsible"]:hover span,
+button[data-testid="tool-group-collapsible"]:hover svg,
+button[data-testid="tool-group-collapsible"]:hover path,
+button[data-testid="tool-group-collapsible"]:hover code,
+button[data-testid="tool-group-collapsible"]:hover div,
+button[data-testid="tool-group-collapsible"]:hover p,
+button[data-testid="worked-for-collapsible"]:hover span,
+button[data-testid="worked-for-collapsible"]:hover svg,
+button[data-testid="worked-for-collapsible"]:hover path,
+button[data-testid="worked-for-collapsible"]:hover code,
+button[data-testid="worked-for-collapsible"]:hover div,
+button[data-testid="worked-for-collapsible"]:hover p,
+button[data-testid="progress-updates-collapsible"]:hover span,
+button[data-testid="progress-updates-collapsible"]:hover svg,
+button[data-testid="progress-updates-collapsible"]:hover path,
+button[data-testid="progress-updates-collapsible"]:hover code,
+button[data-testid="progress-updates-collapsible"]:hover div,
+button[data-testid="progress-updates-collapsible"]:hover p,
+button[data-testid="thinking-collapsible-trigger"]:hover span,
+button[data-testid="thinking-collapsible-trigger"]:hover svg,
+button[data-testid="thinking-collapsible-trigger"]:hover path,
+button[data-testid="thinking-collapsible-trigger"]:hover code,
+button[data-testid="thinking-collapsible-trigger"]:hover div,
+button[data-testid="thinking-collapsible-trigger"]:hover p,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]):hover span,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]):hover svg,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]):hover path,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]):hover code,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]):hover div,
+div[data-testid="conversation-view"] button[class*="min-h-8"]:not(.review-button):not([data-testid="changed-files-card-review"]):hover p,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]):hover span,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]):hover svg,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]):hover path,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]):hover code,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]):hover div,
+div[data-testid="conversation-view"] button.cursor-pointer.rounded-lg:not(.review-button):not([data-testid="changed-files-card-review"]):hover p,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover span,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover svg,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover path,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover code,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover div,
+div[data-testid="conversation-view"] div[role="button"].cursor-pointer:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover p,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover span,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover svg,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover path,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover code,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover div,
+div[data-testid="conversation-view"] div.cursor-pointer.rounded-lg:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not([data-testid="artifact-card"]):not(.artifact-card):hover p,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card):hover span,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card):hover svg,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card):hover path,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card):hover code,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card):hover div,
+div[data-testid="conversation-view"] [class*="min-h-8"][class*="cursor-pointer"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):not([data-testid="artifact-card"]):not(.artifact-card):hover p,
+div[data-testid="conversation-view"] button[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover span,
+div[data-testid="conversation-view"] button[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover svg,
+div[data-testid="conversation-view"] button[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover path,
+div[data-testid="conversation-view"] button[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover code,
+div[data-testid="conversation-view"] button[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover div,
+div[data-testid="conversation-view"] button[class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover p,
+div[data-testid="conversation-view"] [role="button"][class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover span,
+div[data-testid="conversation-view"] [role="button"][class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover svg,
+div[data-testid="conversation-view"] [role="button"][class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover path,
+div[data-testid="conversation-view"] [role="button"][class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover code,
+div[data-testid="conversation-view"] [role="button"][class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover div,
+div[data-testid="conversation-view"] [role="button"][class*="hover:bg-muted"]:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover p,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"][class*="hover:bg-muted"]:hover span,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"][class*="hover:bg-muted"]:hover svg,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"][class*="hover:bg-muted"]:hover path,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"][class*="hover:bg-muted"]:hover code,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"][class*="hover:bg-muted"]:hover div,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"][class*="hover:bg-muted"]:hover p,
+div[data-testid="conversation-view"] button.hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover span,
+div[data-testid="conversation-view"] button.hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover svg,
+div[data-testid="conversation-view"] button.hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover path,
+div[data-testid="conversation-view"] button.hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover code,
+div[data-testid="conversation-view"] button.hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover div,
+div[data-testid="conversation-view"] button.hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover p,
+div[data-testid="conversation-view"] [role="button"].hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover span,
+div[data-testid="conversation-view"] [role="button"].hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover svg,
+div[data-testid="conversation-view"] [role="button"].hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover path,
+div[data-testid="conversation-view"] [role="button"].hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover code,
+div[data-testid="conversation-view"] [role="button"].hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover div,
+div[data-testid="conversation-view"] [role="button"].hover\:bg-muted:not(.files-changed-header):not([data-testid="changed-files-card-header"]):not(.review-button):not([data-testid="changed-files-card-review"]):hover p,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"].hover\:bg-muted:hover span,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"].hover\:bg-muted:hover svg,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"].hover\:bg-muted:hover path,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"].hover\:bg-muted:hover code,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"].hover\:bg-muted:hover div,
+div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"].hover\:bg-muted:hover p {
     color: #ffffff !important;
 }
 
@@ -852,7 +1021,7 @@ div[data-testid="conversation-view"] [class*="terminal"] {
 
 /* 输入框内部底栏按键与药丸按钮（如模型选择器触发按钮、Local工作区选择、语音等）适配微光透亮效果 */
 [data-testid="agent-input-box"] button[class*="bg-secondary"]:not([role="menuitem"]):not([role="option"]),
-[data-testid="agent-input-box"] .bg-secondary:not([role="menuitem"]):not([role="option"]):not([data-side]):not([role="menu"]):not([data-radix-popper-content-wrapper] *):not([data-mention-menu] *):not([class*="bottom-full"] *) {
+[data-testid="agent-input-box"] .bg-secondary:not([role="menuitem"]):not([role="option"]):not([data-side]):not([role="menu"]):not(:is([data-radix-popper-content-wrapper], [data-mention-menu], [class*="bottom-full"]) :is(div, span, button, a, li)) {
     background-color: rgba(255, 255, 255, 0.10) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
@@ -862,16 +1031,16 @@ div[data-testid="conversation-view"] [class*="terminal"] {
 }
 
 /* 彻底清除输入框内部输入 @ 或 / 时出现的突兀黑色长条、黑底胶囊与深色占位块 (严格排除上方浮动候选项列表) */
-[data-testid="agent-input-box"] form .bg-muted:not([data-mention-menu] *):not([class*="bottom-full"] *),
-[data-testid="agent-input-box"] form [class*="bg-muted"]:not([data-mention-menu] *):not([class*="bottom-full"] *),
-[data-testid="agent-input-box"] form .bg-accent:not([data-mention-menu] *):not([class*="bottom-full"] *),
-[data-testid="agent-input-box"] form [class*="bg-accent"]:not([data-mention-menu] *):not([class*="bottom-full"] *),
-[data-testid="agent-input-box"] form .bg-black:not([data-mention-menu] *):not([class*="bottom-full"] *),
-[data-testid="agent-input-box"] form [class*="bg-black"]:not([data-mention-menu] *):not([class*="bottom-full"] *),
-[data-testid="agent-input-box"] form .bg-zinc-800:not([data-mention-menu] *):not([class*="bottom-full"] *),
-[data-testid="agent-input-box"] form .bg-neutral-800:not([data-mention-menu] *):not([class*="bottom-full"] *),
-[data-testid="agent-input-box"] form [class*="bg-zinc"]:not([data-mention-menu] *):not([class*="bottom-full"] *),
-[data-testid="agent-input-box"] form [class*="bg-neutral"]:not([data-mention-menu] *):not([class*="bottom-full"] *) {
+[data-testid="agent-input-box"] form .bg-muted:not(:is([data-mention-menu], [class*="bottom-full"]) div),
+[data-testid="agent-input-box"] form [class*="bg-muted"]:not(:is([data-mention-menu], [class*="bottom-full"]) :is(div, span, button)),
+[data-testid="agent-input-box"] form .bg-accent:not(:is([data-mention-menu], [class*="bottom-full"]) :is(div, span, button)),
+[data-testid="agent-input-box"] form [class*="bg-accent"]:not(:is([data-mention-menu], [class*="bottom-full"]) :is(div, span, button)),
+[data-testid="agent-input-box"] form .bg-black:not(:is([data-mention-menu], [class*="bottom-full"]) div),
+[data-testid="agent-input-box"] form [class*="bg-black"]:not(:is([data-mention-menu], [class*="bottom-full"]) :is(div, span)),
+[data-testid="agent-input-box"] form .bg-zinc-800:not(:is([data-mention-menu], [class*="bottom-full"]) div),
+[data-testid="agent-input-box"] form .bg-neutral-800:not(:is([data-mention-menu], [class*="bottom-full"]) div),
+[data-testid="agent-input-box"] form [class*="bg-zinc"]:not(:is([data-mention-menu], [class*="bottom-full"]) :is(div, span)),
+[data-testid="agent-input-box"] form [class*="bg-neutral"]:not(:is([data-mention-menu], [class*="bottom-full"]) :is(div, span)) {
     background-color: transparent !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -879,9 +1048,10 @@ div[data-testid="conversation-view"] [class*="terminal"] {
 
 /* 彻底清除输入框内部无文本、无图标的空按钮与占位框残影 (解决 @ 下方残留的小圈) */
 [data-testid="agent-input-box"] form button:empty,
-[data-testid="agent-input-box"] form button:not(:has(svg)):not(:has(img)):not(:has(span)),
+[data-testid="agent-input-box"] form button:not(:has(svg, img, span)),
 [data-testid="agent-input-box"] form button.inline-flex:empty,
-[data-testid="agent-input-box"] form *:empty:not([class*="avatar"]):not(input):not(textarea):not(img):not(svg):not([role="option"]) {
+[data-testid="agent-input-box"] form div:empty:not([class*="avatar"]):not([role="option"]),
+[data-testid="agent-input-box"] form span:empty:not([class*="avatar"]):not([role="option"]) {
     background-color: transparent !important;
     background: transparent !important;
     border-color: transparent !important;
@@ -906,7 +1076,10 @@ div[data-testid="conversation-view"] [class*="terminal"] {
 
 /* 文本编辑器容器与输入区域纯净透明化 */
 [data-testid="agent-input-box"] [contenteditable="true"],
-[data-testid="agent-input-box"] [contenteditable="true"] *,
+[data-testid="agent-input-box"] [contenteditable="true"] p,
+[data-testid="agent-input-box"] [contenteditable="true"] span,
+[data-testid="agent-input-box"] [contenteditable="true"] div,
+[data-testid="agent-input-box"] [contenteditable="true"] code,
 [data-testid="agent-input-box"] textarea,
 [data-testid="agent-input-box"] input {
     background-color: transparent !important;
@@ -935,13 +1108,9 @@ form {
 aside[class*="auxiliary"],
 [class*="auxiliaryPane"],
 [data-testid*="auxiliary-pane"],
-[class*="ArtifactViewer"]:not(:has(section.codex-docx-preview), :has(.codex-docx-preview-wrapper)),
+[class*="ArtifactViewer"]:not(:has(section.codex-docx-preview, .codex-docx-preview-wrapper)),
 [data-testid="running-items-panel"],
-div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([data-testid*="terminal"]),
-div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([class*="xterm"]),
-div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([data-testid*="diff"]),
-div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([data-testid*="review"]),
-div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([data-testid*="overview"]) {
+div[class*="group/pane"]:not(:has([data-testid="conversation-view"])):has([data-testid*="terminal"], [class*="xterm"], [data-testid*="diff"], [data-testid*="review"], [data-testid*="overview"]) {
     background-color: rgba(12, 19, 16, 0.60) !important;
     backdrop-filter: blur(16px) !important;
     -webkit-backdrop-filter: blur(16px) !important;
@@ -992,14 +1161,18 @@ div[data-popcorn-review-bar],
 }
 
 /* 确保分页预览容器内部所有层级（纸张、段落、文字、表格、批注、遮罩）100% 清晰锐利，严禁继承或覆盖任何模糊滤镜 */
-.popcorn-paged-annotation-preview *,
-[class*="paged-annotation-preview"] *,
-.popcorn-annotation-batch *,
-.codex-docx-preview-wrapper *,
-section.codex-docx-preview *,
-.codex-docx-preview *,
-.popcorn-review-bar-overlay *,
-.popcorn-review-bar-overlay-content * {
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) div,
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) section,
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) article,
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) span,
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) p,
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) table,
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) button,
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) svg,
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) canvas,
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) img,
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) header,
+:is(.popcorn-paged-annotation-preview, [class*="paged-annotation-preview"], .popcorn-annotation-batch, .codex-docx-preview-wrapper, section.codex-docx-preview, .codex-docx-preview, .popcorn-review-bar-overlay, .popcorn-review-bar-overlay-content) footer {
     filter: none !important;
     -webkit-filter: none !important;
     backdrop-filter: none !important;
@@ -1011,7 +1184,7 @@ section.codex-docx-preview *,
 [data-testid*="terminal-item"],
 div[class*="terminal-item"],
 div[data-testid*="terminal-group"] > div,
-div:has(> [data-testid*="terminal-item"]) {
+:where([data-aux-pane-open], [data-testid="bottom-terminal-panel"], div[class*="group/pane"], aside) div:has(> [data-testid*="terminal-item"]) {
     background-color: transparent !important;
     background: transparent !important;
 }
@@ -1032,8 +1205,12 @@ div[class*="terminal-item"][class*="bg-secondary"] {
 }
 
 /* 终端会话选中项内部文本与图标直接保持亮白 */
-[data-testid*="terminal-item"].bg-secondary *,
-[data-testid*="terminal-item"][class*="bg-secondary"] * {
+[data-testid*="terminal-item"]:is(.bg-secondary, [class*="bg-secondary"]) span,
+[data-testid*="terminal-item"]:is(.bg-secondary, [class*="bg-secondary"]) div,
+[data-testid*="terminal-item"]:is(.bg-secondary, [class*="bg-secondary"]) svg,
+[data-testid*="terminal-item"]:is(.bg-secondary, [class*="bg-secondary"]) path,
+[data-testid*="terminal-item"]:is(.bg-secondary, [class*="bg-secondary"]) code,
+[data-testid*="terminal-item"]:is(.bg-secondary, [class*="bg-secondary"]) button {
     color: #ffffff !important;
 }
 
@@ -1065,9 +1242,15 @@ div[class*="terminal-item"]:hover {
 div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > div,
 div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > a,
 div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > button,
-div.py-3.flex.h-full.w-full.flex-col div[class*="w-full"]:has(button:has(span)) div.px-2 > div > *,
-div[class*="group/pane"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *,
-[data-testid*="auxiliary"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *,
+[data-aux-pane-open] div.py-3.flex.h-full.w-full.flex-col div.px-2 > div > div,
+[data-aux-pane-open] div.py-3.flex.h-full.w-full.flex-col div.px-2 > div > a,
+[data-aux-pane-open] div.py-3.flex.h-full.w-full.flex-col div.px-2 > div > button,
+[data-side-panel-body] div.w-full.flex.flex-col.gap-2 div.px-2 > div > div,
+[data-side-panel-body] div.w-full.flex.flex-col.gap-2 div.px-2 > div > a,
+[data-side-panel-body] div.w-full.flex.flex-col.gap-2 div.px-2 > div > button,
+[data-testid*="auxiliary"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > div,
+[data-testid*="auxiliary"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > a,
+[data-testid*="auxiliary"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > button,
 /* 终端专属类名与包含 PID 的条目 */
 [data-testid*="terminal-session"],
 [data-testid*="terminal-row"],
@@ -1079,8 +1262,7 @@ div[class*="group/pane"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *,
 [class*="terminal-row"],
 [class*="terminal-instance"],
 [class*="terminal-process"],
-:where([data-testid*="auxiliary"], div[class*="group/pane"]:not(:has([data-testid="conversation-view"]))) div[class*="rounded"]:has(span:not(:empty)):has(svg):has(button),
-:where([data-testid*="auxiliary"], div[class*="group/pane"]:not(:has([data-testid="conversation-view"]))) div.flex.items-center.justify-between[class*="rounded"]:has(svg) {
+[data-aux-pane-open] div.flex.items-center.justify-between[class*="rounded"] {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1095,9 +1277,15 @@ div[class*="group/pane"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *,
 div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > div:hover,
 div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > a:hover,
 div.py-3.flex.h-full.w-full.flex-col div.px-2 div.flex.flex-col > button:hover,
-div.py-3.flex.h-full.w-full.flex-col div[class*="w-full"]:has(button:has(span)) div.px-2 > div > *:hover,
-div[class*="group/pane"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *:hover,
-[data-testid*="auxiliary"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *:hover,
+[data-aux-pane-open] div.py-3.flex.h-full.w-full.flex-col div.px-2 > div > div:hover,
+[data-aux-pane-open] div.py-3.flex.h-full.w-full.flex-col div.px-2 > div > a:hover,
+[data-aux-pane-open] div.py-3.flex.h-full.w-full.flex-col div.px-2 > div > button:hover,
+[data-side-panel-body] div.w-full.flex.flex-col.gap-2 div.px-2 > div > div:hover,
+[data-side-panel-body] div.w-full.flex.flex-col.gap-2 div.px-2 > div > a:hover,
+[data-side-panel-body] div.w-full.flex.flex-col.gap-2 div.px-2 > div > button:hover,
+[data-testid*="auxiliary"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > div:hover,
+[data-testid*="auxiliary"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > a:hover,
+[data-testid*="auxiliary"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > button:hover,
 [data-testid*="terminal-session"]:hover,
 [data-testid*="terminal-row"]:hover,
 [data-testid*="terminal-instance"]:hover,
@@ -1108,8 +1296,7 @@ div[class*="group/pane"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *:hover
 [class*="terminal-row"]:hover,
 [class*="terminal-instance"]:hover,
 [class*="terminal-process"]:hover,
-:where([data-testid*="auxiliary"], div[class*="group/pane"]:not(:has([data-testid="conversation-view"]))) div[class*="rounded"]:has(span:not(:empty)):has(svg):has(button):hover,
-:where([data-testid*="auxiliary"], div[class*="group/pane"]:not(:has([data-testid="conversation-view"]))) div.flex.items-center.justify-between[class*="rounded"]:has(svg):hover {
+[data-aux-pane-open] div.flex.items-center.justify-between[class*="rounded"]:hover {
     background-color: rgba(255, 255, 255, 0.10) !important;
     background: rgba(255, 255, 255, 0.10) !important;
     border-color: rgba(255, 255, 255, 0.22) !important;
@@ -1120,8 +1307,18 @@ div[class*="group/pane"] div.w-full.flex.flex-col.gap-2 div.px-2 > div > *:hover
 div.w-full.flex.flex-col.gap-2 div.px-2 span,
 div.w-full.flex.flex-col.gap-2 div.px-2 div,
 div.w-full.flex.flex-col.gap-2 div.px-2 svg,
-[data-testid*="terminal-session"] *,
-[class*="terminal-session"] * {
+[data-testid*="terminal-session"] span,
+[data-testid*="terminal-session"] div,
+[data-testid*="terminal-session"] svg,
+[data-testid*="terminal-session"] path,
+[data-testid*="terminal-session"] code,
+[data-testid*="terminal-session"] button,
+[class*="terminal-session"] span,
+[class*="terminal-session"] div,
+[class*="terminal-session"] svg,
+[class*="terminal-session"] path,
+[class*="terminal-session"] code,
+[class*="terminal-session"] button {
     color: rgba(255, 255, 255, 0.90) !important;
     -webkit-font-smoothing: antialiased !important;
 }
@@ -1192,7 +1389,7 @@ div.w-full.flex.flex-col.gap-2 div.px-2 a:hover svg {
     border-color: rgba(255, 255, 255, 0.32) !important;
 }
 
-div:has(> [data-testid="new-tab-search-input"]) svg {
+[data-testid="aux-pane-new-tab-view"] svg:not(button svg):not(a svg) {
     color: rgba(255, 255, 255, 0.72) !important;
 }
 
@@ -1283,7 +1480,97 @@ div:has(> [data-testid="new-tab-search-input"]) svg {
     .group:hover > [data-testid="changed-file-row"],
     [data-testid^="accumulated-item-"]:is(:hover, [aria-current="true"]),
     .group:hover > [data-testid^="accumulated-item-"]
-) *:not([class*="text-green"]):not([class*="text-emerald"]):not([class*="text-red"]):not([class*="text-rose"]):not([class*="text-amber"]):not([class*="text-yellow"]) {
+) span:not([class*="text-green"]):not([class*="text-emerald"]):not([class*="text-red"]):not([class*="text-rose"]):not([class*="text-amber"]):not([class*="text-yellow"]),
+:is(
+    [data-testid^="new-tab-card-"]:hover,
+    [data-testid^="new-tab-result-"]:is(:hover, [aria-selected="true"]),
+    [data-testid^="overview-panel-row-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="overview-panel-row-"],
+    [data-testid="overview-decorator-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="overview-decorator-row"],
+    [data-testid="background-task-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="background-task-row"],
+    [data-testid="artifact-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="artifact-row"],
+    [data-testid="change-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="change-row"],
+    [data-testid="changed-file-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="changed-file-row"],
+    [data-testid^="accumulated-item-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="accumulated-item-"]
+) div:not([class*="text-green"]):not([class*="text-emerald"]):not([class*="text-red"]):not([class*="text-rose"]):not([class*="text-amber"]):not([class*="text-yellow"]),
+:is(
+    [data-testid^="new-tab-card-"]:hover,
+    [data-testid^="new-tab-result-"]:is(:hover, [aria-selected="true"]),
+    [data-testid^="overview-panel-row-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="overview-panel-row-"],
+    [data-testid="overview-decorator-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="overview-decorator-row"],
+    [data-testid="background-task-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="background-task-row"],
+    [data-testid="artifact-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="artifact-row"],
+    [data-testid="change-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="change-row"],
+    [data-testid="changed-file-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="changed-file-row"],
+    [data-testid^="accumulated-item-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="accumulated-item-"]
+) svg:not([class*="text-green"]):not([class*="text-emerald"]):not([class*="text-red"]):not([class*="text-rose"]):not([class*="text-amber"]):not([class*="text-yellow"]),
+:is(
+    [data-testid^="new-tab-card-"]:hover,
+    [data-testid^="new-tab-result-"]:is(:hover, [aria-selected="true"]),
+    [data-testid^="overview-panel-row-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="overview-panel-row-"],
+    [data-testid="overview-decorator-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="overview-decorator-row"],
+    [data-testid="background-task-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="background-task-row"],
+    [data-testid="artifact-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="artifact-row"],
+    [data-testid="change-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="change-row"],
+    [data-testid="changed-file-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="changed-file-row"],
+    [data-testid^="accumulated-item-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="accumulated-item-"]
+) path:not([class*="text-green"]):not([class*="text-emerald"]):not([class*="text-red"]):not([class*="text-rose"]):not([class*="text-amber"]):not([class*="text-yellow"]),
+:is(
+    [data-testid^="new-tab-card-"]:hover,
+    [data-testid^="new-tab-result-"]:is(:hover, [aria-selected="true"]),
+    [data-testid^="overview-panel-row-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="overview-panel-row-"],
+    [data-testid="overview-decorator-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="overview-decorator-row"],
+    [data-testid="background-task-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="background-task-row"],
+    [data-testid="artifact-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="artifact-row"],
+    [data-testid="change-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="change-row"],
+    [data-testid="changed-file-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="changed-file-row"],
+    [data-testid^="accumulated-item-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="accumulated-item-"]
+) p:not([class*="text-green"]):not([class*="text-emerald"]):not([class*="text-red"]):not([class*="text-rose"]):not([class*="text-amber"]):not([class*="text-yellow"]),
+:is(
+    [data-testid^="new-tab-card-"]:hover,
+    [data-testid^="new-tab-result-"]:is(:hover, [aria-selected="true"]),
+    [data-testid^="overview-panel-row-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="overview-panel-row-"],
+    [data-testid="overview-decorator-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="overview-decorator-row"],
+    [data-testid="background-task-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="background-task-row"],
+    [data-testid="artifact-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="artifact-row"],
+    [data-testid="change-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="change-row"],
+    [data-testid="changed-file-row"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid="changed-file-row"],
+    [data-testid^="accumulated-item-"]:is(:hover, [aria-current="true"]),
+    .group:hover > [data-testid^="accumulated-item-"]
+) code:not([class*="text-green"]):not([class*="text-emerald"]):not([class*="text-red"]):not([class*="text-rose"]):not([class*="text-amber"]):not([class*="text-yellow"]) {
     color: #ffffff !important;
 }
 
@@ -1745,11 +2032,12 @@ div[role="menu"] [role="button"],
 }
 
 /* 条目内层子元素强制透底与无边框，彻底消除嵌套的深色小方框 */
-[role="menuitem"] > *,
-[role="option"] > *,
-[cmdk-item] > *,
-div[data-side] button > *,
-div[data-side] [role="button"] > *,
+:is([role="menuitem"], [role="option"], [cmdk-item], div[data-side] button, div[data-side] [role="button"]) > div,
+:is([role="menuitem"], [role="option"], [cmdk-item], div[data-side] button, div[data-side] [role="button"]) > span,
+:is([role="menuitem"], [role="option"], [cmdk-item], div[data-side] button, div[data-side] [role="button"]) > svg,
+:is([role="menuitem"], [role="option"], [cmdk-item], div[data-side] button, div[data-side] [role="button"]) > a,
+:is([role="menuitem"], [role="option"], [cmdk-item], div[data-side] button, div[data-side] [role="button"]) > kbd,
+:is([role="menuitem"], [role="option"], [cmdk-item], div[data-side] button, div[data-side] [role="button"]) > p,
 [data-mention-menu] [role="option"] > div,
 [data-testid="agent-input-box"] [data-mention-menu] [role="option"] > div,
 div[class*="bottom-full"] [role="option"] > div {
@@ -1798,10 +2086,18 @@ div[data-side] button:hover,
 [data-mention-menu] [role="option"] > div.bg-secondary,
 [data-mention-menu] [role="option"][aria-selected="true"] > div,
 [data-testid="agent-input-box"] [data-mention-menu] .bg-secondary,
-[data-mention-menu] [role="option"] > div:hover > *,
-[data-mention-menu] [role="option"][aria-selected="true"] > div > *,
-div[data-side] [role="menuitem"]:hover > *,
-div[data-side] [role="option"]:hover > * {
+[data-mention-menu] [role="option"] > div:hover > div,
+[data-mention-menu] [role="option"] > div:hover > span,
+[data-mention-menu] [role="option"] > div:hover > svg,
+[data-mention-menu] [role="option"][aria-selected="true"] > div > div,
+[data-mention-menu] [role="option"][aria-selected="true"] > div > span,
+[data-mention-menu] [role="option"][aria-selected="true"] > div > svg,
+div[data-side] [role="menuitem"]:hover > div,
+div[data-side] [role="menuitem"]:hover > span,
+div[data-side] [role="menuitem"]:hover > svg,
+div[data-side] [role="option"]:hover > div,
+div[data-side] [role="option"]:hover > span,
+div[data-side] [role="option"]:hover > svg {
     background-color: rgba(255, 255, 255, 0.12) !important;
     background: rgba(255, 255, 255, 0.12) !important;
     border: 1px solid rgba(255, 255, 255, 0.10) !important;
@@ -1850,31 +2146,40 @@ div[data-side] [class*="badge"] {
 
 /* 11. 菜单内部滚动条精致纤细化，彻底消灭底部与右侧粗笨黑条 */
 [data-mention-menu]::-webkit-scrollbar,
-[data-mention-menu] *::-webkit-scrollbar,
+[data-mention-menu] div::-webkit-scrollbar,
+[data-mention-menu] ul::-webkit-scrollbar,
 div[role="listbox"]::-webkit-scrollbar,
-div[role="listbox"] *::-webkit-scrollbar,
+div[role="listbox"] div::-webkit-scrollbar,
+div[role="listbox"] ul::-webkit-scrollbar,
 div[role="menu"]::-webkit-scrollbar,
-div[role="menu"] *::-webkit-scrollbar {
+div[role="menu"] div::-webkit-scrollbar,
+div[role="menu"] ul::-webkit-scrollbar {
     width: 4px !important;
     height: 4px !important;
 }
 
 [data-mention-menu]::-webkit-scrollbar-thumb,
-[data-mention-menu] *::-webkit-scrollbar-thumb,
+[data-mention-menu] div::-webkit-scrollbar-thumb,
+[data-mention-menu] ul::-webkit-scrollbar-thumb,
 div[role="listbox"]::-webkit-scrollbar-thumb,
-div[role="listbox"] *::-webkit-scrollbar-thumb,
+div[role="listbox"] div::-webkit-scrollbar-thumb,
+div[role="listbox"] ul::-webkit-scrollbar-thumb,
 div[role="menu"]::-webkit-scrollbar-thumb,
-div[role="menu"] *::-webkit-scrollbar-thumb {
+div[role="menu"] div::-webkit-scrollbar-thumb,
+div[role="menu"] ul::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.20) !important;
     border-radius: 4px !important;
 }
 
 [data-mention-menu]::-webkit-scrollbar-track,
-[data-mention-menu] *::-webkit-scrollbar-track,
+[data-mention-menu] div::-webkit-scrollbar-track,
+[data-mention-menu] ul::-webkit-scrollbar-track,
 div[role="listbox"]::-webkit-scrollbar-track,
-div[role="listbox"] *::-webkit-scrollbar-track,
+div[role="listbox"] div::-webkit-scrollbar-track,
+div[role="listbox"] ul::-webkit-scrollbar-track,
 div[role="menu"]::-webkit-scrollbar-track,
-div[role="menu"] *::-webkit-scrollbar-track {
+div[role="menu"] div::-webkit-scrollbar-track,
+div[role="menu"] ul::-webkit-scrollbar-track {
     background: transparent !important;
 }
 
@@ -1886,11 +2191,9 @@ div[role="menu"] *::-webkit-scrollbar-track {
 
 /* 1. 审批选项卡片条目平时状态：通透无边框 */
 div[role="radiogroup"] label,
-div:has(> input[type="radio"]) label,
-div:has(> input[type="checkbox"]) label,
-label:has(> input[type="radio"]),
-label:has(> input[type="checkbox"]),
-label[class*="cursor-pointer"]:has(input) {
+:where([data-testid="conversation-view"], [role="dialog"], .agy-takeover-card) div:has(> input:is([type="radio"], [type="checkbox"])) label,
+:where([data-testid="conversation-view"], [role="dialog"], .agy-takeover-card) label:has(> input:is([type="radio"], [type="checkbox"])),
+:where([data-testid="conversation-view"], [role="dialog"], .agy-takeover-card) label[class*="cursor-pointer"]:has(input) {
     background-color: transparent !important;
     background: transparent !important;
     border: 1px solid transparent !important;
@@ -1904,40 +2207,35 @@ label[class*="cursor-pointer"]:has(input) {
 div[role="radiogroup"] label:hover,
 div[role="radiogroup"] label:has(input:checked),
 div[role="radiogroup"] label.bg-secondary,
-label:has(> input[type="radio"]):hover,
-label:has(> input[type="radio"]:checked),
-label:has(> input[type="checkbox"]):hover,
-label:has(> input[type="checkbox"]:checked),
-label[class*="cursor-pointer"]:has(input):hover,
-label[class*="cursor-pointer"]:has(input:checked) {
+:where([data-testid="conversation-view"], [role="dialog"], .agy-takeover-card) label:has(> input:is([type="radio"], [type="checkbox"])):hover,
+:where([data-testid="conversation-view"], [role="dialog"], .agy-takeover-card) label:has(> input:is([type="radio"], [type="checkbox"]):checked),
+:where([data-testid="conversation-view"], [role="dialog"], .agy-takeover-card) label[class*="cursor-pointer"]:has(input):hover,
+:where([data-testid="conversation-view"], [role="dialog"], .agy-takeover-card) label[class*="cursor-pointer"]:has(input:checked) {
     background-color: rgba(255, 255, 255, 0.12) !important;
     background: rgba(255, 255, 255, 0.12) !important;
     border: 1px solid rgba(255, 255, 255, 0.10) !important;
     color: #ffffff !important;
+    --agy-choice-badge-bg: rgba(255, 255, 255, 0.20);
+    --agy-choice-badge-border: rgba(255, 255, 255, 0.16);
+    --agy-choice-badge-color: #ffffff;
 }
 
 /* 3. 序号徽章 (1, 2, 3, 4, 5) 与前缀小方块：微光胶囊化，杜绝深色方块 */
 div[role="radiogroup"] label div[class*="bg-border"],
-label:has(input) div[class*="bg-border"],
-label:has(input) div[class*="shrink-0"]:not(:has(img)) {
-    background-color: rgba(255, 255, 255, 0.10) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 0.90) !important;
-}
-
-div[role="radiogroup"] label:hover div[class*="bg-border"],
-div[role="radiogroup"] label:has(input:checked) div[class*="bg-border"],
-label:has(input):hover div[class*="bg-border"] {
-    background-color: rgba(255, 255, 255, 0.20) !important;
-    border-color: rgba(255, 255, 255, 0.16) !important;
-    color: #ffffff !important;
+[role="dialog"] label div[class*="bg-border"],
+[data-testid="ask-question-option"] div[class*="bg-border"],
+.agy-takeover-card label div[class*="bg-border"],
+.agy-takeover-card label div[class*="shrink-0"] {
+    background-color: var(--agy-choice-badge-bg, rgba(255, 255, 255, 0.10)) !important;
+    border: 1px solid var(--agy-choice-badge-border, rgba(255, 255, 255, 0.08)) !important;
+    color: var(--agy-choice-badge-color, rgba(255, 255, 255, 0.90)) !important;
 }
 
 /* 4. 自由输入选项输入框 (Write-in input / textarea) 纯净透明微光 */
 div[role="radiogroup"] input[type="text"],
 div[role="radiogroup"] textarea,
-label:has(input) input[type="text"],
-label:has(input) textarea {
+:where([data-testid="conversation-view"], [role="dialog"], .agy-takeover-card) label:has(input) input[type="text"],
+:where([data-testid="conversation-view"], [role="dialog"], .agy-takeover-card) label:has(input) textarea {
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
@@ -1955,12 +2253,9 @@ button[data-testid="interaction-skip-button"] {
 /* 18.1 流程图外层容器全面纯透明，直显高清壁纸 */
 .mermaid-wrapper,
 div[class*="mermaid-wrapper"],
-pre:has(.mermaid-wrapper),
-pre:has(img[alt*="Mermaid"]),
-div:has(> .mermaid-wrapper),
-div:has(> pre > .mermaid-wrapper),
-div[role="button"][tabindex="0"]:has(> img[alt*="Mermaid"]),
-div[role="button"][tabindex="0"]:has(> .mermaid-wrapper) {
+pre:has(.mermaid-wrapper, img[alt*="Mermaid"]),
+:where([data-testid="conversation-view"], [role="dialog"]) div:has(> .mermaid-wrapper, > pre > .mermaid-wrapper),
+div[role="button"][tabindex="0"]:has(> img[alt*="Mermaid"], > .mermaid-wrapper) {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1969,16 +2264,14 @@ div[role="button"][tabindex="0"]:has(> .mermaid-wrapper) {
 }
 
 /* 18.2 流程图外层 pre 容器边框与微光圆角 */
-pre:has(.mermaid-wrapper),
-pre:has(img[alt*="Mermaid"]) {
+pre:has(.mermaid-wrapper, img[alt*="Mermaid"]) {
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
     border-radius: 12px !important;
     padding: 12px 16px !important;
     transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-pre:has(.mermaid-wrapper):hover,
-pre:has(img[alt*="Mermaid"]):hover {
+pre:has(.mermaid-wrapper, img[alt*="Mermaid"]):hover {
     border-color: rgba(255, 255, 255, 0.25) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
 }
@@ -1997,8 +2290,7 @@ img[alt*="Mermaid"] {
 }
 
 /* 18.4 流程图全屏预览弹窗与交互浮层（Lightbox / Modal）毛玻璃透视 */
-div[role="dialog"]:has(.mermaid-wrapper),
-div[role="dialog"]:has(img[alt*="Mermaid"]) {
+div[role="dialog"]:has(.mermaid-wrapper, img[alt*="Mermaid"]) {
     background-color: rgba(18, 22, 26, 0.75) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
@@ -2011,7 +2303,7 @@ div[role="dialog"]:has(img[alt*="Mermaid"]) {
  * 文件型产物卡片（Word、Excel 等）单层大透明框保护规则
  * 避免内层 group/resource-card 与外层容器产生双重框重叠视觉缺陷
  * ------------------------------------------------------------- */
-div:has(> [class*="group/resource-card"]),
+:where([data-testid="conversation-view"], [data-aux-pane-open]) div:has(> [class*="group/resource-card"]),
 div[class*="bg-surface-elevated-secondary"]:has([class*="group/resource-card"]),
 [class*="extension:bg-background-primary-soft"] {
     background: transparent !important;
@@ -2100,6 +2392,7 @@ body[data-agy-theme][data-newux-theme="onyx"].light .surface-composer,
     background-color: rgba(13, 21, 18, 0.22) !important;
     background: rgba(13, 21, 18, 0.22) !important;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.20) !important;
+    contain: style !important;
     overflow: visible !important;
 }
 
@@ -2128,10 +2421,16 @@ body[data-agy-theme][data-newux-theme="onyx"].light .surface-composer-card,
 /* 修复因 --background 设为全透明导致 .text-background 反色按钮（如输入框右下角语音模式按钮 voice-live-pill、发送箭头按钮）内部 SVG currentColor 变透明空白的问题 */
 .text-background,
 .bg-foreground.text-background,
-.bg-foreground.text-background *,
+.bg-foreground.text-background span,
+.bg-foreground.text-background div,
+.bg-foreground.text-background path,
+.bg-foreground.text-background rect,
 .bg-foreground.text-background svg,
 [data-testid="voice-live-pill"]:not(.bg-red-600),
-[data-testid="voice-live-pill"]:not(.bg-red-600) *,
+[data-testid="voice-live-pill"]:not(.bg-red-600) span,
+[data-testid="voice-live-pill"]:not(.bg-red-600) div,
+[data-testid="voice-live-pill"]:not(.bg-red-600) path,
+[data-testid="voice-live-pill"]:not(.bg-red-600) rect,
 [data-testid="voice-live-pill"]:not(.bg-red-600) svg {
     color: #0e1613 !important;
 }
@@ -2149,6 +2448,7 @@ body[data-agy-theme][data-newux-theme] .agy-user-bubble-frame,
     background: rgba(13, 21, 18, 0.22) !important;
     backdrop-filter: blur(12px) saturate(125%) !important;
     -webkit-backdrop-filter: blur(12px) saturate(125%) !important;
+    contain: style !important;
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
     border-radius: 14px !important;
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18) !important;
@@ -2398,8 +2698,14 @@ body[data-agy-theme] .agy-card,
 }
 
 /* 折叠态侧边栏悬停预览浮层（peek-surface="open"）启用毛玻璃，避免与底层对话文字重叠；常驻展开态保持全透明 */
-body[data-agy-theme] .agy-inset-shell [data-peek-surface="open"] > *,
-.agy-inset-shell [data-peek-surface="open"] > * {
+body[data-agy-theme] .agy-inset-shell [data-peek-surface="open"] > div,
+body[data-agy-theme] .agy-inset-shell [data-peek-surface="open"] > aside,
+body[data-agy-theme] .agy-inset-shell [data-peek-surface="open"] > nav,
+body[data-agy-theme] .agy-inset-shell [data-peek-surface="open"] > section,
+.agy-inset-shell [data-peek-surface="open"] > div,
+.agy-inset-shell [data-peek-surface="open"] > aside,
+.agy-inset-shell [data-peek-surface="open"] > nav,
+.agy-inset-shell [data-peek-surface="open"] > section {
     background-color: rgba(14, 22, 19, 0.78) !important;
     background: rgba(14, 22, 19, 0.78) !important;
     backdrop-filter: blur(22px) saturate(150%) !important;

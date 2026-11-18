@@ -1496,7 +1496,43 @@
   const IGNORE_SELECTOR = 'code, pre, [contenteditable="true"], .monaco-editor, [data-lexical-editor], input[type="text"], input[type="password"], textarea';
 
   /**
-   * 检查指定 DOM 节点是否应当被跳过翻译
+   * 无需深入扫描子树与文本翻译的高频非文本/矢量标签集合
+   * @type {Set<string>}
+   */
+  const SKIP_SUBTREE_TAGS = new Set([
+    'CODE', 'PRE', 'SVG', 'PATH', 'G', 'CIRCLE', 'RECT', 'LINE', 'POLYGON', 'POLYLINE',
+    'STYLE', 'SCRIPT', 'NOSCRIPT', 'CANVAS', 'VIDEO', 'AUDIO', 'IFRAME', 'TEXTAREA'
+  ]);
+
+  /**
+   * 用于快速过滤纯中文、纯数字或符号文本的 ASCII 字母校验正则
+   * @type {RegExp}
+   */
+  const HAS_ASCII_LETTER_RE = /[a-zA-Z]/;
+
+  /**
+   * 缓存最近一次已检查或已翻译的文本节点值，避免重复词典与正则遍历
+   * @type {WeakMap<Text, string>}
+   */
+  const checkedTextNodeCache = new WeakMap();
+
+  /**
+   * 检查当前元素自身是否命中需跳过的标签或选择器（不向上回溯祖先，供递归子节点快速判断）
+   *
+   * @function isLocallyIgnoredElement
+   * @param {Node|null|undefined} node - 待检测的 DOM 节点
+   * @returns {boolean} 若节点本身应被忽略返回 true，否则返回 false
+   * @throws {never} 不抛出异常
+   */
+  function isLocallyIgnoredElement(node) {
+    if (!node || node.nodeType !== Node.ELEMENT_NODE) return false;
+    const element = /** @type {HTMLElement} */ (node);
+    if (SKIP_SUBTREE_TAGS.has(element.tagName)) return true;
+    return Boolean(element.matches && element.matches(IGNORE_SELECTOR));
+  }
+
+  /**
+   * 检查指定 DOM 节点是否应当被跳过翻译（包含祖先链检测）
    *
    * @function shouldIgnore
    * @param {Node} node - 需要检查的 DOM 节点
@@ -1511,13 +1547,33 @@
       return false;
     }
     const element = /** @type {HTMLElement} */ (node);
-    if (element.matches && element.matches(IGNORE_SELECTOR)) {
+    if (isLocallyIgnoredElement(element)) {
       return true;
     }
     if (element.closest && element.closest(IGNORE_SELECTOR)) {
       return true;
     }
     return false;
+  }
+
+  /**
+   * 根据元素自身是否匹配子页面容器快速更新局部上下文词典，避免每次递归调用 4 次 closest()
+   *
+   * @function resolveChildContextDictionary
+   * @param {Element} element - 当前遍历到的元素节点
+   * @param {Record<string, string>|null} currentDict - 从父级继承的上下文词典
+   * @returns {Record<string, string>|null} 若当前元素开启新上下文则返回新词典，否则沿用父级词典
+   * @throws {never} 不抛出异常
+   */
+  function resolveChildContextDictionary(element, currentDict) {
+    if (!element || element.nodeType !== Node.ELEMENT_NODE) return currentDict;
+    const screen = element.getAttribute ? element.getAttribute('data-bettergravity-screen') : null;
+    if (screen === 'Plugins') return PLUGINS_SCREEN_DICTIONARY;
+    if (screen === 'Themes') return THEMES_SCREEN_DICTIONARY;
+    if (element.matches && (element.matches('.settings-modal-container') || element.matches('[role="dialog"]'))) {
+      return SETTINGS_MODAL_DICTIONARY;
+    }
+    return currentDict;
   }
 
   /**
@@ -1564,6 +1620,8 @@
     try {
       const trimmed = line.trim();
       if (!trimmed || trimmed.length > 600) return null;
+      // 全部词条与正则模式均包含至少一个英文字母，无 ASCII 字母时立即短路跳过
+      if (!HAS_ASCII_LETTER_RE.test(trimmed)) return null;
 
       // 1. 页面上下文专属词典优先精确匹配（如插件管理中的 Compact 等）
       if (contextDict && contextDict[trimmed]) {
@@ -1603,6 +1661,7 @@
     try {
       const trimmed = text.trim();
       if (!trimmed || trimmed.length > 1500) return null;
+      if (!HAS_ASCII_LETTER_RE.test(trimmed)) return null;
 
       // 1. 优先尝试整体匹配
       const wholeTranslated = translateSingleLine(text, contextDict);
@@ -1635,21 +1694,30 @@
   }
 
   /**
-   * 翻译单个文本节点内容
+   * 翻译单个文本节点内容，并用 WeakMap 缓存已扫描值跳过重复回调
    *
    * @function translateTextNode
    * @param {Text} textNode - 需要翻译的文本 DOM 节点
+   * @param {Record<string, string>|null} [precomputedDict] - 预计算的页面上下文词典（undefined 时回退按节点查询）
    * @returns {void}
    * @throws {Error} 处理文本节点过程中的意外异常会被静默捕获
    */
-  function translateTextNode(textNode) {
+  function translateTextNode(textNode, precomputedDict) {
     try {
       if (!textNode || !textNode.nodeValue) return;
       const rawText = textNode.nodeValue;
-      const contextDict = getContextDictionary(textNode);
+      if (checkedTextNodeCache.get(textNode) === rawText) return;
+      if (!HAS_ASCII_LETTER_RE.test(rawText)) {
+        checkedTextNodeCache.set(textNode, rawText);
+        return;
+      }
+      const contextDict = precomputedDict !== undefined ? precomputedDict : getContextDictionary(textNode);
       const translated = getTranslatedString(rawText, contextDict);
       if (translated && translated !== rawText) {
         textNode.nodeValue = translated;
+        checkedTextNodeCache.set(textNode, translated);
+      } else {
+        checkedTextNodeCache.set(textNode, rawText);
       }
     } catch (err) {
       console.warn('[汉化插件] 文本节点替换失败:', err);
@@ -1661,16 +1729,22 @@
    *
    * @function translateAttributes
    * @param {Element} element - 需要翻译属性的 DOM 元素
+   * @param {Record<string, string>|null} [precomputedDict] - 预计算的页面上下文词典
    * @returns {void}
    * @throws {Error} 处理属性过程中的意外异常会被静默捕获
    */
-  function translateAttributes(element) {
+  function translateAttributes(element, precomputedDict) {
     try {
       if (!element || element.nodeType !== Node.ELEMENT_NODE) return;
-      const contextDict = getContextDictionary(element);
+      const hasPlaceholder = element.hasAttribute('placeholder');
+      const hasAriaLabel = element.hasAttribute('aria-label');
+      const hasTitle = element.hasAttribute('title');
+      if (!hasPlaceholder && !hasAriaLabel && !hasTitle) return;
+
+      const contextDict = precomputedDict !== undefined ? precomputedDict : getContextDictionary(element);
 
       // 翻译 placeholder
-      if (element.hasAttribute('placeholder')) {
+      if (hasPlaceholder) {
         const placeholder = element.getAttribute('placeholder') || '';
         const trans = getTranslatedString(placeholder, contextDict);
         if (trans && trans !== placeholder) {
@@ -1679,7 +1753,7 @@
       }
 
       // 翻译 aria-label
-      if (element.hasAttribute('aria-label')) {
+      if (hasAriaLabel) {
         const ariaLabel = element.getAttribute('aria-label') || '';
         const trans = getTranslatedString(ariaLabel, contextDict);
         if (trans && trans !== ariaLabel) {
@@ -1688,7 +1762,7 @@
       }
 
       // 翻译 title
-      if (element.hasAttribute('title')) {
+      if (hasTitle) {
         const title = element.getAttribute('title') || '';
         const trans = getTranslatedString(title, contextDict);
         if (trans && trans !== title) {
@@ -1701,30 +1775,42 @@
   }
 
   /**
-   * 递归遍历并翻译指定根节点下的所有 UI 文本和属性
+   * 递归遍历并翻译指定根节点下的所有 UI 文本和属性，向下传递上下文词典以消除冗余祖先回溯
    *
    * @function translateSubtree
    * @param {Node} root - 待翻译的根 DOM 节点
+   * @param {Record<string, string>|null} [inheritedDict] - 从上级递归传入的上下文词典
+   * @param {boolean} [ancestorVerified=false] - 标记父级是否已通过 shouldIgnore 校验
    * @returns {void}
    * @throws {Error} 遍历过程中的意外错误会被安全捕获并打印警告
    */
-  function translateSubtree(root) {
+  function translateSubtree(root, inheritedDict, ancestorVerified = false) {
     try {
       if (!root) return;
-      if (shouldIgnore(root)) return;
+      if (ancestorVerified) {
+        if (isLocallyIgnoredElement(root)) return;
+      } else if (shouldIgnore(root)) {
+        return;
+      }
+
+      const contextDict = inheritedDict !== undefined
+        ? (root.nodeType === Node.ELEMENT_NODE
+          ? resolveChildContextDictionary(/** @type {Element} */ (root), inheritedDict)
+          : inheritedDict)
+        : getContextDictionary(root);
 
       if (root.nodeType === Node.TEXT_NODE) {
-        translateTextNode(/** @type {Text} */ (root));
+        translateTextNode(/** @type {Text} */ (root), contextDict);
         return;
       }
 
       if (root.nodeType === Node.ELEMENT_NODE) {
-        translateAttributes(/** @type {Element} */ (root));
+        translateAttributes(/** @type {Element} */ (root), contextDict);
       }
 
       const children = root.childNodes;
       for (let i = 0; i < children.length; i++) {
-        translateSubtree(children[i]);
+        translateSubtree(children[i], contextDict, true);
       }
     } catch (err) {
       console.warn('[汉化插件] DOM 子树翻译异常:', err);
@@ -1742,48 +1828,91 @@
     // 初始全量翻译
     translateSubtree(document.body || document.documentElement);
 
-    // 防抖调度队列
-    let pendingMutations = [];
-    let isScheduled = false;
+    // 去重调度队列：避免流式渲染同帧内重复处理父子节点
+    const pendingSet = new Set();
+    let rafId = 0;
+    let disposed = false;
 
     /**
-     * 批量处理微任务中的 DOM 变动
+     * 检查节点祖先是否也处于待处理集合中，避免对同一子树重复递归扫描
+     *
+     * @function hasAncestorInPendingSet
+     * @param {Node} node - 待检测的 DOM 节点
+     * @param {Set<Node>} batchSet - 本帧待处理节点集合
+     * @returns {boolean} 若已有祖先节点在集合中返回 true
+     * @throws {never} 不抛出异常
+     */
+    function hasAncestorInPendingSet(node, batchSet) {
+      let cur = node.parentNode;
+      while (cur) {
+        if (batchSet.has(cur)) return true;
+        cur = cur.parentNode;
+      }
+      return false;
+    }
+
+    /**
+     * 刷新并翻译累积的 DOM 变更批次，按树深度去重后逐一翻译
      *
      * @function flushMutations
      * @returns {void}
+     * @throws {Error} 处理队列元素时的异常由子函数捕获处理
      */
     function flushMutations() {
-      isScheduled = false;
-      const nodesToProcess = pendingMutations;
-      pendingMutations = [];
+      rafId = 0;
+      if (disposed || pendingSet.size === 0) {
+        pendingSet.clear();
+        return;
+      }
+      const batchSet = new Set(pendingSet);
+      pendingSet.clear();
 
-      for (const node of nodesToProcess) {
+      for (const node of batchSet) {
+        if (!node.isConnected) continue;
+        if (batchSet.size > 1 && hasAncestorInPendingSet(node, batchSet)) continue;
         translateSubtree(node);
       }
     }
 
     const observer = new MutationObserver(function (mutations) {
-      for (const mutation of mutations) {
+      if (disposed) return;
+      for (let m = 0; m < mutations.length; m++) {
+        const mutation = mutations[m];
         if (mutation.type === 'childList') {
-          for (let i = 0; i < mutation.addedNodes.length; i++) {
-            const addedNode = mutation.addedNodes[i];
-            if (!shouldIgnore(addedNode)) {
-              pendingMutations.push(addedNode);
+          const added = mutation.addedNodes;
+          for (let i = 0; i < added.length; i++) {
+            const addedNode = added[i];
+            if (addedNode.nodeType === Node.ELEMENT_NODE) {
+              if (!SKIP_SUBTREE_TAGS.has(/** @type {Element} */ (addedNode).tagName)) {
+                pendingSet.add(addedNode);
+              }
+            } else if (addedNode.nodeType === Node.TEXT_NODE && addedNode.nodeValue && HAS_ASCII_LETTER_RE.test(addedNode.nodeValue)) {
+              pendingSet.add(addedNode);
             }
           }
         } else if (mutation.type === 'characterData') {
           const target = mutation.target;
-          if (target && !shouldIgnore(target)) {
-            pendingMutations.push(target);
+          if (target && target.nodeValue && checkedTextNodeCache.get(/** @type {Text} */ (target)) !== target.nodeValue && HAS_ASCII_LETTER_RE.test(target.nodeValue)) {
+            pendingSet.add(target);
           }
         }
       }
 
-      if (!isScheduled && pendingMutations.length > 0) {
-        isScheduled = true;
-        requestAnimationFrame(flushMutations);
+      if (!rafId && pendingSet.size > 0) {
+        rafId = requestAnimationFrame(flushMutations);
       }
     });
+
+    const originalDisconnect = observer.disconnect.bind(observer);
+    observer.disconnect = function () {
+      disposed = true;
+      if (rafId && typeof cancelAnimationFrame === 'function') {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      pendingSet.clear();
+      originalDisconnect();
+    };
 
     observer.observe(document.body || document.documentElement, {
       childList: true,
@@ -1952,18 +2081,14 @@
   }
 
   /**
-   * 动态扫描并消除总览面板（Overview）与右侧辅助面板中终端会话列表项的深黑底色，
-   * 严格限定作用范围在辅助/总览面板叶子列表项内，绝不波及主对话区或祖先外框容器
+   * 仅在初始化/热重载时执行一次：清理历史旧版本误注入到对话区祖先节点上的内联边框残留
    *
-   * @function processOverviewTerminalItems
-   * @param {HTMLElement} [root=document] - 检索根节点
-   * @returns {void}
-   * @throws {Error} 若 DOM 操作异常时记录日志并安全退出
+   * @function cleanupStaleOverviewMarkers
+   * @returns {void} 无返回值
+   * @throws {never} 不抛出异常
    */
-  function processOverviewTerminalItems(root = document) {
-    if (!root) return;
+  function cleanupStaleOverviewMarkers() {
     try {
-      // 若之前版本曾在对话区或包含对话区的祖先容器上误注入过内联边框，热重载时自动清除残留
       const staleNodes = typeof document !== 'undefined' && document.querySelectorAll
         ? document.querySelectorAll('[data-overview-term-cleaned="true"]')
         : [];
@@ -1980,17 +2105,41 @@
           if (node.dataset) delete node.dataset.overviewTermCleaned;
         }
       }
+    } catch {
+      // 忽略清理异常
+    }
+  }
 
-      // 若传入节点处于主对话区内或本身包裹主对话区，直接跳过，避免穿透扫描污染对话流
+  /**
+   * 动态扫描并消除总览面板（Overview）与右侧辅助面板中终端会话列表项的深黑底色，
+   * 严格限定作用范围在辅助/总览面板叶子列表项内，绝不波及主对话区或祖先外框容器
+   *
+   * @function processOverviewTerminalItems
+   * @param {HTMLElement} [root=document] - 检索根节点
+   * @returns {void}
+   * @throws {Error} 若 DOM 操作异常时记录日志并安全退出
+   */
+  function processOverviewTerminalItems(root = document) {
+    if (!root) return;
+    try {
+      // 若传入节点处于主对话区内或本身即对话容器，优先直接跳过，避免无谓 DOM 查询
       if (
         root !== document &&
         root !== document.body &&
-        root !== document.documentElement &&
-        (root.matches?.('[data-testid="conversation-view"]') ||
-          root.closest?.('[data-testid="conversation-view"]') ||
-          root.querySelector?.('[data-testid="conversation-view"]'))
+        root !== document.documentElement
       ) {
-        return;
+        if (
+          root.matches?.('[data-testid="conversation-view"]') ||
+          root.closest?.('[data-testid="conversation-view"]')
+        ) {
+          return;
+        }
+        if (!root.firstElementChild && !root.matches?.('[data-testid^="overview-terminal-"], [data-testid*="terminal-item"], [data-testid*="terminal-row"], [data-testid*="terminal-session"]')) {
+          return;
+        }
+        if (root.querySelector?.('[data-testid="conversation-view"]')) {
+          return;
+        }
       }
 
       const panelRootSelector = [
@@ -2011,7 +2160,7 @@
       if (root.matches?.(itemSelector)) {
         candidateSet.add(root);
       }
-      if (root.querySelectorAll) {
+      if (root.firstElementChild && root.querySelectorAll) {
         const directItems = root.querySelectorAll(itemSelector);
         for (let i = 0; i < directItems.length; i++) candidateSet.add(directItems[i]);
 
@@ -2055,7 +2204,7 @@
 
   /**
    * 启动 Mermaid 流程图与总览终端透明化保活与动态监听机制
-   * 包含首屏全量扫描、多频次定时守护与 MutationObserver DOM 变动监听（含 src 属性与新增子树）
+   * 包含首屏全量扫描、多频次定时守护与批量化 RAF MutationObserver 监听（含 src 属性与新增子树）
    *
    * @function startMermaidTransparencyKeeper
    * @returns {() => void} 用于断开 MutationObserver 与清理所有定时器的清理回调函数
@@ -2063,15 +2212,16 @@
    */
   function startMermaidTransparencyKeeper() {
     let active = true;
+    cleanupStaleOverviewMarkers();
 
     const scanAll = (root = document) => {
       if (!active || !root) return;
       try {
         // 1. 扫描并处理流程图
-        if (root.matches && root.matches('.mermaid-wrapper img, img[alt*="Mermaid"], img[alt*="mermaid"], img[src^="data:image/svg+xml"]')) {
+        if (root.tagName === 'IMG' || (root.matches && root.matches('.mermaid-wrapper img, img[alt*="Mermaid"], img[alt*="mermaid"], img[src^="data:image/svg+xml"]'))) {
           processMermaidImg(root);
         }
-        if (root.querySelectorAll) {
+        if (root.firstElementChild && root.querySelectorAll) {
           const targets = root.querySelectorAll('.mermaid-wrapper img, img[alt*="Mermaid"], img[alt*="mermaid"], img[src^="data:image/svg+xml"]');
           for (let i = 0; i < targets.length; i++) {
             processMermaidImg(targets[i]);
@@ -2103,8 +2253,52 @@
       clearInterval(intervalTimer);
     }, 8000);
 
-    // 4. MutationObserver 监听 DOM 树变化与属性变化
+    // 4. MutationObserver 监听 DOM 树变化与属性变化（通过 RAF 合并并跳过纯矢量/叶子节点）
     let observer = null;
+    let pendingRafId = 0;
+    const pendingRoots = new Set();
+    const pendingImgs = new Set();
+
+    const flushVisualMutations = () => {
+      pendingRafId = 0;
+      if (!active) return;
+      if (pendingImgs.size > 0) {
+        const imgs = Array.from(pendingImgs);
+        pendingImgs.clear();
+        for (let i = 0; i < imgs.length; i++) {
+          if (imgs[i].isConnected) processMermaidImg(imgs[i]);
+        }
+      }
+      if (pendingRoots.size > 0) {
+        const rootsSnapshot = new Set(pendingRoots);
+        pendingRoots.clear();
+        for (const node of rootsSnapshot) {
+          if (!node.isConnected) continue;
+          let cur = node.parentNode;
+          let coveredByAncestor = false;
+          while (cur) {
+            if (rootsSnapshot.has(cur)) {
+              coveredByAncestor = true;
+              break;
+            }
+            cur = cur.parentNode;
+          }
+          if (!coveredByAncestor) {
+            scanAll(node);
+          }
+        }
+      }
+    };
+
+    const scheduleVisualFlush = () => {
+      if (pendingRafId || !active) return;
+      if (typeof requestAnimationFrame === 'function') {
+        pendingRafId = requestAnimationFrame(flushVisualMutations);
+      } else {
+        flushVisualMutations();
+      }
+    };
+
     try {
       observer = new MutationObserver((mutations) => {
         if (!active) return;
@@ -2113,13 +2307,22 @@
           if (m.type === 'childList') {
             for (let j = 0; j < m.addedNodes.length; j++) {
               const node = m.addedNodes[j];
-              if (node.nodeType === 1) { // ELEMENT_NODE
-                scanAll(node);
+              if (node.nodeType === 1) {
+                const tag = node.tagName;
+                if (tag === 'SVG' || tag === 'PATH' || tag === 'STYLE' || tag === 'SCRIPT') continue;
+                if (tag === 'IMG' || node.firstElementChild) {
+                  pendingRoots.add(node);
+                }
               }
             }
           } else if (m.type === 'attributes' && m.attributeName === 'src') {
-            processMermaidImg(m.target);
+            if (m.target && m.target.tagName === 'IMG') {
+              pendingImgs.add(m.target);
+            }
           }
+        }
+        if (pendingRoots.size > 0 || pendingImgs.size > 0) {
+          scheduleVisualFlush();
         }
       });
 
@@ -2138,6 +2341,12 @@
     return () => {
       active = false;
       clearInterval(intervalTimer);
+      if (pendingRafId && typeof cancelAnimationFrame === 'function') {
+        cancelAnimationFrame(pendingRafId);
+        pendingRafId = 0;
+      }
+      pendingRoots.clear();
+      pendingImgs.clear();
       if (observer) {
         observer.disconnect();
       }

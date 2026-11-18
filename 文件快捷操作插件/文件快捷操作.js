@@ -1052,6 +1052,31 @@
   }
 
   /**
+   * 由正文容器向上定位所属单个回合的底部工具栏（与 findTurnRootFromToolbar 保持对称层级）
+   *
+   * @param {Element} agentResponse - 回复正文容器 `[data-testid="agent-response"]`
+   * @returns {Element | null} 对应的底部工具栏元素，未就绪时返回 null
+   * @throws {never} 不抛出异常
+   */
+  function findToolbarFromAgentResponse(agentResponse) {
+    let cur = agentResponse.parentElement;
+    for (let i = 0; cur && i < 5; i += 1, cur = cur.parentElement) {
+      if (cur.matches && cur.matches(CONVERSATION_VIEW_SELECTOR)) {
+        return null;
+      }
+      const tb = cur.querySelector(TOOLBAR_SELECTOR);
+      if (tb) {
+        const responses = cur.querySelectorAll(AGENT_RESPONSE_SELECTOR);
+        if (responses.length === 1) {
+          return tb;
+        }
+        return null;
+      }
+    }
+    return null;
+  }
+
+  /**
    * 扫描当前对话区全部已完成的回复工具栏，刷新所有底部归档卡片
    *
    * @returns {void}
@@ -1069,43 +1094,126 @@
 
   let rafId = 0;
   let observer = null;
+  let fullScanPending = false;
+  const pendingToolbars = new Set();
 
   /**
-   * 节流调度全量扫描（通过 requestAnimationFrame 合并高频流式输出变更）
+   * 节流调度全量或增量归档卡片刷新（通过 requestAnimationFrame 合并高频流式输出变更）
    *
+   * @param {boolean} [forceFull=true] - 为 true 时触发全对话工具栏扫描，否则仅刷新 pendingToolbars
    * @returns {void}
    * @throws {never}
    */
-  function scheduleScan() {
+  function scheduleScan(forceFull = true) {
+    if (forceFull) {
+      fullScanPending = true;
+    }
+    if (!fullScanPending && pendingToolbars.size === 0) return;
     if (rafId) return;
     rafId = window.requestAnimationFrame(() => {
       rafId = 0;
-      scanConversationArchiveCards();
+      if (fullScanPending) {
+        fullScanPending = false;
+        pendingToolbars.clear();
+        scanConversationArchiveCards();
+        return;
+      }
+      if (pendingToolbars.size > 0) {
+        const batch = Array.from(pendingToolbars);
+        pendingToolbars.clear();
+        for (let i = 0; i < batch.length; i += 1) {
+          const tb = batch[i];
+          if (tb && tb.isConnected) {
+            syncArchiveForToolbar(tb);
+          }
+        }
+      }
     });
   }
 
   /**
-   * 判断一批 DOM 变更记录是否全部源自插件自身注入的节点，防止引发无限观察循环
+   * 从 MutationObserver 回调记录中过滤自身注入，并精准收集受影响的回合工具栏
    *
    * @param {MutationRecord[]} mutations - MutationObserver 回调记录列表
-   * @returns {boolean} 若包含宿主真实 DOM 变更则返回 true
-   * @throws {never}
+   * @returns {{ hasWork: boolean, needFullScan: boolean }} 是否存在需要处理的宿主变更及是否需全量扫描
+   * @throws {never} 不抛出异常
    */
-  function hasHostMutation(mutations) {
+  function collectAffectedArchiveTargets(mutations) {
+    let needFullScan = false;
+    let hasWork = false;
+    const visitedTargets = new Set();
+
     for (let i = 0; i < mutations.length; i += 1) {
       const m = mutations[i];
-      if (m.target instanceof Element && (m.target.closest(`[${ARCHIVE_ATTR}]`) || m.target.closest(`[${MENU_ATTR}]`))) {
-        continue;
-      }
-      if (m.type === 'childList') {
-        const nodes = [...m.addedNodes, ...m.removedNodes];
-        if (nodes.length > 0 && nodes.every((n) => n instanceof Element && (n.hasAttribute(ARCHIVE_ATTR) || n.hasAttribute(MENU_ATTR)))) {
+      const targetEl = m.target instanceof Element ? m.target : m.target?.parentElement;
+
+      if (targetEl) {
+        if (targetEl.closest(`[${ARCHIVE_ATTR}]`) || targetEl.closest(`[${MENU_ATTR}]`)) {
           continue;
         }
       }
-      return true;
+
+      if (m.type === 'childList' && m.addedNodes.length > 0) {
+        let allSelf = true;
+        for (let j = 0; j < m.addedNodes.length; j += 1) {
+          const n = m.addedNodes[j];
+          if (!(n instanceof Element) || (!n.hasAttribute(ARCHIVE_ATTR) && !n.hasAttribute(MENU_ATTR))) {
+            allSelf = false;
+            if (n instanceof Element) {
+              if (n.matches(CONVERSATION_VIEW_SELECTOR) || (n.firstElementChild && n.querySelector(CONVERSATION_VIEW_SELECTOR))) {
+                needFullScan = true;
+                hasWork = true;
+              } else if (n.matches(TOOLBAR_SELECTOR)) {
+                pendingToolbars.add(n);
+                hasWork = true;
+              } else if (n.firstElementChild) {
+                const tbs = n.querySelectorAll(TOOLBAR_SELECTOR);
+                for (let k = 0; k < tbs.length; k += 1) {
+                  pendingToolbars.add(tbs[k]);
+                  hasWork = true;
+                }
+              }
+            }
+          }
+        }
+        if (allSelf && m.removedNodes.length === 0) {
+          continue;
+        }
+      }
+
+      if (needFullScan || !targetEl || visitedTargets.has(targetEl)) {
+        continue;
+      }
+      visitedTargets.add(targetEl);
+
+      // 非对话区域（侧边栏、标题栏、输入框、设置弹窗等）变更不触发归档卡片重扫
+      if (!targetEl.closest(CONVERSATION_VIEW_SELECTOR)) {
+        continue;
+      }
+
+      const directToolbar = targetEl.closest(TOOLBAR_SELECTOR);
+      if (directToolbar) {
+        pendingToolbars.add(directToolbar);
+        hasWork = true;
+        continue;
+      }
+
+      const resp = targetEl.closest(AGENT_RESPONSE_SELECTOR);
+      if (resp) {
+        const tb = findToolbarFromAgentResponse(resp);
+        if (tb) {
+          pendingToolbars.add(tb);
+          hasWork = true;
+        }
+        continue;
+      }
+
+      // 处于 conversation-view 内但不在单个已定位组件中（如整轮节点替换/移除），回退到全量扫描
+      needFullScan = true;
+      hasWork = true;
     }
-    return false;
+
+    return { hasWork, needFullScan };
   }
 
   /**
@@ -1145,8 +1253,9 @@
     window.addEventListener('blur', onBlur);
 
     observer = new MutationObserver((mutations) => {
-      if (hasHostMutation(mutations)) {
-        scheduleScan();
+      const { hasWork, needFullScan } = collectAffectedArchiveTargets(mutations);
+      if (hasWork) {
+        scheduleScan(needFullScan);
       }
     });
     const observeTarget = document.body || document.documentElement;
@@ -1154,15 +1263,16 @@
       observer.observe(observeTarget, { childList: true, subtree: true });
     }
 
+    const triggerFullScan = () => scheduleScan(true);
     const stopSettingsWatch = plugin.settings.onChange(() => {
       closeActiveMenu();
-      scheduleScan();
+      triggerFullScan();
     });
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', scheduleScan, { once: true });
+      document.addEventListener('DOMContentLoaded', triggerFullScan, { once: true });
     } else {
-      scheduleScan();
+      triggerFullScan();
     }
 
     plugin.onDispose(() => {
@@ -1170,6 +1280,8 @@
         window.cancelAnimationFrame(rafId);
         rafId = 0;
       }
+      fullScanPending = false;
+      pendingToolbars.clear();
       observer?.disconnect();
       observer = null;
       stopSettingsWatch?.();
