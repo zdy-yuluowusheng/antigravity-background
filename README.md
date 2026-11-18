@@ -8,9 +8,9 @@
 ![PowerShell](https://img.shields.io/badge/Script-PowerShell%20%7C%20Node.js-purple?style=flat-square&logo=powershell)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-**专为 Google Antigravity 打造的高颜值毛玻璃磨砂主题、自定义壁纸引擎、动态汉化包与全自动恢复工具链**
+**专为 Google Antigravity 打造的高颜值毛玻璃磨砂主题、自定义壁纸引擎、动态汉化包、本地文件快捷操作与全自动恢复工具链**
 
-[快速上手](#-快速上手) • [核心特性](#-核心特性) • [日常工作流](#-日常定制与使用工作流) • [版本更新自动恢复](#-版本更新后的全自动恢复机制) • [技术沉淀](#-攻坚历程与技术要点沉淀) • [文档索引](#-技术文档与方案索引)
+[效果预览](#-本地文件快捷操作与归档卡片重点新功能) • [快速上手](#-快速上手) • [核心特性](#-核心特性) • [日常工作流](#-日常定制与使用工作流) • [版本更新自动恢复](#-版本更新后的全自动恢复机制) • [技术沉淀](#-攻坚历程与技术要点沉淀) • [文档索引](#-技术文档与方案索引)
 
 </div>
 
@@ -25,9 +25,42 @@
 **本项目提供了一套完整的工程化落地方案**：
 * 🌲 **透明UI主题**：通过 CSS 深度穿透实现全界面毛玻璃高斯模糊与暗调微光质感，彻底消除原生 Tailwind 深黑遮罩与灰色色块；
 * 🖼️ **全自动壁纸转码与注入**：支持一键将任意自定义图片（4K 智能压缩 + Base64 编码内嵌）部署为背景壁纸，规避沙箱限制并实现 0 延迟渲染；
+* 📁 **本地文件快捷操作与归档卡片（新增）**：内建 `file-quick-actions` 前端插件，拦截对话区文件胶囊右键弹出可用快捷菜单，并在每轮回复底部自动生成仿 Codex 单层透明归档卡片与「打开方式 ▾」下拉；
 * 🇨🇳 **动态 DOM 汉化语言包**：基于 MutationObserver 实时监听 DOM 树实现无侵入动态汉化，不改动核心二进制代码；
 * ⚡ **更新自愈与全流程脚本**：提供应对官方频繁更新（如 2.17.0+）的一键恢复、双向同步与热重载脚本；
 * 🔬 **20+ 逆向与调试探针**：包含选择器提取、DOM 层级测量与 computedStyle 验证工具集。
+
+---
+
+## 🎯 本地文件快捷操作与归档卡片（重点新功能）
+
+针对 Antigravity 原生客户端 **“必须在右侧边栏预览后才能定位文件，正文右键文件胶囊仅弹出一个不可点击的灰色 Copy”** 的痛点，工程新增了独立 BetterGravity 插件 [`文件快捷操作插件`](文件快捷操作插件/)（ID：`file-quick-actions`），在不修改客户端核心二进制 `app.asar` IPC 的前提下实现开箱即用的双模式交互增强：
+
+![Antigravity 本地文件快捷操作与归档卡片效果预览](文件快捷操作插件/文件快捷操作与归档卡片效果预览.png)
+
+### 核心交互能力
+
+1. **效果 ①：对话正文「本地文件胶囊」右键直达菜单**
+   * 在对话区（`[data-testid="conversation-view"]`）右键任意本地 `file://` 文件或目录胶囊，自动拦截原生无效的灰色 `Copy` 菜单，弹出与主题一致的暗色毛玻璃浮层菜单。
+   * **左键行为 100% 保持原生**：普通左键点击胶囊仍按客户端默认逻辑打开右侧边栏预览，互不冲突。
+   * 支持动作清单：
+     * `在文件资源管理器中显示`（推荐，复用原生 `window.electronNative.revealInFilePicker`，Windows 直接定位并选中文件；SSH 远程会话自动友好提示）
+     * `在右侧边栏预览`（复用原胶囊点击或 React Fiber 中的 `stepHandler.openFile`）
+     * `复制完整路径` / `复制所在目录` / `复制文件名`（目录时自动显示为 `复制目录名`，支持 Clipboard API 与 `execCommand` 双重兜底及 Toast 提示）
+     * `下载副本...`（仅文件显示，复用 React Fiber 中 `fileSystemProviders.get('')` 的 `readFile` 通道生成 Blob 下载）
+     * 当正文存在划词选区时，菜单顶部动态附加 `复制选中文本`。
+
+2. **效果 ②：仿 Codex 回复底部「单层透明归档卡片」+「打开方式 ▾」**
+   * 自动扫描每轮已完成的助手回复正文（`[data-markdown-root]`），按 Windows 盘符/UNC 大小写无关的规范路径去重汇总本地文件与目录引用；自动排除 `worked-for-collapsible` 折叠过程抽屉、`turn-cards-container`、`changed-files-card`、`artifact-card`、`user-message` 及代码块内部链接。
+   * 在每轮底部工具栏（`[data-testid="cascade-system-message-toolbar"]`）上方生成严格单层透明卡片：左侧展示文件类型徽章、文件名与所在目录（支持点击预览或右键弹出操作菜单），右侧配备 **`打开方式 ▾`** 下拉菜单按钮。
+   * 单轮引用文件超过折叠阈值（默认 `3` 个）时自动折叠并展示「展开其余 N 个本地文件」轻量切换条，避免长回复被归档卡片撑高。
+
+3. **主题 1:1 融合与插件参数可配**
+   * 卡片沿用透明主题单层微光边框规范（`transparent` + `rgba(255, 255, 255, 0.14)` 细框），浮层采用 `blur(20px) saturate(145%)` 暗调磨砂，并内置浅色模式兼容兜底规则。
+   * 可直接在 BetterGravity 设置面板中按需调整以下 3 项参数：
+     * `对话区本地文件右键菜单`（`enableContextMenu`，默认开启）
+     * `回复底部文件归档卡片`（`enableArchiveCards`，默认开启）
+     * `底部归档自动折叠数量`（`collapseThreshold`，默认 `3`，范围 `1 ~ 20`）
 
 ---
 
@@ -75,6 +108,12 @@ d:\work\antigravity-background\
 ├── 汉化插件\                                 # 动态 DOM 汉化语言包源码
 │   ├── plugin.json                           # 插件元数据配置
 │   └── index.js                              # 基于 MutationObserver 的汉化核心逻辑
+│
+├── 文件快捷操作插件\                         # 对话区右键快捷菜单与仿 Codex 底部归档卡片插件
+│   ├── plugin.json                           # BetterGravity 插件清单（部署 ID: file-quick-actions）
+│   ├── 文件快捷操作.js                       # 右键拦截菜单、底部单层卡片与客户端接口复用逻辑
+│   ├── 文件快捷操作.css                      # 单层透明卡片、折叠切换条与暗调毛玻璃浮层样式
+│   └── 文件快捷操作与归档卡片效果预览.png    # README 功能效果预览图
 │
 ├── 核心脚本\                                 # 自动化部署、换壁纸与版本自愈脚本
 │   ├── 一键更换背景壁纸.ps1                  # 支持指定图片与透明度的一键换壁纸便捷入口
@@ -129,12 +168,12 @@ git clone https://github.com/zdy-yuluowusheng/antigravity-background.git d:\work
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\核心脚本\一键同步到系统.ps1
 ```
-> **提示**：脚本将自动将毛玻璃主题、壁纸数据、主题配置项以及汉化插件全量复制到系统的 `%APPDATA%\BetterGravity\` 目录下。
+> **提示**：脚本将自动将毛玻璃主题、壁纸数据、主题配置项、汉化插件以及文件快捷操作插件全量复制到系统的 `%APPDATA%\BetterGravity\` 目录下。
 
 ### 步骤三：客户端即时热重载
 无需重启 Antigravity，直接在 Antigravity 窗口中按下快捷键：
 <kbd>Ctrl</kbd> + <kbd>R</kbd>
-> 页面将瞬间重载，高颜值毛玻璃主题与汉化立即生效！
+> 页面将瞬间重载，高颜值毛玻璃主题、动态汉化与文件快捷操作插件立即生效！
 
 ---
 
@@ -169,6 +208,10 @@ powershell -ExecutionPolicy Bypass -File .\核心脚本\一键更换背景壁纸
 
 ### 3. 扩展汉化词典
 直接编辑 [`汉化插件/index.js`](file:///d:/work/antigravity-background/汉化插件/index.js) 中的翻译对照表对象，保存后执行 `.\核心脚本\一键同步到系统.ps1`，然后在客户端中按 <kbd>Ctrl</kbd> + <kbd>R</kbd> 重新加载。
+
+### 4. 配置或定制文件快捷操作插件
+* **可视化开关与阈值调整**：可在 BetterGravity 插件设置面板直接调节 `file-quick-actions` 的 `对话区本地文件右键菜单`（`enableContextMenu`）、`回复底部文件归档卡片`（`enableArchiveCards`）与 `底部归档自动折叠数量`（`collapseThreshold`，默认 `3`）。
+* **自定义菜单或卡片样式**：按需编辑 [`文件快捷操作插件/文件快捷操作.js`](文件快捷操作插件/文件快捷操作.js) 或 [`文件快捷操作插件/文件快捷操作.css`](文件快捷操作插件/文件快捷操作.css)，执行 `.\核心脚本\一键同步到系统.ps1` 后即可触发热重载（必要时按 <kbd>Ctrl</kbd> + <kbd>R</kbd> 刷新界面）。
 
 ---
 
@@ -212,6 +255,7 @@ powershell -ExecutionPolicy Bypass -File .\核心脚本\一键更换背景壁纸
 | **Markdown 表格表头深黑底色** | 表头 `thead` 带有原生 `bg-muted/50`（Chromium 计算为深黑色 `oklab(...)`），且吸顶伪元素带有 `--background` | 外层容器、吸顶条、`thead`、`tr` 全量透明化，表头 `th` 采用极浅白色微光底与精致微光边框，悬停白色微光高亮 |
 | **输入框候选项列表文字重叠** | `@` 与 `/` 触发的下拉候选项菜单缺少背景模糊隔离，导致候选项与背景文字穿透干扰 | 定制独立 Typeahead 毛玻璃雾化遮罩与暗调磨砂底色，隔离下层对话文字 |
 | **Ctrl+R 刷新后控制条白块** | 窗口控制条 (WCO) 区域在渲染树刷新时未能实时重载样式 | 增加全生命周期保活规则与属性穿透，确保热重载后界面样式稳定一致 |
+| **正文文件右键仅有失效 Copy** | 原版 `V7a()` 在无划词选区时仅返回禁用状态的 Copy，且客户端内置安全策略默认拦截 `file://` 协议外链拉起 | 通过 BetterGravity 插件 `file-quick-actions` 捕获胶囊右键，并纯复用 `electronNative.revealInFilePicker`、`stepHandler.openFile` 与 `fileSystemProviders.readFile` 实现快捷菜单及仿 Codex 底部归档卡片 |
 
 ---
 
