@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     一键将 BetterGravity 系统目录的最新主题与插件拉取备份至当前工程
 .DESCRIPTION
@@ -74,6 +74,20 @@ function Sync-SystemToProject {
         if (Test-Path $sysPluginJs) {
             Copy-Item -Path $sysPluginJs -Destination (Join-Path $WorkspaceDir "汉化插件\index.js") -Force
             Write-Host "[成功] 汉化插件源码已拉取 -> 汉化插件\" -ForegroundColor Green
+        }
+
+        # 5. 拉取文件快捷操作插件
+        $sysFqaDir = Join-Path $TargetAppDataDir "plugins\file-quick-actions"
+        $projFqaDir = Join-Path $WorkspaceDir "文件快捷操作插件"
+        if (Test-Path $sysFqaDir) {
+            if (-not (Test-Path $projFqaDir)) { New-Item -ItemType Directory -Path $projFqaDir -Force | Out-Null }
+            foreach ($fqaFile in @("plugin.json", "文件快捷操作.js", "文件快捷操作.css")) {
+                $sysFqaFile = Join-Path $sysFqaDir $fqaFile
+                if (Test-Path $sysFqaFile) {
+                    Copy-Item -Path $sysFqaFile -Destination (Join-Path $projFqaDir $fqaFile) -Force
+                }
+            }
+            Write-Host "[成功] 文件快捷操作插件已拉取 -> 文件快捷操作插件\" -ForegroundColor Green
         }
 
         Write-Host "----------------------------------------------------------" -ForegroundColor Cyan

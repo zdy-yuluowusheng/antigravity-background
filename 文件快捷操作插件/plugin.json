@@ -1,0 +1,10 @@
+{
+  "name": "文件快捷操作与归档卡片",
+  "description": "在对话区右键本地文件胶囊即可定位资源管理器/预览/复制路径/下载副本，并在每轮回复底部自动生成仿 Codex 单层透明归档卡片与「打开方式」菜单",
+  "version": "1.0.0",
+  "author": "Antigravity Community",
+  "main": "文件快捷操作.js",
+  "styles": [
+    "文件快捷操作.css"
+  ]
+}

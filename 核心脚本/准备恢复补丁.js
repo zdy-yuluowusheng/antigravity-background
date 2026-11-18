@@ -9,7 +9,7 @@ const crypto = require('crypto');
 const asar = require('C:/Users/ylws/AppData/Local/npm-cache/_npx/8b3f11f22d4db0c9/node_modules/asar');
 
 /**
- * 将工程目录中的最新透明主题与汉化插件同步至 BetterGravity 用户配置目录 (%APPDATA%\BetterGravity)
+ * 将工程目录中的最新透明主题与自定义插件（汉化插件、文件快捷操作插件）同步至 BetterGravity 用户配置目录 (%APPDATA%\BetterGravity)
  *
  * @function syncUserCustomizations
  * @returns {void}
@@ -23,6 +23,8 @@ function syncUserCustomizations() {
   const i18nJsSrc = path.join(projectRoot, '汉化插件', 'index.js');
   const i18nJsonSrc = path.join(projectRoot, '汉化插件', 'plugin.json');
   const i18nDestDir = path.join(roamingRoot, 'plugins', 'chinese-localization');
+  const fqaSrcDir = path.join(projectRoot, '文件快捷操作插件');
+  const fqaDestDir = path.join(roamingRoot, 'plugins', 'file-quick-actions');
 
   if (fs.existsSync(themeSrc)) {
     fs.mkdirSync(path.dirname(themeDest), { recursive: true });
@@ -37,6 +39,17 @@ function syncUserCustomizations() {
       fs.copyFileSync(i18nJsonSrc, path.join(i18nDestDir, 'plugin.json'));
     }
     console.log(`[成功] 已同步最新汉化插件至 ${i18nDestDir}`);
+  }
+
+  if (fs.existsSync(fqaSrcDir)) {
+    fs.mkdirSync(fqaDestDir, { recursive: true });
+    for (const fileName of ['plugin.json', '文件快捷操作.js', '文件快捷操作.css']) {
+      const from = path.join(fqaSrcDir, fileName);
+      if (fs.existsSync(from)) {
+        fs.copyFileSync(from, path.join(fqaDestDir, fileName));
+      }
+    }
+    console.log(`[成功] 已同步最新文件快捷操作插件至 ${fqaDestDir}`);
   }
 }
 

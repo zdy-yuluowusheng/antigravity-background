@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     一键将本工程的主题、壁纸、配置与汉化插件同步至 BetterGravity 系统目录
 .DESCRIPTION
@@ -78,6 +78,20 @@ function Sync-ProjectToSystem {
         if (Test-Path $srcPluginJs) {
             Copy-Item -Path $srcPluginJs -Destination (Join-Path $targetPlugins "index.js") -Force
             Write-Host "[成功] 汉化插件源码已同步 -> $targetPlugins" -ForegroundColor Green
+        }
+
+        # 5. 同步文件快捷操作插件
+        $srcFqaDir = Join-Path $WorkspaceDir "文件快捷操作插件"
+        $targetFqaDir = Join-Path $TargetAppDataDir "plugins\file-quick-actions"
+        if (Test-Path $srcFqaDir) {
+            if (-not (Test-Path $targetFqaDir)) { New-Item -ItemType Directory -Path $targetFqaDir -Force | Out-Null }
+            foreach ($fqaFile in @("plugin.json", "文件快捷操作.js", "文件快捷操作.css")) {
+                $srcFqaFile = Join-Path $srcFqaDir $fqaFile
+                if (Test-Path $srcFqaFile) {
+                    Copy-Item -Path $srcFqaFile -Destination (Join-Path $targetFqaDir $fqaFile) -Force
+                }
+            }
+            Write-Host "[成功] 文件快捷操作插件已同步 -> $targetFqaDir" -ForegroundColor Green
         }
 
         Write-Host "----------------------------------------------------------" -ForegroundColor Cyan
