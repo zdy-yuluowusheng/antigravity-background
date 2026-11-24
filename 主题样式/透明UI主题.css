@@ -1,8 +1,8 @@
 /**
  * @name        透明UI主题
- * @description 基于 wallhaven 晨雾松林丁达尔光壁纸定制的高级透明主题 (v2.30.0 Onyx 引擎适配与命令行悬停白色微光版)
+ * @description 基于 wallhaven 晨雾松林丁达尔光壁纸定制的高级透明主题 (v2.34.0 全局单层外框与一线分割统一版)
  * @author      Antigravity Assistant
- * @version     2.30.0
+ * @version     2.34.0
  */
 
 /* ================= 1. 变量与纯黑容器全面穿透 (含 v2.30.0 Onyx 新主题引擎适配) ================= */
@@ -451,44 +451,158 @@ div[role="article"].sticky,
     content: none !important;
 }
 
-/* ================= 8. 代码块、行内代码与引用链接胶囊：纯透明极致通透 ================= */
-/* 8.1 代码块外层整体卡片：纯透明无底色、直显高清壁纸 */
-pre,
-.code-block,
-div[class*="word-break-all"][class*="rounded-xl"],
-div[class*="whitespace-pre-wrap"][class*="rounded-xl"],
-div[class*="whitespace-pre-wrap"][class*="bg-muted"],
-div[data-testid="conversation-view"] div:has(> div > .code-block, > .code-block) {
+/* ================= 8. 代码块、行内代码与引用链接胶囊：全局单层外框与一线分割规范 ================= */
+/*
+ * 全局核心视觉铁律（One-Box Principle）：
+ * 1. 所有块级代码/命令行输出（bash / text / js / python 等）仅在最外层根卡片保留唯一一层 12px 圆角细框；
+ * 2. 彻底清除 Onyx 内胆框（Well）、中间内边距包装层（.p-3）、.code-block 与内部 <pre>/<code> 的一切套娃边框、圆角和阴影；
+ * 3. 顶部语言/说明栏与下方实际命令/代码之间统一仅用一条贯穿左右的 1px 极细横线分割，顶栏图标按钮平时无框、悬停微光。
+ */
+
+/* 8.1.1 代码块与命令行块最外层根卡片：严格单层通透外框 */
+:where([data-testid="conversation-view"], [data-aux-pane-open], [role="dialog"]) :is(
+    div[class*="whitespace-pre-wrap"][class*="rounded"],
+    div[class*="word-break-all"][class*="rounded"],
+    div[class*="whitespace-pre-wrap"][class*="bg-muted"],
+    [class*="agy-code-block"],
+    [data-testid*="code-block"]:not(pre):not(code),
+    div:is([class*="rounded"], [class*="border"]):has(> .code-block, > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > .code-block, > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > div > .code-block, > div > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"]))):not(:has(p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote, [data-testid="run-command-step"], [data-testid*="-collapsible"], [data-testid="changed-files-card"], .files-changed-header)):not(:has(> :nth-child(4))):not([data-testid="conversation-view"]):not([data-testid="autoscroll-viewport"]):not([data-testid="agent-response"]):not([data-testid*="message"]):not([role="article"]):not(.prose):not([class*="prose"]):not([class*="message"]):not([class*="bubble"]):not([class*="takeover"]):not(.agy-callout):not(.fqa-card):not([data-testid="artifact-card"]):not(.artifact-card)
+) {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
     border-radius: 12px !important;
     box-shadow: none !important;
+    overflow: hidden !important;
 }
 
-/* 代码块内部代码渲染区纯透明 */
+/* 当代码块根卡片包含“顶栏 + 代码体”上下分区时，归零外层内边距（消除 Onyx p-1 缩进缝隙），使中间分割线 100% 左右贯通 */
+:where([data-testid="conversation-view"], [data-aux-pane-open], [role="dialog"]) :is(
+    div[class*="whitespace-pre-wrap"][class*="rounded"],
+    div[class*="word-break-all"][class*="rounded"],
+    div[class*="whitespace-pre-wrap"][class*="bg-muted"],
+    [class*="agy-code-block"],
+    [data-testid*="code-block"]:not(pre):not(code),
+    div:is([class*="rounded"], [class*="border"]):has(> .code-block, > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > .code-block, > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > div > .code-block, > div > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"]))):not(:has(p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote, [data-testid="run-command-step"], [data-testid*="-collapsible"], [data-testid="changed-files-card"], .files-changed-header)):not(:has(> :nth-child(4))):not([data-testid="conversation-view"]):not([data-testid="autoscroll-viewport"]):not([data-testid="agent-response"]):not([data-testid*="message"]):not([role="article"]):not(.prose):not([class*="prose"]):not([class*="message"]):not([class*="bubble"]):not([class*="takeover"]):not(.agy-callout):not(.fqa-card):not([data-testid="artifact-card"]):not(.artifact-card)
+):has(> div:first-child:not(:has(pre, .code-block)):has(+ div, + pre)) {
+    padding: 0 !important;
+}
+
+/* 8.1.2 内部多层套娃彻底清零：代码块根卡片内部的所有嵌套子容器（内胆框、.p-3、.code-block、pre、code、语法高亮层）一律无框、无圆角、纯透明 */
+html body :is(
+    div[class*="whitespace-pre-wrap"][class*="rounded"],
+    div[class*="word-break-all"][class*="rounded"],
+    div[class*="whitespace-pre-wrap"][class*="bg-muted"],
+    [class*="agy-code-block"],
+    [data-testid*="code-block"]:not(pre):not(code),
+    [data-testid="conversation-view"] div:is([class*="rounded"], [class*="border"]):has(> .code-block, > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > .code-block, > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > div > .code-block, > div > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"]))):not(:has(p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote, [data-testid="run-command-step"], [data-testid*="-collapsible"], [data-testid="changed-files-card"], .files-changed-header)):not(:has(> :nth-child(4))):not([data-testid="agent-response"]):not([data-testid*="message"]):not([role="article"]):not(.prose):not([class*="prose"]):not([class*="message"]):not([class*="bubble"]):not([class*="takeover"]):not(.agy-callout):not(.fqa-card):not([data-testid="artifact-card"]):not(.artifact-card),
+    [data-aux-pane-open] div:is([class*="rounded"], [class*="border"]):has(> .code-block, > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > .code-block, > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > div > .code-block, > div > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"]))):not(:has(p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote)):not(:has(> :nth-child(4))):not(.prose):not([class*="prose"]):not(.fqa-card)
+) :is(div, pre, code, section):not(button *):not([role="button"] *),
 pre code,
 .code-block,
 .code-block pre,
 .code-block code,
-[class*="syntax-highlighter"] {
+[class*="syntax-highlighter"],
+[class*="shiki"] {
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
+    border-width: 0 !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
     box-shadow: none !important;
-}
-
-/* 代码块顶部语言标题栏 (如 css、js 等标识与右侧复制按钮) */
-div[class*="whitespace-pre-wrap"] > div[class*="border-b"],
-div[class*="whitespace-pre-wrap"] div[class*="rounded-t"],
-div[class*="border-border"][class*="rounded-t"] {
-    background-color: transparent !important;
-    background: transparent !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    outline: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+}
+
+/* 消除原内胆代码区的外边距缩进，并为直接挂载的裸 pre 代码体兜底内边距 */
+html body :is(
+    div[class*="whitespace-pre-wrap"][class*="rounded"],
+    div[class*="word-break-all"][class*="rounded"],
+    div[class*="whitespace-pre-wrap"][class*="bg-muted"],
+    [class*="agy-code-block"],
+    [data-testid*="code-block"]:not(pre):not(code),
+    [data-testid="conversation-view"] div:is([class*="rounded"], [class*="border"]):has(> .code-block, > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > .code-block, > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > div > .code-block, > div > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"]))):not(:has(p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote, [data-testid="run-command-step"], [data-testid*="-collapsible"], [data-testid="changed-files-card"], .files-changed-header)):not(:has(> :nth-child(4))):not([data-testid="agent-response"]):not([data-testid*="message"]):not([role="article"]):not(.prose):not([class*="prose"]):not([class*="message"]):not([class*="bubble"]):not([class*="takeover"]):not(.agy-callout):not(.fqa-card):not([data-testid="artifact-card"]):not(.artifact-card)
+) > :nth-child(2) {
+    margin: 0 !important;
+}
+
+html body :is(
+    div[class*="whitespace-pre-wrap"][class*="rounded"],
+    div[class*="word-break-all"][class*="rounded"],
+    div[class*="whitespace-pre-wrap"][class*="bg-muted"],
+    [class*="agy-code-block"],
+    [data-testid*="code-block"]:not(pre):not(code),
+    [data-testid="conversation-view"] div:is([class*="rounded"], [class*="border"]):has(> pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"]))):not(:has(p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote)):not(:has(> :nth-child(4))):not([data-testid="agent-response"]):not(.prose):not([class*="prose"])
+) > pre:nth-child(2) {
+    padding: 10px 12px !important;
+}
+
+/* 8.1.3 代码块顶部语言/类型标题栏（如 bash、text、js 与右侧 @ / 复制按钮）：贯穿左右的 1px 细横线分割 */
+html body :is(
+    div[class*="whitespace-pre-wrap"] > div[class*="border-b"],
+    div[class*="whitespace-pre-wrap"] > div[class*="rounded-t"],
+    div[class*="border-border"][class*="rounded-t"],
+    div[class*="whitespace-pre-wrap"][class*="rounded"] > div:first-child:not(:has(pre, .code-block)):has(+ div, + pre),
+    div[class*="word-break-all"][class*="rounded"] > div:first-child:not(:has(pre, .code-block)):has(+ div, + pre),
+    [class*="agy-code-block"] > div:first-child:not(:has(pre, .code-block)):has(+ div, + pre),
+    [data-testid*="code-block"]:not(pre):not(code) > div:first-child:not(:has(pre, .code-block)):has(+ div, + pre),
+    [data-testid="conversation-view"] div:is([class*="rounded"], [class*="border"]):has(> .code-block, > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > .code-block, > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > div > .code-block, > div > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"]))):not(:has(p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote, [data-testid="run-command-step"], [data-testid*="-collapsible"], [data-testid="changed-files-card"], .files-changed-header)):not(:has(> :nth-child(4))):not([data-testid="agent-response"]):not([data-testid*="message"]):not([role="article"]):not(.prose):not([class*="prose"]):not([class*="message"]):not([class*="bubble"]):not([class*="takeover"]):not(.agy-callout):not(.fqa-card):not([data-testid="artifact-card"]):not(.artifact-card) > div:first-child:not(:has(pre, .code-block)):has(+ div, + pre)
+) {
+    margin: 0 !important;
+    padding: 6px 12px !important;
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* 顶栏右侧次要图标按钮（@ 引用、复制等）：平时无框纯透明，仅悬停微光 */
+html body :is(
+    div[class*="whitespace-pre-wrap"][class*="rounded"],
+    div[class*="word-break-all"][class*="rounded"],
+    [class*="agy-code-block"],
+    [data-testid*="code-block"]:not(pre):not(code),
+    [data-testid="conversation-view"] div:is([class*="rounded"], [class*="border"]):has(> .code-block, > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > .code-block, > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > div > .code-block, > div > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"]))):not(:has(p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote, [data-testid="run-command-step"], [data-testid*="-collapsible"])):not(:has(> :nth-child(4))):not([data-testid="agent-response"]):not(.prose):not([class*="prose"])
+) > div:first-child:not(:has(pre, .code-block)) button {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    border-radius: 6px !important;
+    transition: background-color 0.16s ease, color 0.16s ease !important;
+}
+
+html body :is(
+    div[class*="whitespace-pre-wrap"][class*="rounded"],
+    div[class*="word-break-all"][class*="rounded"],
+    [class*="agy-code-block"],
+    [data-testid*="code-block"]:not(pre):not(code),
+    [data-testid="conversation-view"] div:is([class*="rounded"], [class*="border"]):has(> .code-block, > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > .code-block, > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])), > div > div > .code-block, > div > div > pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"]))):not(:has(p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote, [data-testid="run-command-step"], [data-testid*="-collapsible"])):not(:has(> :nth-child(4))):not([data-testid="agent-response"]):not(.prose):not([class*="prose"])
+) > div:first-child:not(:has(pre, .code-block)) button:hover {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+}
+
+/* 8.1.4 无外层卡片包裹的完全独立裸 <pre> 兜底单框（排除已处于代码块卡片、步骤展开框、审批卡、产物卡或流程图内的 pre） */
+:where([data-testid="conversation-view"], [data-aux-pane-open]) pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"])):not(.code-block pre):not(div[class*="rounded"] pre):not(div[class*="border"] pre):not([data-testid="run-command-step"] pre):not([data-state="open"] pre):not(.agy-takeover-frame pre):not([data-testid="artifact-card"] pre):not(.artifact-card pre) {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 12px !important;
+    padding: 10px 12px !important;
+    box-shadow: none !important;
 }
 
 /* 8.2 行内代码与引用链接胶囊单层大框规范：彻底根除多层套娃重叠，严格只在最外层保留单一通透大框 */
@@ -571,35 +685,74 @@ code:has(a, button, .inline-pill, [class*="inline-pill"]) {
     box-shadow: none !important;
 }
 
-/* 8.3 文件变更状态条与折叠栏 (如 3 files changed +46 -43 > 与 审查 按钮) */
-.files-changed-header,
-div[class*="files-changed-header"],
-div[class*="files-changed"] {
+/* 8.3 文件变更状态卡片与折叠面板 (如 5 files changed +230 -76 与 审查 按钮)：严格单层外框 + 展开态一线分割 */
+/* 1. 最外层文件变更卡片（或无外层卡片包裹时的独立 .files-changed-header）保留唯一 12px 圆角细框 */
+[data-testid="changed-files-card"],
+div[class*="changed-files-card"]:not([class*="header"]),
+div[class*="files-changed"]:not(.files-changed-header):not([class*="files-changed-header"]):has(.files-changed-header, [data-testid="changed-files-card-header"]),
+.files-changed-header:not(:is([data-testid="changed-files-card"], div[class*="changed-files-card"], div[class*="files-changed"]:not(.files-changed-header)) .files-changed-header),
+[data-testid="changed-files-card-header"]:not(:is([data-testid="changed-files-card"], div[class*="changed-files-card"]) [data-testid="changed-files-card-header"]) {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
     border-radius: 12px !important;
     box-shadow: none !important;
-    transition: background-color 0.2s ease !important;
+    overflow: hidden !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease !important;
+}
+
+/* 2. 当处于外层卡片内部时，内层 Header 与展开列表容器彻底去框、去圆角，杜绝双框重叠 */
+:is([data-testid="changed-files-card"], div[class*="changed-files-card"]:not([class*="header"]), div[class*="files-changed"]:not(.files-changed-header)) :is(.files-changed-header, [data-testid="changed-files-card-header"], div[class*="files-changed-header"]),
+:is([data-testid="changed-files-card"], div[class*="changed-files-card"]:not([class*="header"])) > div {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* 3. 当文件变更面板处于展开状态（Header 下方紧跟文件明细列表）时，仅用一条 1px 细横线分割顶栏与文件列表 */
+:is([data-testid="changed-files-card"], div[class*="changed-files-card"]:not([class*="header"]), div[class*="files-changed"]:not(.files-changed-header)) :is(.files-changed-header, [data-testid="changed-files-card-header"]):has(+ div:not(:empty)),
+:is([data-testid="changed-files-card"], div[class*="changed-files-card"]:not([class*="header"])) > div:first-child:has(+ div:not(:empty)) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background-color: rgba(255, 255, 255, 0.02) !important;
 }
 
 .files-changed-header:hover,
+[data-testid="changed-files-card-header"]:hover,
 div[class*="files-changed-header"]:hover {
     background-color: rgba(255, 255, 255, 0.06) !important;
 }
 
-/* 状态条右侧的【审查】操作按钮 */
+/* 4. 展开后的单行变更文件条目：平时无框纯透，悬停微光 */
+div[data-testid="conversation-view"] [data-testid="change-row"],
+div[data-testid="conversation-view"] [data-testid="changed-file-row"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 6px !important;
+    transition: background-color 0.16s ease !important;
+}
+
+div[data-testid="conversation-view"] [data-testid="change-row"]:hover,
+div[data-testid="conversation-view"] [data-testid="changed-file-row"]:hover {
+    background-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* 状态条右侧的【审查】主操作按钮 */
 .review-button,
-button[class*="review-button"] {
+button[class*="review-button"],
+[data-testid="changed-files-card-review"] {
     background-color: transparent !important;
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border: 1px solid rgba(255, 255, 255, 0.14) !important;
     border-radius: 6px !important;
-    transition: background-color 0.2s ease !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease !important;
 }
 
 /* 8.4 Markdown 引用块 (blockquote) 与提示引用框：纯透明无底色、直显清晰壁纸 */
@@ -978,11 +1131,32 @@ div[data-testid="conversation-view"] [data-testid="ephemeral-tool-status"].hover
     color: #ffffff !important;
 }
 
-/* 5. 展开的子项命令行容器及终端执行输出底色通透处理 */
+/* 5. 展开的子项命令行详情面板及终端执行输出：严格单层外框 + 顶栏/命令与输出之间一线分割（彻底清除内部 pre 套娃框） */
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:not([role="button"]):has(pre, code, [class*="terminal"]),
+div[data-testid="conversation-view"] [data-state="open"]:not(button):not([role="button"]) > div:is([class*="rounded"], [class*="border"]):has(pre, [class*="terminal"]):not(:has([data-testid="run-command-step"])) {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+}
+
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:not([role="button"]) :is(div, pre, code, [class*="terminal"]):not(button *),
 div[data-testid="conversation-view"] [data-state="open"] pre,
 div[data-testid="conversation-view"] [data-state="open"] code,
 div[data-testid="conversation-view"] [class*="terminal"] {
     background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:not([role="button"]):has(pre, code, [class*="terminal"]) > div:first-child:has(+ div, + pre),
+div[data-testid="conversation-view"] [data-testid="run-command-step"] > div:not([role="button"]) div[class*="border-b"] {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background-color: rgba(255, 255, 255, 0.02) !important;
 }
 
 /* ================= 10. 主对话框 / 输入框保持通透美观与清除深色黑条 ================= */
@@ -1758,21 +1932,28 @@ div[data-testid="conversation-view"] div:has(> table),
     box-shadow: none !important;
 }
 
-/* 2. 表格整体边框与圆角规范 */
+/* 2. 表格整体单层外框与圆角规范（彻底消除父 div 与子 table 双层边框叠粗重影，统一 12px 圆角） */
+div[data-testid="conversation-view"] div:has(> table) {
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 12px !important;
+    background-color: transparent !important;
+    overflow: hidden !important;
+}
+
 div[data-testid="conversation-view"] table {
     background-color: transparent !important;
     background: transparent !important;
     border-collapse: separate !important;
     border-spacing: 0 !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 8px !important;
-    overflow: hidden !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
 
-div[data-testid="conversation-view"] div:has(> table) {
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 8px !important;
-    background-color: transparent !important;
+/* 兜底兼容：仅当 table 未被父级 div 直接包裹时，由 table 自身保留单层外框 */
+div[data-testid="conversation-view"] table:not(div > table) {
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 12px !important;
     overflow: hidden !important;
 }
 
@@ -1784,14 +1965,14 @@ div[data-testid="conversation-view"] [class*="bg-muted/50"] {
     background: transparent !important;
 }
 
-/* 4. 表头单元格 th：赋予柔和浅白半透明微光与精致微光底边 */
+/* 4. 表头单元格 th：与代码块顶栏保持统一的极淡微光与 1px 底部分割线 */
 div[data-testid="conversation-view"] thead th,
 div[data-testid="conversation-view"] th {
-    background-color: rgba(255, 255, 255, 0.06) !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
     color: #ffffff !important;
     font-weight: 600 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.16) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
     transition: background-color 0.2s ease !important;
 }
 
@@ -2289,15 +2470,28 @@ div[role="button"][tabindex="0"]:has(> img[alt*="Mermaid"], > .mermaid-wrapper) 
     box-shadow: none !important;
 }
 
-/* 18.2 流程图外层 pre 容器边框与微光圆角 */
-pre:has(.mermaid-wrapper, img[alt*="Mermaid"]) {
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+/* 18.2 流程图单层外框规范：若已被外层圆角卡片包裹则内部 pre 去框；仅无外框包裹时由 pre 保留单层 12px 框 */
+div[class*="rounded"]:has(> pre > .mermaid-wrapper, > pre > img[alt*="Mermaid"], > div > pre > .mermaid-wrapper) {
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 12px !important;
+    background: transparent !important;
+    overflow: hidden !important;
+}
+
+div[class*="rounded"] pre:has(.mermaid-wrapper, img[alt*="Mermaid"]) {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+pre:has(.mermaid-wrapper, img[alt*="Mermaid"]):not(div[class*="rounded"] pre) {
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
     border-radius: 12px !important;
     padding: 12px 16px !important;
     transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-pre:has(.mermaid-wrapper, img[alt*="Mermaid"]):hover {
+pre:has(.mermaid-wrapper, img[alt*="Mermaid"]):not(div[class*="rounded"] pre):hover {
     border-color: rgba(255, 255, 255, 0.25) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
 }
@@ -2326,9 +2520,11 @@ div[role="dialog"]:has(.mermaid-wrapper, img[alt*="Mermaid"]) {
 
 
 /* -------------------------------------------------------------
- * 文件型产物卡片（Word、Excel 等）单层大透明框保护规则
- * 避免内层 group/resource-card 与外层容器产生双重框重叠视觉缺陷
+ * 文档制品卡片（artifact-card）与文件型产物卡片（Word、Excel 等）全局单层框保护规则
+ * 统一 12px 圆角与 0.14 微光边，彻底清除内部子包装器与 pre 套娃框
  * ------------------------------------------------------------- */
+[data-testid="artifact-card"],
+.artifact-card,
 :where([data-testid="conversation-view"], [data-aux-pane-open]) div:has(> [class*="group/resource-card"]),
 div[class*="bg-surface-elevated-secondary"]:has([class*="group/resource-card"]),
 [class*="extension:bg-background-primary-soft"] {
@@ -2336,12 +2532,20 @@ div[class*="bg-surface-elevated-secondary"]:has([class*="group/resource-card"]),
     background-color: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
     box-shadow: none !important;
-    border-radius: 14px !important;
+    border-radius: 12px !important;
     overflow: hidden !important;
+    transition: background-color 0.18s ease, border-color 0.18s ease !important;
 }
 
+[data-testid="artifact-card"]:hover,
+.artifact-card:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.24) !important;
+}
+
+:is([data-testid="artifact-card"], .artifact-card) :is(div, pre, code, header):not(button *),
 [class*="group/resource-card"],
 div.group\/resource-card,
 [class*="group/resource-card"][class*="bg-primary-soft"] {
@@ -2353,7 +2557,11 @@ div.group\/resource-card,
     border-width: 0 !important;
     border-color: transparent !important;
     box-shadow: none !important;
-    border-radius: inherit !important;
+    border-radius: 0 !important;
+}
+
+:is([data-testid="artifact-card"], .artifact-card) > div:first-child:has(+ div:not(:empty)) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
 [class*="group/resource-card"]:hover,
@@ -2592,10 +2800,30 @@ body[data-agy-theme][data-newux-theme] .agy-takeover-card,
 }
 
 body[data-agy-theme] .agy-takeover-card [data-testid="ask-question-option"]:hover,
-body[data-agy-theme] .agy-takeover-card [data-testid="ask-question-writein"]:hover,
-body[data-agy-theme] .agy-takeover-card [data-testid="permission-target-editor"] {
+body[data-agy-theme] .agy-takeover-card [data-testid="ask-question-writein"]:hover {
     background-color: rgba(255, 255, 255, 0.12) !important;
     background: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* 审批卡片内的待执行命令/目标路径预览区：去除独立套娃圆角框，统一为上下细横线轻量分割 */
+body[data-agy-theme] .agy-takeover-card [data-testid="permission-target-editor"],
+.agy-takeover-frame [data-testid="permission-target-editor"] {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.agy-takeover-frame :is(pre, code):not(:is(p, span) > code) {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
 
 body[data-agy-theme] .agy-scroll-bottom,
@@ -2629,6 +2857,14 @@ body[data-agy-theme] .agy-callout,
     backdrop-filter: blur(12px) saturate(125%) !important;
     -webkit-backdrop-filter: blur(12px) saturate(125%) !important;
     border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+}
+
+.agy-callout > div {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
 }
 
 body[data-agy-theme] .agy-pill.surface-opaque,
@@ -2717,10 +2953,22 @@ body[data-agy-theme] .agy-tip-card,
     border-color: rgba(255, 255, 255, 0.14) !important;
 }
 
-body[data-agy-theme] .agy-card,
-.agy-card {
+/* 通用独立卡片（严格排除嵌套在其它卡片内部的子层 .agy-card 以及已按纯透单框规范定制的对话流代码块/变更卡/产物卡/表格） */
+body[data-agy-theme] .agy-card:not(.agy-card .agy-card):not([data-testid="conversation-view"] :is(pre, .code-block, [data-testid="run-command-step"], [data-testid="changed-files-card"], [data-testid="artifact-card"], .artifact-card, .agy-takeover-frame, .agy-callout, table)),
+.agy-card:not(.agy-card .agy-card):not([data-testid="conversation-view"] :is(pre, .code-block, [data-testid="run-command-step"], [data-testid="changed-files-card"], [data-testid="artifact-card"], .artifact-card, .agy-takeover-frame, .agy-callout, table)) {
     background-color: rgba(13, 21, 18, 0.24) !important;
     border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* 防止任何 .agy-card 内部嵌套的二层 .agy-card 或内胆容器再次产生套娃边框 */
+body[data-agy-theme] .agy-card .agy-card,
+.agy-card .agy-card,
+body[data-agy-theme] [data-testid="conversation-view"] div:has(.code-block, pre:not(:has(.mermaid-wrapper, img[alt*="Mermaid"]))) .agy-card {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
 
 /* 折叠态侧边栏悬停预览浮层（peek-surface="open"）启用毛玻璃，避免与底层对话文字重叠；常驻展开态保持全透明 */
