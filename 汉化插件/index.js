@@ -1118,7 +1118,45 @@
     'This chat is archived.': '此对话已归档。',
     "This chat's environment is paused": '此对话的运行环境已暂停',
     'Go to Accounts': '前往账号管理',
-    'Manage and delete your data anytime': '随时管理并删除您的数据'
+    'Manage and delete your data anytime': '随时管理并删除您的数据',
+
+    // === v2.34.0 新增：编排器设置（Orchestrator Settings）与模型菜单词条 ===
+    'Orchestrator Settings': '编排器设置',
+    'Choose the models Orchestrator uses. A larger, smarter orchestrator model with a faster, cheaper executor gives high quality for fewer tokens.': '选择编排器使用的模型。使用规模更大、更智能的编排模型搭配响应更快、成本更低的执行模型，可以以更少的 Token 消耗获得高质量结果。',
+    'Orchestrator Model': '编排模型 (Orchestrator)',
+    'Plans the work, makes design decisions, and reviews the result. Pick a top-tier model. You can also pick one per conversation from the Orchestrator row in the model menu.': '负责规划任务、制定设计决策并审查最终结果，建议选择顶尖模型。您也可以在模型菜单的“编排器”行中为每个对话单独指定。',
+    'Executor Model': '执行模型 (Executor)',
+    'Carries out the plan: searches, edits, builds, and tests. Pick a faster, cheaper model.': '负责执行具体计划：代码检索、编辑、构建与测试，建议选择速度更快、成本更低的模型。',
+    'Orchestrator': '编排器 (Orchestrator)',
+    "The Orchestrator's own planner": '编排器自带规划模型',
+    'Thinking effort': '思考深度',
+    'Controls how much time and quota the model spends reasoning before responding. Higher effort improves accuracy on hard problems, at the cost of slower responses and higher quota use.': '控制模型在回复前用于深度推理的时间与配额消耗。较高的思考深度可提升复杂问题的准确度，但响应会更慢且消耗更多配额。',
+    'Extra High': '超高',
+    'See Activity': '查看明细',
+    'Get More AI Credits': '获取更多 AI 积分',
+    'No quota information available.': '暂无配额信息。',
+    'No models available': '暂无可用模型',
+    'Best of N Models': '多路优选 (Best of N) 模型',
+    'View Usage': '查看用量',
+    'View plans': '查看套餐方案',
+    'Keybinding Scheme': '快捷键方案',
+    'VS Code Default': 'VS Code 默认方案',
+    'Antigravity (AGY) Style': 'Antigravity (AGY) 风格',
+    'Manage your keybinding scheme and customize shortcuts in VS Code.': '管理您的快捷键方案，并在 VS Code 中自定义快捷键。',
+    'Choose between non-colliding VS Code defaults or standalone Antigravity chords.': '在无冲突的 VS Code 默认快捷键或独立的 Antigravity 组合键之间进行选择。',
+    'Customize Shortcuts': '自定义快捷键',
+    'All active Antigravity shortcuts and user keybinding overrides are managed directly by VS Code.': '所有生效的 Antigravity 快捷键与用户自定义覆盖项均由 VS Code 直接管理。',
+    'Edit Shortcut': '编辑快捷键',
+    'Add Shortcut': '添加快捷键',
+    'Remove Shortcut': '移除快捷键',
+    'Enter always submits. This adds a second shortcut.': 'Enter 键始终用于发送，此项可添加第二个发送快捷键。',
+    'Choose which key sends a message in the chat composer.': '选择在对话输入框中按下哪个按键发送消息。',
+    'Browsing Data': '浏览数据',
+    'Clear history, cookies and site data from the built-in browser, or manage cookies for each site.': '清除内置浏览器的历史记录、Cookie 与站点数据，或按站点管理 Cookie。',
+    'Cookies by Site': '按站点管理 Cookie',
+    'Clear Browsing Data?': '确认清除浏览数据？',
+    'Search sites...': '搜索站点...',
+    'Enable Browser Agent': '启用浏览器智能体'
   };
 
   /**
@@ -1201,7 +1239,13 @@
     'Google AI Pro': 'Google AI 专业版 (Google AI Pro)',
     'Google AI Ultra': 'Google AI 旗舰版 (Google AI Ultra)',
     'tokens (': 'Tokens (',
-    'tokens)': 'Tokens)'
+    'tokens)': 'Tokens)',
+    'Low': '低',
+    'Medium': '中等',
+    'High': '高',
+    'Extra': '超高',
+    'Extra High': '超高',
+    'Max': '最高'
   };
 
   /**
@@ -1570,7 +1614,7 @@
     const screen = element.getAttribute ? element.getAttribute('data-bettergravity-screen') : null;
     if (screen === 'Plugins') return PLUGINS_SCREEN_DICTIONARY;
     if (screen === 'Themes') return THEMES_SCREEN_DICTIONARY;
-    if (element.matches && (element.matches('.settings-modal-container') || element.matches('[role="dialog"]'))) {
+    if (element.matches && (element.matches('.settings-modal-container') || element.matches('[role="dialog"]') || element.matches('[role="menu"]') || element.matches('.agy-overlay'))) {
       return SETTINGS_MODAL_DICTIONARY;
     }
     return currentDict;
@@ -1598,7 +1642,7 @@
       if (el.closest('[data-bettergravity-screen="Themes"]')) {
         return THEMES_SCREEN_DICTIONARY;
       }
-      if (el.closest('.settings-modal-container') || el.closest('[role="dialog"]')) {
+      if (el.closest('.settings-modal-container') || el.closest('[role="dialog"]') || el.closest('[role="menu"]') || el.closest('.agy-overlay')) {
         return SETTINGS_MODAL_DICTIONARY;
       }
       return null;

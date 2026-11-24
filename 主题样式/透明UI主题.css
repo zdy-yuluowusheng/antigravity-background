@@ -1839,10 +1839,13 @@ div[data-testid="conversation-view"] th:hover {
  * 3. 悬停细腻白色微光：选项条目平时纯透明，鼠标悬停或键盘高亮呈现柔和白色半透明微光与高透细边框。
  */
 
-/* 1. Radix Popper 外层定位容器与输入框上浮容器：禁用缩放与位移动画，严防放大镜效应 */
+/* 1. Radix Popper 与 Base UI 外层定位容器（Positioner）及输入框上浮容器：
+ * 禁用缩放动画，严防放大镜效应；
+ * 定位容器（div[role="presentation"][data-side]）绝不可覆盖 transform / background / overflow，
+ * 以便完整保留 Floating UI 的内联 style="transform: translate(Xpx, Ypx)" 坐标并允许二级子菜单向外展开！
+ */
 [data-radix-popper-content-wrapper],
 div[role="presentation"][data-side],
-div[data-side],
 [data-portal],
 [data-testid="agent-input-box"] div[class*="bottom-full"],
 div[class*="bottom-full"] {
@@ -1856,6 +1859,17 @@ div[class*="bottom-full"] {
     --tw-scale-y: 1 !important;
     --tw-enter-translate-x: 0 !important;
     --tw-enter-translate-y: 0 !important;
+    overflow: visible !important;
+}
+
+div[role="presentation"][data-side] {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    overflow: visible !important;
 }
 
 /* 2. 彻底禁用全屏遮罩层 (Overlay) 滤镜与动画 */
@@ -1872,15 +1886,14 @@ div[class*="bottom-full"] {
     transition: none !important;
 }
 
-/* 3. 全局所有选择框真实浮层卡片（模型选择、项目目录、工作区选择、@引用菜单、/命令菜单；严格限定浮层容器，绝不误伤携带 data-state="closed" 的触发器按钮）：完全 1:1 统一毛玻璃核心 */
-div:is(.animate-slideIn, [class*="animate-slideIn"], [class*="animate-in"], [class*="zoom-in"]):not([role="button"]),
-[data-radix-popper-content-wrapper] > div[data-state="open"],
-[data-radix-popper-content-wrapper] > div[data-state="closed"],
-div[data-side][data-state="open"],
-div[data-side][data-state="closed"],
-div[role="presentation"][data-side] > div,
-div[data-side] > div,
-[data-radix-popper-content-wrapper] > div,
+/* 3. 全局所有选择框真实浮层卡片（模型选择、项目目录、工作区选择、@引用菜单、/命令菜单；严格排除 role="presentation" 的外层定位器与触发器按钮）：完全 1:1 统一毛玻璃核心 */
+div:is(.animate-slideIn, [class*="animate-slideIn"], [class*="animate-in"], [class*="zoom-in"]):not([role="button"]):not([role="presentation"]),
+[data-radix-popper-content-wrapper] > div[data-state="open"]:not([role="presentation"]),
+[data-radix-popper-content-wrapper] > div[data-state="closed"]:not([role="presentation"]),
+div[data-side][data-state="open"]:not([role="presentation"]),
+div[data-side][data-state="closed"]:not([role="presentation"]),
+div[role="presentation"][data-side] > div:not([role="presentation"]),
+[data-radix-popper-content-wrapper] > div:not([role="presentation"]),
 [data-radix-menu-content],
 [data-radix-dropdown-menu-content],
 [data-radix-popover-content],
@@ -1896,10 +1909,10 @@ div[role="listbox"][aria-label="Mentions"],
 [data-testid="agent-input-box"] div[class*="bottom-full"],
 div[class*="bottom-full"][class*="bg-card"],
 div[class*="bottom-full"][class*="rounded-2xl"],
-div[data-side][class*="bg-popover"],
-div[data-side][class*="bg-card"],
-div[data-side][class*="border"],
-div[data-side][class*="shadow"],
+div[data-side][class*="bg-popover"]:not([role="presentation"]),
+div[data-side][class*="bg-card"]:not([role="presentation"]),
+div[data-side][class*="border"]:not([role="presentation"]),
+div[data-side][class*="shadow"]:not([role="presentation"]),
 [data-testid*="dropdown-menu"],
 [data-testid*="popover-content"],
 [data-testid*="project-picker"],
@@ -1919,7 +1932,6 @@ div[data-portal] div[role="listbox"] {
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
     border-radius: 14px !important;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35) !important;
-    overflow: hidden !important;
 
     /* 独立硬件加速图层隔离，彻底遮盖化开后方文字 */
     transform: translateZ(0) !important;
@@ -1939,46 +1951,60 @@ div[data-portal] div[role="listbox"] {
     z-index: 99999 !important;
 }
 
-/* 专项彻底禁用 animate-slideIn 与各类 scale/zoom 进入动画，确保背景绝对不被放大 */
-.animate-slideIn,
-[class*="animate-slideIn"],
-div[role="presentation"][data-side] > div,
-div[data-side] > div,
+/* 当一级菜单包含展开的二级子菜单（如模型思考深度等级弹窗 Low/Medium/High/Extra High）时，
+ * 必须保持 overflow: visible，且移除 transform 创建的 fixed 包含块限制，使二级子菜单完整显示在右侧且不被父菜单裁剪！
+ */
+div[role="menu"]:has(div[role="presentation"][data-side]),
+.agy-overlay:has(div[role="presentation"][data-side]),
+div[role="presentation"][data-side] > div:has(div[role="presentation"][data-side]) {
+    overflow: visible !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+}
+
+/* 专项彻底禁用 animate-slideIn 与各类 scale/zoom 进入动画，确保背景绝对不被放大（严格排除 role="presentation" 定位容器） */
+.animate-slideIn:not([role="presentation"]),
+[class*="animate-slideIn"]:not([role="presentation"]),
+div[role="presentation"][data-side] > div:not([role="presentation"]),
 [data-mention-menu] {
     animation: none !important;
     animation-name: none !important;
     animation-duration: 0s !important;
-    transform: translateZ(0) !important;
-    -webkit-transform: translateZ(0) !important;
 }
 
 /* 从源头重写 keyframes 动画，彻底抹平全局所有 scale 缩放矩阵 */
-@keyframes slideIn { from { opacity: 0; transform: translateZ(0) !important; } to { opacity: 1; transform: translateZ(0) !important; } }
-@keyframes enter   { from { opacity: 0; transform: translateZ(0) !important; } to { opacity: 1; transform: translateZ(0) !important; } }
-@keyframes zoomIn  { from { opacity: 0; transform: translateZ(0) !important; } to { opacity: 1; transform: translateZ(0) !important; } }
-@keyframes exit    { from { opacity: 1; transform: translateZ(0) !important; } to { opacity: 0; transform: translateZ(0) !important; } }
-@keyframes zoomOut { from { opacity: 1; transform: translateZ(0) !important; } to { opacity: 0; transform: translateZ(0) !important; } }
+@keyframes slideIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes enter   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes zoomIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes exit    { from { opacity: 1; } to { opacity: 0; } }
+@keyframes zoomOut { from { opacity: 1; } to { opacity: 0; } }
 
-/* 4. 下拉菜单与候选项内层滚动区包装器：纯净通透无冗余边框与黑底 */
+/* 4. 下拉菜单与候选项内层滚动区包装器：纯净通透无冗余边框与黑底（排除二级子菜单卡片本身） */
 [data-radix-popper-content-wrapper] [class*="viewport"],
-[data-radix-menu-content] > div,
-[data-radix-dropdown-menu-content] > div,
-[data-radix-popover-content] > div,
-[data-radix-select-content] > div,
-div[role="menu"] > div,
-div[role="listbox"] > div,
+[data-radix-menu-content] > div:not([role="presentation"]):not(.agy-overlay),
+[data-radix-dropdown-menu-content] > div:not([role="presentation"]):not(.agy-overlay),
+[data-radix-popover-content] > div:not([role="presentation"]):not(.agy-overlay),
+[data-radix-select-content] > div:not([role="presentation"]):not(.agy-overlay),
+div[role="menu"] > div:not([role="presentation"]):not(.agy-overlay),
+div[role="listbox"] > div:not([role="presentation"]):not(.agy-overlay),
 [data-mention-menu] > div,
 [data-testid="agent-input-box"] [data-mention-menu] > div,
 [data-testid="agent-input-box"] div[role="listbox"] > div,
 div[class*="bottom-full"] > div,
 div[data-side] [class*="viewport"],
-div[data-side] > div,
+div[data-side]:not([role="presentation"]) > div:not([role="presentation"]):not(.agy-overlay),
 [cmdk-list],
 [cmdk-list] > div {
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
+}
+
+/* 当菜单内层包裹器包含二级子菜单时，解除 overflow-y-auto 裁剪，允许二级等级弹窗向右侧完整溢出显示 */
+div[role="menu"] > div:has(div[role="presentation"][data-side]),
+.agy-overlay > div:has(div[role="presentation"][data-side]) {
+    overflow: visible !important;
 }
 
 /* 5. 搜索输入框（如 Search Projects）：微光底色与精致微白边框 */

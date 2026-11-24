@@ -94,6 +94,14 @@ function Sync-ProjectToSystem {
             Write-Host "[成功] 文件快捷操作插件已同步 -> $targetFqaDir" -ForegroundColor Green
         }
 
+        # 6. 同步自动恢复脚本 restore.ps1
+        $srcRestorePs1 = Join-Path $WorkspaceDir "核心脚本\restore.ps1"
+        if (Test-Path $srcRestorePs1) {
+            $dstRestorePs1 = Join-Path $TargetAppDataDir "restore.ps1"
+            Copy-Item -Path $srcRestorePs1 -Destination $dstRestorePs1 -Force
+            Write-Host "[成功] 自动恢复脚本已同步 -> $dstRestorePs1" -ForegroundColor Green
+        }
+
         Write-Host "----------------------------------------------------------" -ForegroundColor Cyan
         Write-Host "全量同步完成！" -ForegroundColor Green
         Write-Host "提示: 若 Antigravity 客户端已处于打开状态，可直接在窗口中按 Ctrl + R 热重载生效。" -ForegroundColor Yellow
